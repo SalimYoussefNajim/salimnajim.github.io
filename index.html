@@ -10,53 +10,83 @@
 </head>
 <body class="bg-black text-white overflow-x-hidden">
 
+  <!-- Cosmic Background -->
   <div id="stars" class="absolute inset-0 z-0"></div>
   <div id="shooting-stars" class="absolute inset-0 z-0"></div>
 
   <!-- Hero Section -->
   <section class="relative z-10 flex flex-col items-center justify-center h-screen text-center px-4">
     <h1 class="text-5xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text drop-shadow-xl">
-      Salim's Cosmic Universe
+      Salim Najim · Vision Beyond Stars
     </h1>
     <p class="mt-6 text-lg text-white/80 max-w-xl">
-      Realistic shooting stars. Cinematic. Deep space. Pure magic.
+      I design, invent, and bring ideas to life across digital and physical realms.
     </p>
     <div class="mt-10 animate-bounce text-white/50 text-3xl">↓</div>
   </section>
 
-  <!-- Portfolio Section -->
+  <!-- What I Do -->
+  <section class="relative z-10 px-6 py-24 bg-gradient-to-b from-black to-zinc-900" data-aos="fade-up">
+    <h2 class="text-4xl font-semibold text-center mb-12">What I Do</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
+      <div class="card">
+        <h3 class="text-xl font-bold mb-2">🚀 Tech Innovator</h3>
+        <p class="text-white/70">Inventing futuristic devices like Tesla Coils, AI smart lenses, and defense systems.</p>
+      </div>
+      <div class="card">
+        <h3 class="text-xl font-bold mb-2">💡 Creative Engineer</h3>
+        <p class="text-white/70">Designing intuitive experiences and solving complex problems with elegance.</p>
+      </div>
+      <div class="card">
+        <h3 class="text-xl font-bold mb-2">🎥 Visual Creator</h3>
+        <p class="text-white/70">Crafting cinematic visuals with Najim’s Production — emotion meets technology.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Stack -->
+  <section class="relative z-10 px-6 py-24" data-aos="fade-up">
+    <h2 class="text-4xl font-semibold text-center mb-12">Technologies I Use</h2>
+    <div class="flex flex-wrap justify-center gap-10">
+      <img src="assets/icons8-html-96.png" alt="HTML" class="h-12 hover:scale-110 transition" loading="lazy">
+      <img src="assets/icons8-css-96.png" alt="CSS" class="h-12 hover:scale-110 transition" loading="lazy">
+      <img src="assets/icons8-java-script-96.png" alt="JavaScript" class="h-12 hover:scale-110 transition" loading="lazy">
+      <img src="assets/icons8-python-96.png" alt="Python" class="h-12 hover:scale-110 transition" loading="lazy">
+      <img src="assets/icons8-ai-96.png" alt="AI/ML" class="h-12 hover:scale-110 transition" loading="lazy">
+      <img src="assets/icons8-adobe-after-effects-96.png" alt="After Effects" class="h-12 hover:scale-110 transition" loading="lazy">
+    </div>
+  </section>
+
+  <!-- Projects (Existing) -->
   <section class="relative z-10 px-6 py-20" data-aos="fade-left">
     <h2 class="text-4xl font-semibold text-center mb-12">My Works</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
       <div class="card">
-        <img src="assets/project1.jpg" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
-        <h3 class="text-xl font-bold mb-1">Project Title 1</h3>
-        <p class="text-sm text-white/70">A project that amazed the universe.</p>
+        <img src="assets/project1.png" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
+        <h3 class="text-xl font-bold mb-1">Tesla Coil City</h3>
+        <p class="text-sm text-white/70">An electrifying Tesla Coil invention showcased in a full city demo.</p>
       </div>
       <div class="card" data-aos-delay="100">
-        <img src="assets/project2.jpg" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
-        <h3 class="text-xl font-bold mb-1">Project Title 2</h3>
-        <p class="text-sm text-white/70">A creation that defied the stars.</p>
+        <img src="assets/project2.png" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
+        <h3 class="text-xl font-bold mb-1">NeuroLens AR</h3>
+        <p class="text-sm text-white/70">A smart AI-powered contact lens for real-time student learning enhancement.</p>
       </div>
       <div class="card" data-aos-delay="200">
         <img src="assets/project3.jpg" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
-        <h3 class="text-xl font-bold mb-1">Project Title 3</h3>
-        <p class="text-sm text-white/70">A legacy etched in code and light.</p>
+        <h3 class="text-xl font-bold mb-1">Najim’s Production</h3>
+        <p class="text-sm text-white/70">Video storytelling with cinematic edge and emotional power.</p>
       </div>
     </div>
   </section>
+
   <!-- Footer -->
   <footer class="text-center py-10 text-white/40 text-sm border-t border-white/10 mt-10">
     &copy; 2025 Salim Najim · All rights reserved.
   </footer>
 
-  <!-- Scripts -->
   <script src="js/main.js"></script>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script>
-    AOS.init({ duration: 1000, once: true });
-  </script>
+  <script>AOS.init({ duration: 1000, once: true });</script>
 </body>
-  <script src="js/main.js"></script>
-</body>
+
 </html>
