@@ -3,30 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Realistic Shooting Star Site</title>
+  <title>Salim Najim · Vision Beyond Stars</title>
   <link rel="icon" href="assets/favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body class="bg-black text-white overflow-x-hidden">
+
+<!-- Login Modal -->
+<div id="loginModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 hidden">
+  <div class="bg-white/5 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-8 w-full max-w-md text-white relative">
+    <div class="w-full flex justify-center absolute -top-6 left-0">
+      <button id="closeLogin" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold shadow-md hover:scale-110 transition">
+        &times;
+      </button>
+    </div>
+    <h2 class="text-2xl font-bold mb-6 text-center mt-4">Welcome Back</h2>
+    <input type="email" id="loginEmail" placeholder="Email" class="w-full mb-4 px-4 py-2 rounded bg-white/10 border border-white/10 focus:outline-none placeholder-white/50" />
+    <input type="password" id="loginPassword" placeholder="Password" class="w-full mb-6 px-4 py-2 rounded bg-white/10 border border-white/10 focus:outline-none placeholder-white/50" />
+    <p class="text-sm text-right text-white/60 mb-4">
+  <a href="#" id="forgotPassword" class="text-blue-400 hover:underline hover:text-purple-400 transition">Forgot Password?</a>
+</p>
+    <button id="loginSubmit" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 py-2 rounded font-bold hover:scale-105 transition">Login</button>
+    <p class="text-sm text-center mt-4 text-white/60">
+      Don’t have an account?
+      <a href="#" id="switchToRegister" class="text-blue-400 hover:underline hover:text-purple-400 transition">Register</a>
+    </p>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<div id="registerModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 hidden">
+  <div class="bg-white/5 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-8 w-full max-w-md text-white relative">
+    <div class="w-full flex justify-center absolute -top-6 left-0">
+      <button id="closeRegister" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold shadow-md hover:scale-110 transition">
+        &times;
+      </button>
+    </div>
+    <h2 class="text-2xl font-bold mb-6 text-center mt-4">Create Account</h2>
+    <input type="text" id="name" placeholder="First Name" class="w-full mb-3 px-4 py-2 rounded bg-white/10 border border-white/10 focus:outline-none placeholder-white/50" />
+    <input type="text" id="surname" placeholder="Last Name" class="w-full mb-3 px-4 py-2 rounded bg-white/10 border border-white/10 focus:outline-none placeholder-white/50" />
+    <input type="email" id="registerEmail" placeholder="Email" class="w-full mb-3 px-4 py-2 rounded bg-white/10 border border-white/10 focus:outline-none placeholder-white/50" />
+    <input type="password" id="registerPassword" placeholder="Password" class="w-full mb-4 px-4 py-2 rounded bg-white/10 border border-white/10 focus:outline-none placeholder-white/50" />
+    <button id="registerSubmit" class="w-full bg-gradient-to-r from-purple-500 to-blue-600 py-2 rounded font-bold hover:scale-105 transition">Register</button>
+    <p class="text-sm text-center mt-4 text-white/60">
+      Already have an account?
+      <a href="#" id="switchToLogin" class="text-blue-400 hover:underline hover:text-purple-400 transition">Login</a>
+    </p>
+  </div>
+</div>
+
+<!-- Portal Trigger -->
+<section class="relative z-10 flex flex-col items-center justify-center h-screen text-center px-4">
+  <h1 class="text-5xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text drop-shadow-xl">Salim Najim · Vision Beyond Stars</h1>
+  <p class="mt-6 text-lg text-white/80 max-w-xl">I design, invent, and bring ideas to life across digital and physical realms.</p>
+  <button id="openLogin" class="mt-10 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-lg font-semibold shadow-lg hover:scale-105 hover:shadow-xl transition">Enter Portal</button>
+  <div class="mt-6 animate-bounce text-white/50 text-3xl">↓</div>
+</section>
+
 
   <!-- Cosmic Background -->
   <div id="stars" class="absolute inset-0 z-0"></div>
   <div id="shooting-stars" class="absolute inset-0 z-0"></div>
 
-  <!-- Hero Section -->
-  <section class="relative z-10 flex flex-col items-center justify-center h-screen text-center px-4">
-    <h1 class="text-5xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text drop-shadow-xl">
-      Salim Najim · Vision Beyond Stars
-    </h1>
-    <p class="mt-6 text-lg text-white/80 max-w-xl">
-      I design, invent, and bring ideas to life across digital and physical realms.
-    </p>
-    <div class="mt-10 animate-bounce text-white/50 text-3xl">↓</div>
-  </section>
-
   <!-- What I Do -->
-  <section class="relative z-10 px-6 py-24 bg-gradient-to-b from-black to-zinc-900" data-aos="fade-up">
+  <section class="relative z-10 px-6 py-24 bg-gradient-to-b from-black to-zinc-900">
     <h2 class="text-4xl font-semibold text-center mb-12">What I Do</h2>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
       <div class="card">
@@ -45,7 +86,7 @@
   </section>
 
   <!-- Tech Stack -->
-  <section class="relative z-10 px-6 py-24" data-aos="fade-up">
+  <section class="relative z-10 px-6 py-24">
     <h2 class="text-4xl font-semibold text-center mb-12">Technologies I Use</h2>
     <div class="flex flex-wrap justify-center gap-10">
       <img src="assets/icons8-html-96.png" alt="HTML" class="h-12 hover:scale-110 transition" loading="lazy">
@@ -57,8 +98,8 @@
     </div>
   </section>
 
-  <!-- Projects (Existing) -->
-  <section class="relative z-10 px-6 py-20" data-aos="fade-left">
+  <!-- Projects -->
+  <section class="relative z-10 px-6 py-20">
     <h2 class="text-4xl font-semibold text-center mb-12">My Works</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
       <div class="card">
@@ -66,12 +107,12 @@
         <h3 class="text-xl font-bold mb-1">Tesla Coil City</h3>
         <p class="text-sm text-white/70">An electrifying Tesla Coil invention showcased in a full city demo.</p>
       </div>
-      <div class="card" data-aos-delay="100">
+      <div class="card">
         <img src="assets/project2.png" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
         <h3 class="text-xl font-bold mb-1">NeuroLens AR</h3>
         <p class="text-sm text-white/70">A smart AI-powered contact lens for real-time student learning enhancement.</p>
       </div>
-      <div class="card" data-aos-delay="200">
+      <div class="card">
         <img src="assets/project3.jpg" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
         <h3 class="text-xl font-bold mb-1">Najim’s Production</h3>
         <p class="text-sm text-white/70">Video storytelling with cinematic edge and emotional power.</p>
@@ -84,9 +125,77 @@
     &copy; 2025 Salim Najim · All rights reserved.
   </footer>
 
+<!-- Firebase Integration -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBzs_juBDTdqF7J9qAXywCJCfyrvgey0a0",
+    authDomain: "login-portal-b0fcb.firebaseapp.com",
+    projectId: "login-portal-b0fcb",
+    storageBucket: "login-portal-b0fcb.firebasestorage.app",
+    messagingSenderId: "78689644440",
+    appId: "1:78689644440:web:ce76c91afb0b44420e05ed"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // Modal Logic
+  document.getElementById("openLogin").onclick = () => loginModal.classList.remove("hidden");
+  document.getElementById("closeLogin").onclick = () => loginModal.classList.add("hidden");
+  document.getElementById("closeRegister").onclick = () => registerModal.classList.add("hidden");
+  document.getElementById("switchToRegister").onclick = () => { loginModal.classList.add("hidden"); registerModal.classList.remove("hidden"); };
+  document.getElementById("switchToLogin").onclick = () => { registerModal.classList.add("hidden"); loginModal.classList.remove("hidden"); };
+
+  // Register
+  document.getElementById("registerSubmit").onclick = async () => {
+    const email = document.getElementById("registerEmail").value;
+    const password = document.getElementById("registerPassword").value;
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      alert("✅ Account created successfully");
+      registerModal.classList.add("hidden");
+      loginModal.classList.remove("hidden");
+    } catch (err) {
+      alert("❌ " + err.message);
+    }
+  };
+
+  // Login
+  document.getElementById("loginSubmit").onclick = async () => {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      window.location.href = "dashboard.html";
+    } catch (err) {
+      alert("❌ " + err.message);
+    }
+  };
+import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+// Forgot Password Handler
+document.getElementById("forgotPassword").onclick = async () => {
+  const email = document.getElementById("loginEmail").value;
+  if (!email) {
+    alert("📧 Please enter your email first.");
+    return;
+  }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert("📬 Password reset link sent! Check your inbox.");
+  } catch (err) {
+    alert("❌ " + err.message);
+  }
+};
+
+</script>
+
   <script src="js/main.js"></script>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script>AOS.init({ duration: 1000, once: true });</script>
-</body>
 
+</body>
 </html>
