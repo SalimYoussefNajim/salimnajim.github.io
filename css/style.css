@@ -85,3 +85,21 @@ html {
   -ms-overflow-style: none;  /* IE 10+ */
   scrollbar-width: none;     /* Firefox */
 }
+/* Smooth hover on icons */
+img.hover\:scale-110 {
+  transition: transform 0.3s ease-in-out;
+}
+img.hover\:scale-110:hover {
+  transform: scale(1.1);
+}
+
+/* Subtle section fades */
+[data-aos] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+}
+[data-aos].aos-animate {
+  opacity: 1;
+  transform: none;
+}
