@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ask Najim AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+</head>
+<body class="bg-black text-white font-sans">
+
+  <!-- 🔐 Not Authenticated Message -->
+  <div id="authWarning" class="min-h-screen flex items-center justify-center text-center hidden">
+    <div>
+      <h2 class="text-2xl font-bold mb-4 text-red-400">🚫 Access Denied</h2>
+      <p class="text-white/70">You must be logged in to access Ask Najim AI.</p>
+      <a href="index.html" class="mt-4 inline-block bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-2 rounded-full hover:scale-105 transition">Return to Login</a>
+    </div>
+  </div>
+
+  <!-- ✅ AI Dashboard -->
+  <div id="dashboardContent" class="hidden min-h-screen flex flex-col items-center justify-start pt-12 px-4">
+    <h1 class="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-400">
+      Ask Najim AI
+    </h1>
+
+    <div id="chatBox" class="w-full max-w-2xl mb-4 space-y-4 overflow-y-auto flex-1">
+      <!-- Chat messages go here -->
+    </div>
+
+    <div class="w-full max-w-2xl flex items-center gap-2 pb-8">
+      <input id="userInput" type="text" placeholder="Ask me anything..." class="flex-1 px-4 py-2 rounded bg-black border border-white/20 text-white placeholder-white/50 focus:outline-none">
+      <button id="sendBtn" class="px-6 py-2 rounded bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90">Send</button>
+    </div>
+  </div>
+
+  <!-- Firebase Config & Auth Check -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBzs_juBDTdqF7J9qAXywCJCfyrvgey0a0",
+      authDomain: "login-portal-b0fcb.firebaseapp.com",
+      projectId: "login-portal-b0fcb",
+      appId: "1:78689644440:web:ce76c91afb0b44420e05ed"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        document.getElementById("dashboardContent").classList.remove("hidden");
+      } else {
+        document.getElementById("authWarning").classList.remove("hidden");
+      }
+    });
+  </script>
+
+  <!-- AI Chat Script -->
+  <script>
+    const chatBox = document.getElementById("chatBox");
+    const sendBtn = document.getElementById("sendBtn");
+    const userInput = document.getElementById("userInput");
+
+    const API_URL = "https://api.groq.com/openai/v1/chat/completions";
+    const API_KEY = "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"; // 🔓 Visible in frontend
+
+    if (sendBtn) {
+      sendBtn.addEventListener("click", async () => {
+        const question = userInput.value.trim();
+        if (!question) return;
+
+        addMessage("user", question);
+        userInput.value = "";
+        addMessage("assistant", "Thinking...");
+
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify({
+              model: "meta-llama/llama-4-scout-17b-16e-instruct",
+              messages: [{ role: "user", content: question }]
+            })
+          });
+
+          const data = await res.json();
+          const reply = data?.choices?.[0]?.message?.content || "⚠️ No response.";
+          updateLastMessage(reply);
+        } catch (err) {
+          updateLastMessage("❌ Error: " + err.message);
+        }
+      });
+    }
+
+    function addMessage(role, content) {
+      const msg = document.createElement("div");
+      msg.className = `max-w-2xl p-3 rounded-xl text-sm whitespace-pre-line ${
+        role === "user" ? "bg-blue-600 self-end text-right" : "bg-zinc-800 self-start text-left"
+      }`;
+      msg.textContent = content;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function updateLastMessage(content) {
+      const msgs = chatBox.querySelectorAll("div");
+      const last = msgs[msgs.length - 1];
+      last.textContent = content;
+    }
+  </script>
+</body>
+</html>
