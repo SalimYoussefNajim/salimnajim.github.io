@@ -130,53 +130,50 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBzs_juBDTdqF7J9qAXywCJCfyrvgey0a0",
-    authDomain: "login-portal-b0fcb.firebaseapp.com",
-    projectId: "login-portal-b0fcb",
-    storageBucket: "login-portal-b0fcb.firebasestorage.app",
-    messagingSenderId: "78689644440",
-    appId: "1:78689644440:web:ce76c91afb0b44420e05ed"
-  };
+ const BASE_URL = "https://ai-07vr.onrender.com"; // Replace this
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // Modal Logic
-  document.getElementById("openLogin").onclick = () => loginModal.classList.remove("hidden");
-  document.getElementById("closeLogin").onclick = () => loginModal.classList.add("hidden");
-  document.getElementById("closeRegister").onclick = () => registerModal.classList.add("hidden");
-  document.getElementById("switchToRegister").onclick = () => { loginModal.classList.add("hidden"); registerModal.classList.remove("hidden"); };
-  document.getElementById("switchToLogin").onclick = () => { registerModal.classList.add("hidden"); loginModal.classList.remove("hidden"); };
-
-  // Register
-  document.getElementById("registerSubmit").onclick = async () => {
-    const email = document.getElementById("registerEmail").value;
-    const password = document.getElementById("registerPassword").value;
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      alert("✅ Account created successfully");
+document.getElementById("registerSubmit").onclick = async () => {
+  const email = document.getElementById("registerEmail").value;
+  const password = document.getElementById("registerPassword").value;
+  try {
+    const res = await fetch(`${BASE_URL}/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      alert("✅ " + data.message);
       registerModal.classList.add("hidden");
       loginModal.classList.remove("hidden");
-    } catch (err) {
-      alert("❌ " + err.message);
+    } else {
+      alert("❌ " + data.error);
     }
-  };
+  } catch (err) {
+    alert("❌ " + err.message);
+  }
+};
 
-  // Login
-  document.getElementById("loginSubmit").onclick = async () => {
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
+document.getElementById("loginSubmit").onclick = async () => {
+  const email = document.getElementById("loginEmail").value;
+  const password = document.getElementById("loginPassword").value;
+  try {
+    const res = await fetch(`${BASE_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (res.ok) {
       window.location.href = "dashboard.html";
-    } catch (err) {
-      alert("❌ " + err.message);
+    } else {
+      alert("❌ " + data.error);
     }
-  };
-import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+  } catch (err) {
+    alert("❌ " + err.message);
+  }
+};
 
-// Forgot Password Handler
 document.getElementById("forgotPassword").onclick = async () => {
   const email = document.getElementById("loginEmail").value;
   if (!email) {
@@ -184,8 +181,13 @@ document.getElementById("forgotPassword").onclick = async () => {
     return;
   }
   try {
-    await sendPasswordResetEmail(auth, email);
-    alert("📬 Password reset link sent! Check your inbox.");
+    const res = await fetch(`${BASE_URL}/reset-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    alert("📬 " + data.message);
   } catch (err) {
     alert("❌ " + err.message);
   }
