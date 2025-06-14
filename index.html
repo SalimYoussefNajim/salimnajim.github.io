@@ -173,6 +173,19 @@ document.getElementById("loginSubmit").onclick = async () => {
     alert("❌ " + err.message);
   }
 };
+const res = await fetch("https://ai-07vr.onrender.com/login", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email, password })
+});
+const data = await res.json();
+
+if (res.ok && data.token) {
+  localStorage.setItem("authToken", data.token);
+  window.location.href = "dashboard.html";
+} else {
+  alert(data.error || "Login failed");
+}
 
 document.getElementById("forgotPassword").onclick = async () => {
   const email = document.getElementById("loginEmail").value;
