@@ -130,7 +130,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
 
- const BASE_URL = "https://ai-07vr.onrender.com"; // Replace this
+ const BASE_URL = "https://ai-07vr.onrender.com";
 
 document.getElementById("registerSubmit").onclick = async () => {
   const email = document.getElementById("registerEmail").value;
@@ -165,8 +165,8 @@ document.getElementById("loginSubmit").onclick = async () => {
     });
     const data = await res.json();
     if (res.ok && data.token) {
-      localStorage.setItem("authToken", data.token); // 🔐 Store Firebase ID token
-      window.location.href = "dashboard.html";       // 🚀 Redirect to dashboard
+      localStorage.setItem("authToken", data.token); 
+      window.location.href = "dashboard.html";       
     } else {
       alert("❌ " + data.error);
     }
