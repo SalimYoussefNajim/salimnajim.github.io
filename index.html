@@ -154,39 +154,32 @@ document.getElementById("registerSubmit").onclick = async () => {
   }
 };
 
-document.getElementById("loginSubmit").onclick = async () => {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
-  try {
-    const res = await fetch(`${BASE_URL}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
-    const data = await res.json();
-    if (res.ok) {
-      window.location.href = "dashboard.html";
-    } else {
-      alert("❌ " + data.error);
+const BASE_URL = "https://ai-07vr.onrender.com";
+
+  document.getElementById("loginSubmit").onclick = async () => {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    try {
+      const res = await fetch(`${BASE_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.token) {
+        localStorage.setItem("authToken", data.token); // 🔐 SAVE TOKEN
+        window.location.href = "dashboard.html";       // ✅ REDIRECT
+      } else {
+        alert("❌ " + (data.error || "Login failed"));
+      }
+    } catch (err) {
+      alert("❌ " + err.message);
     }
-  } catch (err) {
-    alert("❌ " + err.message);
-  }
-};
-const res = await fetch("https://ai-07vr.onrender.com/login", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ email, password })
-});
-const data = await res.json();
-
-if (res.ok && data.token) {
-  localStorage.setItem("authToken", data.token);
-  window.location.href = "dashboard.html";
-} else {
-  alert(data.error || "Login failed");
-}
-
+  };
+  
 document.getElementById("forgotPassword").onclick = async () => {
   const email = document.getElementById("loginEmail").value;
   if (!email) {
