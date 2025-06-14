@@ -31,7 +31,7 @@
     </div>
   </div>
 
-  <!-- 🧠 Logic -->
+  <!-- 🔁 Auth & Chat Logic -->
   <script>
     const API_BASE = "https://ai-07vr.onrender.com";
     const token = localStorage.getItem("authToken");
@@ -39,11 +39,12 @@
     const sendBtn = document.getElementById("sendBtn");
     const userInput = document.getElementById("userInput");
 
-    async function verifyAccess() {
+    async function verifyUser() {
       if (!token) return showDenied();
 
       try {
         const res = await fetch(`${API_BASE}/auth-status`, {
+          method: "GET",
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -104,8 +105,7 @@
       last.textContent = content;
     }
 
-    // 🔐 Start verification when page loads
-    window.onload = verifyAccess;
+    window.onload = verifyUser;
   </script>
 </body>
 </html>
