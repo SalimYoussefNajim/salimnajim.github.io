@@ -19,7 +19,15 @@
 
   <!-- ✅ AI Dashboard -->
   <div id="dashboardContent" class="hidden min-h-screen flex flex-col items-center justify-start pt-12 px-4">
-    <h1 class="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-400">
+    
+    <!-- 🚪 Logout Button -->
+    <div class="w-full max-w-2xl flex justify-end mb-4">
+      <button id="logoutBtn" class="text-sm bg-red-600 px-4 py-2 rounded-full hover:bg-red-700 transition">
+        Logout
+      </button>
+    </div>
+
+    <h1 class="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-400 mb-6">
       Ask Najim AI
     </h1>
 
@@ -38,7 +46,9 @@
     const chatBox = document.getElementById("chatBox");
     const sendBtn = document.getElementById("sendBtn");
     const userInput = document.getElementById("userInput");
+    const logoutBtn = document.getElementById("logoutBtn");
 
+    // 🔐 Check authentication
     async function verifyUser() {
       if (!token) return showDenied();
 
@@ -64,6 +74,7 @@
       document.getElementById("dashboardContent").classList.add("hidden");
     }
 
+    // ✉️ Chat send logic
     sendBtn.addEventListener("click", async () => {
       const question = userInput.value.trim();
       if (!question || !token) return;
@@ -89,6 +100,7 @@
       }
     });
 
+    // 💬 UI helpers
     function addMessage(role, content) {
       const msg = document.createElement("div");
       msg.className = `max-w-2xl p-3 rounded-xl text-sm whitespace-pre-line ${
@@ -105,6 +117,13 @@
       last.textContent = content;
     }
 
+    // 🚪 Logout logic
+    logoutBtn?.addEventListener("click", () => {
+      localStorage.removeItem("authToken");
+      window.location.href = "index.html";
+    });
+
+    // ⏳ On page load
     window.onload = verifyUser;
   </script>
 </body>
