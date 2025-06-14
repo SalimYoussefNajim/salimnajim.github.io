@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ask Najim AI</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
 </head>
 <body class="bg-black text-white font-sans">
 
@@ -37,65 +33,61 @@
     </div>
   </div>
 
-  <!-- Firebase Config & Auth Check -->
+  <!-- Auth & Chat Logic -->
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBzs_juBDTdqF7J9qAXywCJCfyrvgey0a0",
-      authDomain: "login-portal-b0fcb.firebaseapp.com",
-      projectId: "login-portal-b0fcb",
-      appId: "1:78689644440:web:ce76c91afb0b44420e05ed"
-    };
+    const API_BASE = "https://ai-07vr.onrender.com";
 
-    firebase.initializeApp(firebaseConfig);
+    // ✅ Auth Check using ID token saved in localStorage (set during login)
+    const token = localStorage.getItem("authToken");
 
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        document.getElementById("dashboardContent").classList.remove("hidden");
-      } else {
-        document.getElementById("authWarning").classList.remove("hidden");
-      }
-    });
-  </script>
+    if (!token) {
+      document.getElementById("authWarning").classList.remove("hidden");
+    } else {
+      fetch(`${API_BASE}/auth-status`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data?.loggedIn) {
+            document.getElementById("dashboardContent").classList.remove("hidden");
+          } else {
+            document.getElementById("authWarning").classList.remove("hidden");
+          }
+        })
+        .catch(() => {
+          document.getElementById("authWarning").classList.remove("hidden");
+        });
+    }
 
-  <!-- AI Chat Script -->
-  <script>
+    // ✅ AI Chat Logic
     const chatBox = document.getElementById("chatBox");
     const sendBtn = document.getElementById("sendBtn");
     const userInput = document.getElementById("userInput");
 
-    const API_URL = "https://api.groq.com/openai/v1/chat/completions";
-    const API_KEY = "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"; // 🔓 Visible in frontend
+    sendBtn.addEventListener("click", async () => {
+      const question = userInput.value.trim();
+      if (!question) return;
 
-    if (sendBtn) {
-      sendBtn.addEventListener("click", async () => {
-        const question = userInput.value.trim();
-        if (!question) return;
+      addMessage("user", question);
+      userInput.value = "";
+      addMessage("assistant", "Thinking...");
 
-        addMessage("user", question);
-        userInput.value = "";
-        addMessage("assistant", "Thinking...");
+      try {
+        const res = await fetch(`${API_BASE}/ask-ai`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ question })
+        });
 
-        try {
-          const res = await fetch(API_URL, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${API_KEY}`
-            },
-            body: JSON.stringify({
-              model: "meta-llama/llama-4-scout-17b-16e-instruct",
-              messages: [{ role: "user", content: question }]
-            })
-          });
-
-          const data = await res.json();
-          const reply = data?.choices?.[0]?.message?.content || "⚠️ No response.";
-          updateLastMessage(reply);
-        } catch (err) {
-          updateLastMessage("❌ Error: " + err.message);
-        }
-      });
-    }
+        const data = await res.json();
+        const reply = data?.reply || "⚠️ No response.";
+        updateLastMessage(reply);
+      } catch (err) {
+        updateLastMessage("❌ Error: " + err.message);
+      }
+    });
 
     function addMessage(role, content) {
       const msg = document.createElement("div");
