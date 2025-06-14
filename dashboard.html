@@ -19,20 +19,39 @@
     firebase.initializeApp(firebaseConfig);
   </script>
   <script>
-  const token = localStorage.getItem("authToken");
   const API_BASE = "https://ai-07vr.onrender.com";
+  const token = localStorage.getItem("authToken");
 
-  window.onload = async () => {
+  async function verifyUser() {
+    if (!token) {
+      showAccessDenied();
+      return;
+    }
+
     try {
       const res = await fetch(`${API_BASE}/auth-status`, {
+        method: "GET",
         headers: { Authorization: `Bearer ${token}` }
       });
+
       const data = await res.json();
-      if (!data.loggedIn) window.location.href = "index.html";
-    } catch {
-      window.location.href = "index.html";
+
+      if (data?.loggedIn) {
+        document.getElementById("dashboardContent").classList.remove("hidden");
+      } else {
+        showAccessDenied();
+      }
+    } catch (err) {
+      showAccessDenied();
     }
-  };
+  }
+
+  function showAccessDenied() {
+    document.getElementById("authWarning").classList.remove("hidden");
+    document.getElementById("dashboardContent").classList.add("hidden");
+  }
+
+  window.onload = verifyUser;
 </script>
 </head>
 <body class="bg-black text-white font-sans">
