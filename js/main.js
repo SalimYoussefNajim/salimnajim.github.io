@@ -31,3 +31,9 @@ window.onload = () => {
     }
   }, 1000);
 };
+  document.getElementById("openLogin").onclick = () => {
+    document.getElementById("loginModal").classList.remove("hidden");
+  };
+  document.getElementById("closeLogin").onclick = () => {
+    document.getElementById("loginModal").classList.add("hidden");
+  };
