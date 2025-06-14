@@ -6,16 +6,17 @@
   <title>Ask Najim AI</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- ✅ Firebase (required for firebase.auth()) -->
+  <!-- ✅ Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
   <script>
-    firebase.initializeApp({
+    const firebaseConfig = {
       apiKey: "AIzaSyBzs_juBDTdqF7J9qAXywCJCfyrvgey0a0",
       authDomain: "login-portal-b0fcb.firebaseapp.com",
       projectId: "login-portal-b0fcb",
       appId: "1:78689644440:web:ce76c91afb0b44420e05ed"
-    });
+    };
+    firebase.initializeApp(firebaseConfig);
   </script>
 </head>
 <body class="bg-black text-white font-sans">
@@ -43,7 +44,7 @@
     </div>
   </div>
 
-  <!-- Auth & AI Chat Logic -->
+  <!-- 🧠 Script Logic -->
   <script>
     const API_BASE = "https://ai-07vr.onrender.com";
     const chatBox = document.getElementById("chatBox");
@@ -52,6 +53,7 @@
 
     let userToken = null;
 
+    // ✅ AUTH CHECK
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user) {
         userToken = await user.getIdToken();
@@ -73,6 +75,7 @@
       }
     });
 
+    // ✅ CHAT HANDLER
     sendBtn.addEventListener("click", async () => {
       const question = userInput.value.trim();
       if (!question || !userToken) return;
@@ -92,13 +95,13 @@
         });
 
         const data = await res.json();
-        const reply = data?.reply || "⚠️ No response.";
-        updateLastMessage(reply);
+        updateLastMessage(data?.reply || "⚠️ No response.");
       } catch (err) {
         updateLastMessage("❌ Error: " + err.message);
       }
     });
 
+    // ✅ UI
     function addMessage(role, content) {
       const msg = document.createElement("div");
       msg.className = `max-w-2xl p-3 rounded-xl text-sm whitespace-pre-line ${
@@ -112,7 +115,7 @@
     function updateLastMessage(content) {
       const msgs = chatBox.querySelectorAll("div");
       const last = msgs[msgs.length - 1];
-      if (last) last.textContent = content;
+      last.textContent = content;
     }
   </script>
 </body>
