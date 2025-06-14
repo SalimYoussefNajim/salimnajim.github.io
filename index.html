@@ -164,8 +164,9 @@ document.getElementById("loginSubmit").onclick = async () => {
       body: JSON.stringify({ email, password })
     });
     const data = await res.json();
-    if (res.ok) {
-      window.location.href = "dashboard.html";
+    if (res.ok && data.token) {
+      localStorage.setItem("authToken", data.token); // 🔐 Store Firebase ID token
+      window.location.href = "dashboard.html";       // 🚀 Redirect to dashboard
     } else {
       alert("❌ " + data.error);
     }
