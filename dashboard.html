@@ -5,28 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ask Najim AI</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Firebase Logic is now handled by backend -->
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
   <script>
-    const API_BASE = "https://ai-07vr.onrender.com"; // 🔒 Secure backend
-
-    // Wait for user state check from backend
-    window.onload = async () => {
-      const res = await fetch(`${API_BASE}/auth-status`, {
-        method: "GET",
-        credentials: "include"
-      });
-
-      const data = await res.json();
-      if (data?.loggedIn) {
-        document.getElementById("dashboardContent").classList.remove("hidden");
-      } else {
-        document.getElementById("authWarning").classList.remove("hidden");
-      }
+    const firebaseConfig = {
+      apiKey: "AIzaSyBzs_juBDTdqF7J9qAXywCJCfyrvgey0a0",
+      authDomain: "login-portal-b0fcb.firebaseapp.com",
+      projectId: "login-portal-b0fcb",
+      appId: "1:78689644440:web:ce76c91afb0b44420e05ed"
     };
+    firebase.initializeApp(firebaseConfig);
   </script>
 </head>
-
 <body class="bg-black text-white font-sans">
 
   <!-- 🔐 Not Authenticated Message -->
@@ -44,9 +36,7 @@
       Ask Najim AI
     </h1>
 
-    <div id="chatBox" class="w-full max-w-2xl mb-4 space-y-4 overflow-y-auto flex-1">
-      <!-- Chat messages go here -->
-    </div>
+    <div id="chatBox" class="w-full max-w-2xl mb-4 space-y-4 overflow-y-auto flex-1"></div>
 
     <div class="w-full max-w-2xl flex items-center gap-2 pb-8">
       <input id="userInput" type="text" placeholder="Ask me anything..." class="flex-1 px-4 py-2 rounded bg-black border border-white/20 text-white placeholder-white/50 focus:outline-none">
@@ -57,31 +47,29 @@
   <!-- Auth & Chat Logic -->
   <script>
     const API_BASE = "https://ai-07vr.onrender.com";
-
-    // ✅ Auth Check (via cookie or storage depending on how your login works)
-    firebase.auth().onAuthStateChanged(async (user) => {
-  if (user) {
-    const token = await user.getIdToken(); // 🔐 Firebase ID Token
-    const res = await fetch(`${API_BASE}/auth-status`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    const data = await res.json();
-    if (data?.loggedIn) {
-      document.getElementById("dashboardContent").classList.remove("hidden");
-    } else {
-      document.getElementById("authWarning").classList.remove("hidden");
-    }
-  } else {
-    document.getElementById("authWarning").classList.remove("hidden");
-  }
-});
-
-    // ✅ AI Chat Logic
     const chatBox = document.getElementById("chatBox");
     const sendBtn = document.getElementById("sendBtn");
     const userInput = document.getElementById("userInput");
 
+    // ✅ Check if user is authenticated and verified by backend
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (user) {
+        const token = await user.getIdToken();
+        const res = await fetch(`${API_BASE}/auth-status`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data?.loggedIn) {
+          document.getElementById("dashboardContent").classList.remove("hidden");
+        } else {
+          document.getElementById("authWarning").classList.remove("hidden");
+        }
+      } else {
+        document.getElementById("authWarning").classList.remove("hidden");
+      }
+    });
+
+    // ✅ Ask AI Logic
     sendBtn.addEventListener("click", async () => {
       const question = userInput.value.trim();
       if (!question) return;
@@ -91,9 +79,14 @@
       addMessage("assistant", "Thinking...");
 
       try {
+        const token = await firebase.auth().currentUser?.getIdToken();
+
         const res = await fetch(`${API_BASE}/ask-ai`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
           body: JSON.stringify({ question })
         });
 
@@ -119,6 +112,7 @@
       const msgs = chatBox.querySelectorAll("div");
       const last = msgs[msgs.length - 1];
       last.textContent = content;
+      console.log("Assistant reply:", content); // Optional debug
     }
   </script>
 </body>
