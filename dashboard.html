@@ -18,6 +18,22 @@
     };
     firebase.initializeApp(firebaseConfig);
   </script>
+  <script>
+  const token = localStorage.getItem("authToken");
+  const API_BASE = "https://ai-07vr.onrender.com";
+
+  window.onload = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/auth-status`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (!data.loggedIn) window.location.href = "index.html";
+    } catch {
+      window.location.href = "index.html";
+    }
+  };
+</script>
 </head>
 <body class="bg-black text-white font-sans">
 
