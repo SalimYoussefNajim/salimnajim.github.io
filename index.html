@@ -14,20 +14,18 @@
 <div id="loginModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 hidden">
   <div class="bg-white/5 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-8 w-full max-w-md text-white relative">
     <div class="w-full flex justify-center absolute -top-6 left-0">
-      <button id="closeLogin" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold shadow-md hover:scale-110 transition">
-        &times;
-      </button>
+      <button id="closeLogin" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold shadow-md hover:scale-110 transition">&times;</button>
     </div>
     <h2 class="text-2xl font-bold mb-6 text-center mt-4">Welcome Back</h2>
-    <input type="email" id="loginEmail" placeholder="Email" class="w-full mb-4 px-4 py-2 rounded bg-white/10 border border-white/10 focus:outline-none placeholder-white/50" />
-    <input type="password" id="loginPassword" placeholder="Password" class="w-full mb-6 px-4 py-2 rounded bg-white/10 border border-white/10 focus:outline-none placeholder-white/50" />
+    <input type="email" id="loginEmail" placeholder="Email" class="w-full mb-4 px-4 py-2 rounded bg-white/10 border border-white/10" />
+    <input type="password" id="loginPassword" placeholder="Password" class="w-full mb-6 px-4 py-2 rounded bg-white/10 border border-white/10" />
     <p class="text-sm text-right text-white/60 mb-4">
-  <a href="#" id="forgotPassword" class="text-blue-400 hover:underline hover:text-purple-400 transition">Forgot Password?</a>
-</p>
-    <button id="loginSubmit" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 py-2 rounded font-bold hover:scale-105 transition">Login</button>
+      <a href="#" id="forgotPassword" class="text-blue-400 hover:underline">Forgot Password?</a>
+    </p>
+    <button id="loginSubmit" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 py-2 rounded font-bold">Login</button>
     <p class="text-sm text-center mt-4 text-white/60">
       Don’t have an account?
-      <a href="#" id="switchToRegister" class="text-blue-400 hover:underline hover:text-purple-400 transition">Register</a>
+      <a href="#" id="switchToRegister" class="text-blue-400 hover:underline">Register</a>
     </p>
   </div>
 </div>
@@ -36,19 +34,17 @@
 <div id="registerModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 hidden">
   <div class="bg-white/5 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-8 w-full max-w-md text-white relative">
     <div class="w-full flex justify-center absolute -top-6 left-0">
-      <button id="closeRegister" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold shadow-md hover:scale-110 transition">
-        &times;
-      </button>
+      <button id="closeRegister" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold shadow-md hover:scale-110 transition">&times;</button>
     </div>
     <h2 class="text-2xl font-bold mb-6 text-center mt-4">Create Account</h2>
-    <input type="text" id="name" placeholder="First Name" class="w-full mb-3 px-4 py-2 rounded bg-white/10 border border-white/10 focus:outline-none placeholder-white/50" />
-    <input type="text" id="surname" placeholder="Last Name" class="w-full mb-3 px-4 py-2 rounded bg-white/10 border border-white/10 focus:outline-none placeholder-white/50" />
-    <input type="email" id="registerEmail" placeholder="Email" class="w-full mb-3 px-4 py-2 rounded bg-white/10 border border-white/10 focus:outline-none placeholder-white/50" />
-    <input type="password" id="registerPassword" placeholder="Password" class="w-full mb-4 px-4 py-2 rounded bg-white/10 border border-white/10 focus:outline-none placeholder-white/50" />
-    <button id="registerSubmit" class="w-full bg-gradient-to-r from-purple-500 to-blue-600 py-2 rounded font-bold hover:scale-105 transition">Register</button>
+    <input type="text" id="name" placeholder="First Name" class="w-full mb-3 px-4 py-2 rounded bg-white/10 border border-white/10" />
+    <input type="text" id="surname" placeholder="Last Name" class="w-full mb-3 px-4 py-2 rounded bg-white/10 border border-white/10" />
+    <input type="email" id="registerEmail" placeholder="Email" class="w-full mb-3 px-4 py-2 rounded bg-white/10 border border-white/10" />
+    <input type="password" id="registerPassword" placeholder="Password" class="w-full mb-4 px-4 py-2 rounded bg-white/10 border border-white/10" />
+    <button id="registerSubmit" class="w-full bg-gradient-to-r from-purple-500 to-blue-600 py-2 rounded font-bold">Register</button>
     <p class="text-sm text-center mt-4 text-white/60">
       Already have an account?
-      <a href="#" id="switchToLogin" class="text-blue-400 hover:underline hover:text-purple-400 transition">Login</a>
+      <a href="#" id="switchToLogin" class="text-blue-400 hover:underline">Login</a>
     </p>
   </div>
 </div>
@@ -57,148 +53,114 @@
 <section class="relative z-10 flex flex-col items-center justify-center h-screen text-center px-4">
   <h1 class="text-5xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text drop-shadow-xl">Salim Najim · Vision Beyond Stars</h1>
   <p class="mt-6 text-lg text-white/80 max-w-xl">I design, invent, and bring ideas to life across digital and physical realms.</p>
-  <button id="openLogin" class="mt-10 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-lg font-semibold shadow-lg hover:scale-105 hover:shadow-xl transition">Enter Portal</button>
-  <div class="mt-6 animate-bounce text-white/50 text-3xl">↓</div>
+  <button id="openLogin" class="mt-10 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-lg font-semibold shadow-lg hover:scale-105">Enter Portal</button>
 </section>
 
+<!-- Background Stars -->
+<div id="stars" class="absolute inset-0 z-0"></div>
+<div id="shooting-stars" class="absolute inset-0 z-0"></div>
 
-  <!-- Cosmic Background -->
-  <div id="stars" class="absolute inset-0 z-0"></div>
-  <div id="shooting-stars" class="absolute inset-0 z-0"></div>
+<!-- Footer -->
+<footer class="text-center py-10 text-white/40 text-sm border-t border-white/10 mt-10">
+  &copy; 2025 Salim Najim · All rights reserved.
+</footer>
 
-  <!-- What I Do -->
-  <section class="relative z-10 px-6 py-24 bg-gradient-to-b from-black to-zinc-900">
-    <h2 class="text-4xl font-semibold text-center mb-12">What I Do</h2>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
-      <div class="card">
-        <h3 class="text-xl font-bold mb-2">🚀 Tech Innovator</h3>
-        <p class="text-white/70">Inventing futuristic devices like Tesla Coils, AI smart lenses, and defense systems.</p>
-      </div>
-      <div class="card">
-        <h3 class="text-xl font-bold mb-2">💡 Creative Engineer</h3>
-        <p class="text-white/70">Designing intuitive experiences and solving complex problems with elegance.</p>
-      </div>
-      <div class="card">
-        <h3 class="text-xl font-bold mb-2">🎥 Visual Creator</h3>
-        <p class="text-white/70">Crafting cinematic visuals with Najim’s Production — emotion meets technology.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Tech Stack -->
-  <section class="relative z-10 px-6 py-24">
-    <h2 class="text-4xl font-semibold text-center mb-12">Technologies I Use</h2>
-    <div class="flex flex-wrap justify-center gap-10">
-      <img src="assets/icons8-html-96.png" alt="HTML" class="h-12 hover:scale-110 transition" loading="lazy">
-      <img src="assets/icons8-css-96.png" alt="CSS" class="h-12 hover:scale-110 transition" loading="lazy">
-      <img src="assets/icons8-java-script-96.png" alt="JavaScript" class="h-12 hover:scale-110 transition" loading="lazy">
-      <img src="assets/icons8-python-96.png" alt="Python" class="h-12 hover:scale-110 transition" loading="lazy">
-      <img src="assets/icons8-ai-96.png" alt="AI/ML" class="h-12 hover:scale-110 transition" loading="lazy">
-      <img src="assets/icons8-adobe-after-effects-96.png" alt="After Effects" class="h-12 hover:scale-110 transition" loading="lazy">
-    </div>
-  </section>
-
-  <!-- Projects -->
-  <section class="relative z-10 px-6 py-20">
-    <h2 class="text-4xl font-semibold text-center mb-12">My Works</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-      <div class="card">
-        <img src="assets/project1.png" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
-        <h3 class="text-xl font-bold mb-1">Tesla Coil City</h3>
-        <p class="text-sm text-white/70">An electrifying Tesla Coil invention showcased in a full city demo.</p>
-      </div>
-      <div class="card">
-        <img src="assets/project2.png" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
-        <h3 class="text-xl font-bold mb-1">NeuroLens AR</h3>
-        <p class="text-sm text-white/70">A smart AI-powered contact lens for real-time student learning enhancement.</p>
-      </div>
-      <div class="card">
-        <img src="assets/project3.jpg" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
-        <h3 class="text-xl font-bold mb-1">Najim’s Production</h3>
-        <p class="text-sm text-white/70">Video storytelling with cinematic edge and emotional power.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="text-center py-10 text-white/40 text-sm border-t border-white/10 mt-10">
-    &copy; 2025 Salim Najim · All rights reserved.
-  </footer>
-
-<!-- Firebase Integration -->
+<!-- Scripts -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+  const BASE_URL = "https://ai-07vr.onrender.com";
 
- const BASE_URL = "https://ai-07vr.onrender.com";
+  // Register
+  document.getElementById("registerSubmit").onclick = async () => {
+    const name = document.getElementById("name").value;
+    const surname = document.getElementById("surname").value;
+    const email = document.getElementById("registerEmail").value;
+    const password = document.getElementById("registerPassword").value;
 
-document.getElementById("registerSubmit").onclick = async () => {
-  const email = document.getElementById("registerEmail").value;
-  const password = document.getElementById("registerPassword").value;
-  try {
-    const res = await fetch(`${BASE_URL}/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
-    const data = await res.json();
-    if (res.ok) {
-      alert("✅ " + data.message);
-      registerModal.classList.add("hidden");
-      loginModal.classList.remove("hidden");
-    } else {
-      alert("❌ " + data.error);
+    if (!name || !surname || !email || !password) {
+      alert("❌ Please fill in all fields.");
+      return;
     }
-  } catch (err) {
-    alert("❌ " + err.message);
-  }
-};
 
-document.getElementById("loginSubmit").onclick = async () => {
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
-  try {
-    const res = await fetch(`${BASE_URL}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
-    const data = await res.json();
-    if (res.ok && data.token) {
-      localStorage.setItem("authToken", data.token); 
-      window.location.href = "dashboard.html";       
-    } else {
-      alert("❌ " + data.error);
+    try {
+      const res = await fetch(`${BASE_URL}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, surname, email, password }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert("✅ " + data.message);
+        document.getElementById("registerModal").classList.add("hidden");
+        document.getElementById("loginModal").classList.remove("hidden");
+      } else {
+        alert("❌ " + data.error);
+      }
+    } catch (err) {
+      alert("❌ " + err.message);
     }
-  } catch (err) {
-    alert("❌ " + err.message);
-  }
-};
+  };
 
-document.getElementById("forgotPassword").onclick = async () => {
-  const email = document.getElementById("loginEmail").value;
-  if (!email) {
-    alert("📧 Please enter your email first.");
-    return;
-  }
-  try {
-    const res = await fetch(`${BASE_URL}/reset-password`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email })
-    });
-    const data = await res.json();
-    alert("📬 " + data.message);
-  } catch (err) {
-    alert("❌ " + err.message);
-  }
-};
+  // Login
+  document.getElementById("loginSubmit").onclick = async () => {
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+    try {
+      const res = await fetch(`${BASE_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (res.ok && data.token) {
+        localStorage.setItem("authToken", data.token);
+        window.location.href = "dashboard.html";
+      } else {
+        alert("❌ " + data.error);
+      }
+    } catch (err) {
+      alert("❌ " + err.message);
+    }
+  };
 
+  // Forgot Password
+  document.getElementById("forgotPassword").onclick = async () => {
+    const email = document.getElementById("loginEmail").value;
+    if (!email) return alert("📧 Please enter your email first.");
+    try {
+      const res = await fetch(`${BASE_URL}/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      alert("📬 " + data.message);
+    } catch (err) {
+      alert("❌ " + err.message);
+    }
+  };
+
+  // Modal control
+  document.getElementById("openLogin").onclick = () => {
+    document.getElementById("loginModal").classList.remove("hidden");
+  };
+  document.getElementById("closeLogin").onclick = () => {
+    document.getElementById("loginModal").classList.add("hidden");
+  };
+  document.getElementById("closeRegister").onclick = () => {
+    document.getElementById("registerModal").classList.add("hidden");
+  };
+  document.getElementById("switchToRegister").onclick = () => {
+    document.getElementById("loginModal").classList.add("hidden");
+    document.getElementById("registerModal").classList.remove("hidden");
+  };
+  document.getElementById("switchToLogin").onclick = () => {
+    document.getElementById("registerModal").classList.add("hidden");
+    document.getElementById("loginModal").classList.remove("hidden");
+  };
 </script>
 
-  <script src="js/main.js"></script>
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script>AOS.init({ duration: 1000, once: true });</script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>AOS.init({ duration: 1000, once: true });</script>
 
 </body>
 </html>
