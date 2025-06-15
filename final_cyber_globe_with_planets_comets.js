@@ -1,6 +1,6 @@
 // Initialize the cyber globe
 const globe = Globe()(document.getElementById('globeViz'))
-  .globeImageUrl('assets/Grid_Pollution_NightLights_2017-1920x960.png')
+  .globeImageUrl('assets/9q4whksam3cwjg5e5n41xcq0i82f.png')
   .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
   .backgroundColor('#000000') // pure cyber space
   .showGraticules(true)
