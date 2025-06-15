@@ -92,6 +92,13 @@
     </div>
   </section>
 
+<section class="relative z-10 px-6 py-24 bg-black" id="globe-section">
+  <h2 class="text-4xl font-semibold text-center mb-12">My World</h2>
+  <div id="globeViz" class="w-full h-[700px] rounded-xl"></div>
+</section>
+
+
+
   <!-- Projects -->
   <section class="relative z-10 px-6 py-20">
     <h2 class="text-4xl font-semibold text-center mb-12">My Works</h2>
@@ -216,6 +223,12 @@
 <script src="js/main.js"></script>
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>AOS.init({ duration: 1000, once: true });</script>
+
+<!-- 👇 Order matters -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://unpkg.com/globe.gl"></script>
+<script src="final_cyber_globe_with_planets_comets.js"></script>
+
 
 </body>
 </html>
