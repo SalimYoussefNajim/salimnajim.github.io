@@ -117,6 +117,13 @@
       last.textContent = content;
     }
 
+    app.get("/chat-history", verifyFirebaseToken, (req, res) => {
+  const uid = req.user.uid;
+  const history = userHistories.get(uid) || [];
+  res.json({ history });
+});
+
+
     // 🚪 Logout logic
     logoutBtn?.addEventListener("click", () => {
       localStorage.removeItem("authToken");
