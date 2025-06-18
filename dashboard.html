@@ -19,7 +19,7 @@
 
   <!-- ✅ AI Dashboard -->
   <div id="dashboardContent" class="hidden min-h-screen flex flex-col items-center justify-start pt-12 px-4">
-    
+
     <!-- 🚪 Logout Button -->
     <div class="w-full max-w-2xl flex justify-end mb-4">
       <button id="logoutBtn" class="text-sm bg-red-600 px-4 py-2 rounded-full hover:bg-red-700 transition">
@@ -37,6 +37,9 @@
       <input id="userInput" type="text" placeholder="Ask me anything..." class="flex-1 px-4 py-2 rounded bg-black border border-white/20 text-white placeholder-white/50 focus:outline-none">
       <button id="sendBtn" class="px-6 py-2 rounded bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90">Send</button>
     </div>
+
+    <!-- 🗂️ Saved Chat History -->
+    <div id="chatList" class="w-full max-w-2xl mt-8 space-y-4"></div>
   </div>
 
   <!-- 🔁 Auth & Chat Logic -->
@@ -47,8 +50,9 @@
     const sendBtn = document.getElementById("sendBtn");
     const userInput = document.getElementById("userInput");
     const logoutBtn = document.getElementById("logoutBtn");
+    const chatList = document.getElementById("chatList");
+    let currentHistory = [];
 
-    // 🔐 Check authentication
     async function verifyUser() {
       if (!token) return showDenied();
 
@@ -61,6 +65,7 @@
         const data = await res.json();
         if (data?.loggedIn) {
           document.getElementById("dashboardContent").classList.remove("hidden");
+          loadChats();
         } else {
           showDenied();
         }
@@ -80,6 +85,7 @@
       if (!question || !token) return;
 
       addMessage("user", question);
+      currentHistory.push({ role: "user", content: question });
       userInput.value = "";
       addMessage("assistant", "Thinking...");
 
@@ -94,13 +100,15 @@
         });
 
         const data = await res.json();
-        updateLastMessage(data?.reply || "⚠️ No response.");
+        const reply = data?.reply || "⚠️ No response.";
+        updateLastMessage(reply);
+        currentHistory.push({ role: "assistant", content: reply });
+        await saveChat(currentHistory);
       } catch (err) {
         updateLastMessage("❌ Error: " + err.message);
       }
     });
 
-    // 💬 UI helpers
     function addMessage(role, content) {
       const msg = document.createElement("div");
       msg.className = `max-w-2xl p-3 rounded-xl text-sm whitespace-pre-line ${
@@ -117,13 +125,85 @@
       last.textContent = content;
     }
 
-    // 🚪 Logout logic
+    async function saveChat(messages) {
+      try {
+        await fetch(`${API_BASE}/save-chat`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({ messages })
+        });
+        loadChats();
+      } catch (err) {
+        console.error("❌ Save error:", err.message);
+      }
+    }
+
+    async function loadChats() {
+      try {
+        const res = await fetch(`${API_BASE}/chats`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (res.ok) renderChatList(data.chats);
+      } catch (err) {
+        console.error("❌ Load error:", err.message);
+      }
+    }
+
+    function renderChatList(chats) {
+      chatList.innerHTML = "";
+      chats.forEach(chat => {
+        const item = document.createElement("div");
+        item.className = "bg-white/10 p-3 rounded text-sm";
+        item.innerHTML = `
+          <div class="flex justify-between">
+            <span>🕒 ${new Date(chat.createdAt?.seconds * 1000).toLocaleString()}</span>
+            <button onclick="deleteChat('${chat.id}')" class="text-red-400 hover:text-red-600">🗑️</button>
+          </div>
+          <div class="mt-2">${chat.messages?.[0]?.content || "[Empty]"}</div>
+        `;
+        item.onclick = () => openChat(chat.id);
+        chatList.appendChild(item);
+      });
+    }
+
+    async function openChat(chatId) {
+      try {
+        const res = await fetch(`${API_BASE}/chat/${chatId}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (res.ok) {
+          chatBox.innerHTML = "";
+          currentHistory = data.messages;
+          data.messages.forEach(msg => addMessage(msg.role, msg.content));
+        }
+      } catch (err) {
+        alert("❌ Failed to open chat");
+      }
+    }
+
+    window.deleteChat = async function (chatId) {
+      if (!confirm("Delete this chat?")) return;
+      try {
+        await fetch(`${API_BASE}/chat/${chatId}`, {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        loadChats();
+      } catch (err) {
+        alert("❌ Delete failed");
+      }
+    };
+
     logoutBtn?.addEventListener("click", () => {
       localStorage.removeItem("authToken");
       window.location.href = "index.html";
     });
 
-    // ⏳ On page load
     window.onload = verifyUser;
   </script>
 </body>
