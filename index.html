@@ -217,19 +217,21 @@
     document.getElementById("loginModal").classList.remove("hidden");
   };
 
-  // 🌍 Fetch IP & Country
+// 🌐 STEP 1: Fetch IP & Country Code
 async function getUserCountry() {
   try {
     const res = await fetch("https://ipapi.co/json/");
     const data = await res.json();
-    return data.country_code; // e.g. "TR"
+    console.log("🌐 IP Info:", data);
+    console.log("🌍 Detected Country Code:", data.country_code);
+    return data.country_code;
   } catch (err) {
-    console.error("Failed to get IP info", err);
+    console.error("❌ Failed to get IP info:", err);
     return null;
   }
 }
 
-// 🌐 Create Spinning Globe
+// 🌍 STEP 2: Build Spinning Globe and Highlight Country
 const world = Globe()(document.getElementById('globeViz'))
   .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
   .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
@@ -245,18 +247,37 @@ fetch('https://unpkg.com/world-atlas@1/world/110m.json')
   .then(landData => {
     const geo = window.topojson.feature(landData, landData.objects.countries).features;
 
+    // 🔁 Base setup
     world.polygonsData(geo)
       .polygonAltitude(0.01)
-      .polygonCapColor(feat => feat.properties.highlight ? 'rgba(255, 223, 0, 0.9)' : 'rgba(200, 200, 200, 0.5)')
+      .polygonCapColor(() => 'rgba(200, 200, 200, 0.5)')
       .polygonSideColor(() => 'rgba(0, 100, 0, 0.15)')
       .polygonStrokeColor(() => '#111');
 
+    // ✨ Highlight user's country
     getUserCountry().then(code => {
       if (!code) return;
       geo.forEach(f => {
-        if (f.id === code) f.properties.highlight = true;
+        const iso = f.properties.ISO_A2 || f.properties.iso_a2 || f.properties.iso2;
+        if (iso === code) {
+          console.log("✅ Highlighting:", iso);
+          f.properties.highlight = true;
+        }
       });
+
+      // Re-render with highlight
       world.polygonsData(geo);
+
+      // ✨ Add glow pulse animation
+      let pulse = 0;
+      setInterval(() => {
+        pulse = 0.5 + 0.5 * Math.sin(Date.now() / 500);
+        world.polygonCapColor(feat =>
+          feat.properties.highlight
+            ? `rgba(255, 215, 0, ${pulse})`
+            : 'rgba(200, 200, 200, 0.5)'
+        );
+      }, 100);
     });
   });
 
