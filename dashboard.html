@@ -53,9 +53,9 @@
       if (!token) return showDenied();
 
       try {
-        const res = await fetch(`${API_BASE}/auth-status`, {
+        const res = await fetch(${API_BASE}/auth-status, {
           method: "GET",
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: Bearer ${token} }
         });
 
         const data = await res.json();
@@ -84,11 +84,11 @@
       addMessage("assistant", "Thinking...");
 
       try {
-        const res = await fetch(`${API_BASE}/ask-ai`, {
+        const res = await fetch(${API_BASE}/ask-ai, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Authorization": Bearer ${token}
           },
           body: JSON.stringify({ question })
         });
@@ -103,9 +103,9 @@
     // 💬 UI helpers
     function addMessage(role, content) {
       const msg = document.createElement("div");
-      msg.className = `max-w-2xl p-3 rounded-xl text-sm whitespace-pre-line ${
+      msg.className = max-w-2xl p-3 rounded-xl text-sm whitespace-pre-line ${
         role === "user" ? "bg-blue-600 self-end text-right" : "bg-zinc-800 self-start text-left"
-      }`;
+      };
       msg.textContent = content;
       chatBox.appendChild(msg);
       chatBox.scrollTop = chatBox.scrollHeight;
@@ -116,7 +116,6 @@
       const last = msgs[msgs.length - 1];
       last.textContent = content;
     }
-
 
     // 🚪 Logout logic
     logoutBtn?.addEventListener("click", () => {
