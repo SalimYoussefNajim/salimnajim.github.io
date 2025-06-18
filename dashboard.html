@@ -84,34 +84,23 @@
       userInput.value = "";
       addMessage("assistant", "Thinking...");
 
-      const controller = new AbortController();
-setTimeout(() => controller.abort(), 15000); // Timeout after 15s
-      
       try {
-  const res = await fetch(`${API_BASE}/ask-ai`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    },
-    body: JSON.stringify({ question })
-  });
+        const res = await fetch(`${API_BASE}/ask-ai`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${token}`
+  },
+  body: JSON.stringify({ question })
+});
 
-  const data = await res.json();
+        const data = await res.json();
+        updateLastMessage(data?.reply || "⚠️ No response.");
+      } catch (err) {
+        updateLastMessage("❌ Error: " + err.message);
+      }
+    });
 
-  if (!res.ok) {
-    updateLastMessage(`❌ Error: ${data.error || "Server error"}`);
-  } else {
-    updateLastMessage(data?.reply || "⚠️ No reply from AI.");
-  }
-} catch (err) {
-  if (err.name === "AbortError") {
-    updateLastMessage("⏱ Timed out. Try again.");
-  } else {
-    updateLastMessage("❌ Request failed. Try again.");
-  }
-}
-      });
     // 💬 UI helpers
     function addMessage(role, content) {
       const msg = document.createElement("div");
