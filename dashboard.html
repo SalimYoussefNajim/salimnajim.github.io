@@ -20,8 +20,11 @@
   <!-- ✅ AI Dashboard -->
   <div id="dashboardContent" class="hidden min-h-screen flex flex-col items-center justify-start pt-12 px-4">
 
-    <!-- 🚪 Logout Button -->
-    <div class="w-full max-w-2xl flex justify-end mb-4">
+    <!-- 🚪 Logout + New Chat Buttons -->
+    <div class="w-full max-w-2xl flex justify-between mb-4">
+      <button id="newChatBtn" class="text-sm bg-green-600 px-4 py-2 rounded-full hover:bg-green-700 transition">
+        + New Chat
+      </button>
       <button id="logoutBtn" class="text-sm bg-red-600 px-4 py-2 rounded-full hover:bg-red-700 transition">
         Logout
       </button>
@@ -56,23 +59,20 @@
     const userInput = document.getElementById("userInput");
     const logoutBtn = document.getElementById("logoutBtn");
     const chatDropdown = document.getElementById("chatDropdown");
+    const newChatBtn = document.getElementById("newChatBtn");
     let currentHistory = [];
 
     async function verifyUser() {
       if (!token) return showDenied();
-
       try {
         const res = await fetch(`${API_BASE}/auth-status`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-
         const data = await res.json();
         if (data?.loggedIn) {
           document.getElementById("dashboardContent").classList.remove("hidden");
           loadChats();
-        } else {
-          showDenied();
-        }
+        } else showDenied();
       } catch (err) {
         showDenied();
       }
@@ -101,7 +101,6 @@
           },
           body: JSON.stringify({ question })
         });
-
         const data = await res.json();
         const reply = data?.reply || "⚠️ No response.";
         updateLastMessage(reply);
@@ -110,6 +109,12 @@
       } catch (err) {
         updateLastMessage("❌ Error: " + err.message);
       }
+    });
+
+    newChatBtn?.addEventListener("click", async () => {
+      if (currentHistory.length > 0) await saveChat(currentHistory);
+      currentHistory = [];
+      chatBox.innerHTML = "";
     });
 
     function addMessage(role, content) {
