@@ -39,7 +39,7 @@
     </div>
 
     <!-- 🗂️ Saved Chat History -->
-    <div id="chatList" class="w-full max-w-2xl mt-8 space-y-4"></div>
+    <div id="chatList" class="w-full max-w-2xl mt-8 space-y-4 bg-white/5 p-4 rounded-lg"></div>
   </div>
 
   <!-- 🔁 Auth & Chat Logic -->
@@ -58,7 +58,6 @@
 
       try {
         const res = await fetch(`${API_BASE}/auth-status`, {
-          method: "GET",
           headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -94,7 +93,7 @@
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           },
           body: JSON.stringify({ question })
         });
@@ -147,6 +146,7 @@
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
+        console.log("🔍 Loaded Chats:", data.chats);
         if (res.ok) renderChatList(data.chats);
       } catch (err) {
         console.error("❌ Load error:", err.message);
@@ -157,13 +157,13 @@
       chatList.innerHTML = "";
       chats.forEach(chat => {
         const item = document.createElement("div");
-        item.className = "bg-white/10 p-3 rounded text-sm";
+        item.className = "bg-white/10 p-3 rounded text-sm cursor-pointer hover:bg-white/20 transition";
         item.innerHTML = `
-          <div class="flex justify-between">
-            <span>🕒 ${new Date(chat.createdAt?.seconds * 1000).toLocaleString()}</span>
-            <button onclick="deleteChat('${chat.id}')" class="text-red-400 hover:text-red-600">🗑️</button>
+          <div class="flex justify-between items-center">
+            <span class="text-white/80 text-sm">🕒 ${new Date(chat.createdAt?.seconds * 1000).toLocaleString()}</span>
+            <button onclick="event.stopPropagation(); deleteChat('${chat.id}')" class="text-red-400 hover:text-red-600 text-sm">🗑️</button>
           </div>
-          <div class="mt-2">${chat.messages?.[0]?.content || "[Empty]"}</div>
+          <p class="mt-2 text-white/60 text-sm line-clamp-2">${chat.messages?.[0]?.content || "[Empty chat]"}</p>
         `;
         item.onclick = () => openChat(chat.id);
         chatList.appendChild(item);
