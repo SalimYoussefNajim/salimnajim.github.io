@@ -7,27 +7,6 @@
   <link rel="icon" href="assets/favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css" />
-<script src="https://unpkg.com/three@0.152.2/build/three.min.js"></script>
-<script src="https://unpkg.com/topojson-client@3"></script>
-<script src="https://unpkg.com/globe.gl"></script>
-<style>
-  #globeViz {
-    width: 100%;
-    height: 600px;
-    margin-top: 4rem;
-  }
-
-  @media (max-width: 768px) {
-    #globeViz {
-      height: 400px;
-    }
-  }
-
-  canvas {
-    image-rendering: auto !important;
-    display: block;
-  }
-</style>
 </head>
 <body class="bg-black text-white overflow-x-hidden">
 
@@ -80,8 +59,6 @@
 <!-- Cosmic Background -->
   <div id="stars" class="absolute inset-0 z-0"></div>
   <div id="shooting-stars" class="absolute inset-0 z-0"></div>
-
-  <div id="globeViz"></div>
   
 
   <!-- What I Do -->
@@ -235,76 +212,6 @@
     document.getElementById("registerModal").classList.add("hidden");
     document.getElementById("loginModal").classList.remove("hidden");
   };
-
-// 🌐 Get user's country
-async function getUserCountry() {
-  try {
-    const res = await fetch("https://ipapi.co/json/");
-    const data = await res.json();
-    console.log("🌐 IP:", data.ip);
-    console.log("🌍 Detected Country:", data.country_name, "→", data.country_code);
-    return data.country_code;
-  } catch (err) {
-    console.error("❌ Failed to fetch IP:", err);
-    return null;
-  }
-}
-
-// 🌍 Initialize the globe
-const world = Globe()(document.getElementById("globeViz"))
-  .globeImageUrl("https://unpkg.com/three-globe/example/img/earth-night.jpg")
-  .backgroundImageUrl("https://unpkg.com/three-globe/example/img/night-sky.png")
-  .showGraticules(true)
-  .showAtmosphere(true)
-  .atmosphereColor("#2288ff")
-  .atmosphereAltitude(0.25)
-  .polygonAltitude(0.02)
-  .polygonSideColor(() => "rgba(0, 100, 0, 0.15)")
-  .polygonStrokeColor(() => "#222")
-  .polygonCapColor(() => "rgba(200,200,200,0.4)");
-
-world.controls().autoRotate = true;
-world.controls().autoRotateSpeed = 0.4;
-world.controls().enableZoom = false;
-world.controls().enableDamping = true;
-world.controls().dampingFactor = 0.1;
-
-// 🗺️ Load map and highlight country
-fetch("https://unpkg.com/world-atlas@1/world/110m.json")
-  .then(res => res.json())
-  .then(async landData => {
-    const geo = window.topojson.feature(landData, landData.objects.countries).features;
-
-    const userCode = await getUserCountry();
-    let found = false;
-
-    geo.forEach(f => {
-      const iso = f.properties.ISO_A2 || f.properties.iso_a2 || f.properties.iso2 || "";
-      if (iso.toUpperCase() === userCode?.toUpperCase()) {
-        f.properties.highlight = true;
-        found = true;
-        console.log("✅ Highlighting:", f.properties.name || iso);
-      }
-    });
-
-    world.polygonsData(geo);
-
-    if (found) {
-      // ✨ Add glow pulse
-      let pulse = 0;
-      setInterval(() => {
-        pulse = 0.6 + 0.4 * Math.sin(Date.now() / 400);
-        world.polygonCapColor(feat =>
-          feat.properties.highlight
-            ? `rgba(255, 255, 0, ${pulse})` // 🔥 Real yellow pulse
-            : "rgba(200, 200, 200, 0.4)"
-        );
-      }, 80);
-    } else {
-      console.warn("⚠️ Could not highlight country. Maybe ISO code mismatch.");
-    }
-  });
-
 
 </script>
 
