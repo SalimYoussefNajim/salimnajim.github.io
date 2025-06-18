@@ -7,6 +7,9 @@
   <link rel="icon" href="assets/favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css" />
+<script src="https://unpkg.com/three@0.152.2/build/three.min.js"></script>
+<script src="https://unpkg.com/topojson-client@3"></script>
+<script src="https://unpkg.com/globe.gl"></script>
 </head>
 <body class="bg-black text-white overflow-x-hidden">
 
@@ -59,6 +62,8 @@
 <!-- Cosmic Background -->
   <div id="stars" class="absolute inset-0 z-0"></div>
   <div id="shooting-stars" class="absolute inset-0 z-0"></div>
+
+  <div id="globeViz" class="w-full h-[600px] mt-16"></div>
 
   <!-- What I Do -->
   <section class="relative z-10 px-6 py-24 bg-gradient-to-b from-black to-zinc-900">
@@ -211,6 +216,50 @@
     document.getElementById("registerModal").classList.add("hidden");
     document.getElementById("loginModal").classList.remove("hidden");
   };
+
+  // 🌍 Fetch IP & Country
+async function getUserCountry() {
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    const data = await res.json();
+    return data.country_code; // e.g. "TR"
+  } catch (err) {
+    console.error("Failed to get IP info", err);
+    return null;
+  }
+}
+
+// 🌐 Create Spinning Globe
+const world = Globe()(document.getElementById('globeViz'))
+  .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
+  .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+  .pointOfView({ lat: 20, lng: 0, altitude: 2 }, 0)
+  .showGlobe(true)
+  .showAtmosphere(true)
+  .atmosphereColor('#3a228a')
+  .atmosphereAltitude(0.25)
+  .enablePointerInteraction(true);
+
+fetch('https://unpkg.com/world-atlas@1/world/110m.json')
+  .then(res => res.json())
+  .then(landData => {
+    const geo = window.topojson.feature(landData, landData.objects.countries).features;
+
+    world.polygonsData(geo)
+      .polygonAltitude(0.01)
+      .polygonCapColor(feat => feat.properties.highlight ? 'rgba(255, 223, 0, 0.9)' : 'rgba(200, 200, 200, 0.5)')
+      .polygonSideColor(() => 'rgba(0, 100, 0, 0.15)')
+      .polygonStrokeColor(() => '#111');
+
+    getUserCountry().then(code => {
+      if (!code) return;
+      geo.forEach(f => {
+        if (f.id === code) f.properties.highlight = true;
+      });
+      world.polygonsData(geo);
+    });
+  });
+
 </script>
 
 <script src="js/main.js"></script>
