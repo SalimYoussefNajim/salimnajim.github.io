@@ -61,6 +61,7 @@
     const chatDropdown = document.getElementById("chatDropdown");
     const newChatBtn = document.getElementById("newChatBtn");
     let currentHistory = [];
+    let currentChatId = null;
 
     async function verifyUser() {
       if (!token) return showDenied();
@@ -99,9 +100,10 @@
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
           },
-          body: JSON.stringify({ question })
+          body: JSON.stringify({ question, chatId: currentChatId })
         });
         const data = await res.json();
+        if (data.chatId) currentChatId = data.chatId;
         const reply = data?.reply || "⚠️ No response.";
         updateLastMessage(reply);
         currentHistory.push({ role: "assistant", content: reply });
@@ -115,6 +117,7 @@
       if (currentHistory.length > 0) await saveChat(currentHistory);
       currentHistory = [];
       chatBox.innerHTML = "";
+      currentChatId = null;
     });
 
     function addMessage(role, content) {
@@ -174,6 +177,7 @@
     chatDropdown.addEventListener("change", async (e) => {
       const chatId = e.target.value;
       if (!chatId) return;
+      currentChatId = chatId;
       try {
         const res = await fetch(`${API_BASE}/chat/${chatId}`, {
           headers: { Authorization: `Bearer ${token}` }
