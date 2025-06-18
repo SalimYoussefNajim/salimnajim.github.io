@@ -31,15 +31,20 @@
       Ask Najim AI
     </h1>
 
+    <!-- 📂 Saved Chats Dropdown -->
+    <div class="w-full max-w-2xl mb-4">
+      <label for="chatDropdown" class="block mb-1 text-sm text-white/70">Saved Chats:</label>
+      <select id="chatDropdown" class="w-full px-4 py-2 bg-zinc-900 border border-white/20 text-white rounded">
+        <option value="">Select a previous chat</option>
+      </select>
+    </div>
+
     <div id="chatBox" class="w-full max-w-2xl mb-4 space-y-4 overflow-y-auto flex-1"></div>
 
     <div class="w-full max-w-2xl flex items-center gap-2 pb-8">
       <input id="userInput" type="text" placeholder="Ask me anything..." class="flex-1 px-4 py-2 rounded bg-black border border-white/20 text-white placeholder-white/50 focus:outline-none">
       <button id="sendBtn" class="px-6 py-2 rounded bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90">Send</button>
     </div>
-
-    <!-- 🗂️ Saved Chat History -->
-    <div id="chatList" class="w-full max-w-2xl mt-8 space-y-4 bg-white/5 p-4 rounded-lg"></div>
   </div>
 
   <!-- 🔁 Auth & Chat Logic -->
@@ -50,7 +55,7 @@
     const sendBtn = document.getElementById("sendBtn");
     const userInput = document.getElementById("userInput");
     const logoutBtn = document.getElementById("logoutBtn");
-    const chatList = document.getElementById("chatList");
+    const chatDropdown = document.getElementById("chatDropdown");
     let currentHistory = [];
 
     async function verifyUser() {
@@ -78,7 +83,6 @@
       document.getElementById("dashboardContent").classList.add("hidden");
     }
 
-    // ✉️ Chat send logic
     sendBtn.addEventListener("click", async () => {
       const question = userInput.value.trim();
       if (!question || !token) return;
@@ -121,7 +125,7 @@
     function updateLastMessage(content) {
       const msgs = chatBox.querySelectorAll("div");
       const last = msgs[msgs.length - 1];
-      last.textContent = content;
+      if (last) last.textContent = content;
     }
 
     async function saveChat(messages) {
@@ -146,31 +150,25 @@
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();
-        console.log("🔍 Loaded Chats:", data.chats);
-        if (res.ok) renderChatList(data.chats);
+        if (res.ok) populateDropdown(data.chats);
       } catch (err) {
         console.error("❌ Load error:", err.message);
       }
     }
 
-    function renderChatList(chats) {
-      chatList.innerHTML = "";
+    function populateDropdown(chats) {
+      chatDropdown.innerHTML = '<option value="">Select a previous chat</option>';
       chats.forEach(chat => {
-        const item = document.createElement("div");
-        item.className = "bg-white/10 p-3 rounded text-sm cursor-pointer hover:bg-white/20 transition";
-        item.innerHTML = `
-          <div class="flex justify-between items-center">
-            <span class="text-white/80 text-sm">🕒 ${new Date(chat.createdAt?.seconds * 1000).toLocaleString()}</span>
-            <button onclick="event.stopPropagation(); deleteChat('${chat.id}')" class="text-red-400 hover:text-red-600 text-sm">🗑️</button>
-          </div>
-          <p class="mt-2 text-white/60 text-sm line-clamp-2">${chat.messages?.[0]?.content || "[Empty chat]"}</p>
-        `;
-        item.onclick = () => openChat(chat.id);
-        chatList.appendChild(item);
+        const option = document.createElement("option");
+        option.value = chat.id;
+        option.textContent = `🕒 ${new Date(chat.createdAt?.seconds * 1000).toLocaleString()} — ${chat.messages?.[0]?.content?.substring(0, 30) || "[Empty]"}`;
+        chatDropdown.appendChild(option);
       });
     }
 
-    async function openChat(chatId) {
+    chatDropdown.addEventListener("change", async (e) => {
+      const chatId = e.target.value;
+      if (!chatId) return;
       try {
         const res = await fetch(`${API_BASE}/chat/${chatId}`, {
           headers: { Authorization: `Bearer ${token}` }
@@ -184,20 +182,7 @@
       } catch (err) {
         alert("❌ Failed to open chat");
       }
-    }
-
-    window.deleteChat = async function (chatId) {
-      if (!confirm("Delete this chat?")) return;
-      try {
-        await fetch(`${API_BASE}/chat/${chatId}`, {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        loadChats();
-      } catch (err) {
-        alert("❌ Delete failed");
-      }
-    };
+    });
 
     logoutBtn?.addEventListener("click", () => {
       localStorage.removeItem("authToken");
