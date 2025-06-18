@@ -64,6 +64,7 @@
   <div id="shooting-stars" class="absolute inset-0 z-0"></div>
 
   <div id="globeViz" class="w-full h-[600px] mt-16"></div>
+  
 
   <!-- What I Do -->
   <section class="relative z-10 px-6 py-24 bg-gradient-to-b from-black to-zinc-900">
@@ -217,68 +218,65 @@
     document.getElementById("loginModal").classList.remove("hidden");
   };
 
-// 🌐 STEP 1: Fetch IP & Country Code
+// 🌐 IP Fetch
 async function getUserCountry() {
   try {
     const res = await fetch("https://ipapi.co/json/");
     const data = await res.json();
     console.log("🌐 IP Info:", data);
-    console.log("🌍 Detected Country Code:", data.country_code);
-    return data.country_code;
+    return data.country_code; // like "TR"
   } catch (err) {
-    console.error("❌ Failed to get IP info:", err);
+    console.error("IP error:", err);
     return null;
   }
 }
 
-// 🌍 STEP 2: Build Spinning Globe and Highlight Country
+// 🌍 Globe Setup
 const world = Globe()(document.getElementById('globeViz'))
   .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
   .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
-  .pointOfView({ lat: 20, lng: 0, altitude: 2 }, 0)
-  .showGlobe(true)
-  .showAtmosphere(true)
-  .atmosphereColor('#3a228a')
-  .atmosphereAltitude(0.25)
-  .enablePointerInteraction(true);
+  .atmosphereColor('#00aaff')
+  .atmosphereAltitude(0.3)
+  .pointOfView({ lat: 30, lng: 10, altitude: 2.5 }, 0)
+  .showGraticules(true)
+  .polygonAltitude(0.03)
+  .polygonCapColor(() => 'rgba(200,200,200,0.4)')
+  .polygonSideColor(() => 'rgba(100,100,100,0.1)')
+  .polygonStrokeColor(() => '#999');
+    .controls().autoRotate = true;
+  .controls().autoRotateSpeed = 0.3;
 
+
+// 🎯 Highlight logic
 fetch('https://unpkg.com/world-atlas@1/world/110m.json')
   .then(res => res.json())
-  .then(landData => {
+  .then(async landData => {
     const geo = window.topojson.feature(landData, landData.objects.countries).features;
 
-    // 🔁 Base setup
-    world.polygonsData(geo)
-      .polygonAltitude(0.01)
-      .polygonCapColor(() => 'rgba(200, 200, 200, 0.5)')
-      .polygonSideColor(() => 'rgba(0, 100, 0, 0.15)')
-      .polygonStrokeColor(() => '#111');
+    const code = await getUserCountry();
+    console.log("🌍 Your Country Code:", code);
 
-    // ✨ Highlight user's country
-    getUserCountry().then(code => {
-      if (!code) return;
-      geo.forEach(f => {
-        const iso = f.properties.ISO_A2 || f.properties.iso_a2 || f.properties.iso2;
-        if (iso === code) {
-          console.log("✅ Highlighting:", iso);
-          f.properties.highlight = true;
-        }
-      });
-
-      // Re-render with highlight
-      world.polygonsData(geo);
-
-      // ✨ Add glow pulse animation
-      let pulse = 0;
-      setInterval(() => {
-        pulse = 0.5 + 0.5 * Math.sin(Date.now() / 500);
-        world.polygonCapColor(feat =>
-          feat.properties.highlight
-            ? `rgba(255, 215, 0, ${pulse})`
-            : 'rgba(200, 200, 200, 0.5)'
-        );
-      }, 100);
+    // ✅ Match by 2-letter ISO (some datasets use uppercase)
+    geo.forEach(f => {
+      if ((f.properties.ISO_A2 || f.properties.iso_a2 || "").toUpperCase() === code.toUpperCase()) {
+        f.properties.highlight = true;
+        console.log("✅ Country highlighted:", f.properties.name || f.properties.NAME);
+      }
     });
+
+    // Initial data render
+    world.polygonsData(geo);
+
+    // 🔁 Glowing effect
+    let pulse = 0;
+    setInterval(() => {
+      pulse = 0.5 + 0.5 * Math.sin(Date.now() / 500);
+      world.polygonCapColor(feat =>
+        feat.properties.highlight
+          ? `rgba(255, 215, 0, ${pulse})`  // glowing gold
+          : 'rgba(200,200,200,0.4)'
+      );
+    }, 100);
   });
 
 </script>
@@ -286,6 +284,10 @@ fetch('https://unpkg.com/world-atlas@1/world/110m.json')
 <script src="js/main.js"></script>
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 <script>AOS.init({ duration: 1000, once: true });</script>
-
+<style>
+  canvas {
+    image-rendering: auto !important;
+  }
+</style>
 </body>
 </html>
