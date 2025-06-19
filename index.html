@@ -62,11 +62,16 @@
 <body class="bg-black text-white overflow-x-hidden">
 
 <!-- Login Modal -->
-<div id="loginModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 hidden">
-  <div class="bg-white/5 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-8 w-full max-w-md text-white relative">
+<div id="loginModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center text-center opacity-0 pointer-events-none transition-opacity duration-700 z-50">
+  <div class="relative bg-white/5 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-8 w-full max-w-md text-white overflow-hidden">
+
+    <!-- Rocket Throttle Glow -->
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-cyan-500/30 blur-3xl rounded-full z-[-1] animate-pulse"></div>
+
     <div class="w-full flex justify-center absolute -top-6 left-0">
       <button id="closeLogin" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold shadow-md hover:scale-110 transition">&times;</button>
     </div>
+
     <h2 class="text-2xl font-bold mb-6 text-center mt-4">Welcome Back</h2>
     <input type="email" id="loginEmail" placeholder="Email" class="w-full mb-4 px-4 py-2 rounded bg-white/10 border border-white/10" />
     <input type="password" id="loginPassword" placeholder="Password" class="w-full mb-6 px-4 py-2 rounded bg-white/10 border border-white/10" />
@@ -85,8 +90,10 @@
 <img id="rocketLaunch" src="assets/rocket.png" alt="Rocket" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 w-16 z-50 transition-transform duration-1000 ease-out" />
 
 <!-- Register Modal -->
-<div id="registerModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 hidden">
+<div id="registerModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center text-center opacity-0 pointer-events-none transition-opacity duration-700 z-50">
   <div class="bg-white/5 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-8 w-full max-w-md text-white relative">
+   <!-- Rocket Throttle Glow -->
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-40 h-40 bg-cyan-500/30 blur-3xl rounded-full z-[-1] animate-pulse"></div>
     <div class="w-full flex justify-center absolute -top-6 left-0">
       <button id="closeRegister" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white w-10 h-10 flex items-center justify-center rounded-full text-lg font-bold shadow-md hover:scale-110 transition">&times;</button>
     </div>
@@ -112,9 +119,9 @@
   <p class="mt-4 text-lg md:text-xl text-white/60 max-w-xl">
     Where aerospace dreams meet the simplicity of design.
   </p>
-  <button id="openLogin" class="group mt-8 px-6 py-3 bg-white/10 border border-white/20 backdrop-blur-xl rounded-full text-lg font-medium text-white hover:bg-white/20 transition duration-300 flex items-center gap-3">
-  <span>Enter Portal</span>
-  <img src="assets/rocket.png" alt="rocket" class="w-5 h-5 transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-12" />
+ <button id="openLogin" class="mt-8 px-8 py-3 text-lg font-semibold rounded-full bg-white/10 text-white border border-white/20 backdrop-blur-xl hover:bg-white/20 hover:shadow-[0_0_30px_rgba(0,200,255,0.3)] transition-all duration-300 ease-in-out">
+  Enter Portal
+</button>
 </button>
 </section>
 
@@ -276,23 +283,51 @@
     }
   };
 
-  // Modal control
+  const loginModal = document.getElementById("loginModal");
+  const registerModal = document.getElementById("registerModal");
+
+  // OPEN Login
   document.getElementById("openLogin").onclick = () => {
-    document.getElementById("loginModal").classList.remove("hidden");
+    loginModal.classList.remove("hidden", "pointer-events-none", "opacity-0");
+    setTimeout(() => loginModal.classList.add("opacity-100"), 10);
   };
+
+  // CLOSE Login
   document.getElementById("closeLogin").onclick = () => {
-    document.getElementById("loginModal").classList.add("hidden");
+    loginModal.classList.remove("opacity-100");
+    setTimeout(() => {
+      loginModal.classList.add("opacity-0", "pointer-events-none");
+    }, 500);
   };
+
+  // CLOSE Register
   document.getElementById("closeRegister").onclick = () => {
-    document.getElementById("registerModal").classList.add("hidden");
+    registerModal.classList.remove("opacity-100");
+    setTimeout(() => {
+      registerModal.classList.add("opacity-0", "pointer-events-none");
+    }, 500);
   };
+
+  // Switch to Register
   document.getElementById("switchToRegister").onclick = () => {
-    document.getElementById("loginModal").classList.add("hidden");
-    document.getElementById("registerModal").classList.remove("hidden");
+    loginModal.classList.remove("opacity-100");
+    registerModal.classList.remove("hidden", "pointer-events-none", "opacity-0");
+
+    setTimeout(() => {
+      loginModal.classList.add("opacity-0", "pointer-events-none");
+      registerModal.classList.add("opacity-100");
+    }, 300);
   };
+
+  // Switch to Login
   document.getElementById("switchToLogin").onclick = () => {
-    document.getElementById("registerModal").classList.add("hidden");
-    document.getElementById("loginModal").classList.remove("hidden");
+    registerModal.classList.remove("opacity-100");
+    loginModal.classList.remove("hidden", "pointer-events-none", "opacity-0");
+
+    setTimeout(() => {
+      registerModal.classList.add("opacity-0", "pointer-events-none");
+      loginModal.classList.add("opacity-100");
+    }, 300);
   };
 </script>
 
