@@ -187,13 +187,13 @@ a {
   background: conic-gradient(
     from 0deg,
     rgba(0, 255, 255, 0) 0%,
-    rgba(0, 255, 255, 0.8) 6%,
-    rgba(0, 255, 255, 0) 12%
+    rgba(0, 255, 255, 0.9) 4%,
+    rgba(0, 255, 255, 0.6) 6%,
+    rgba(0, 255, 255, 0.2) 10%,
+    rgba(0, 255, 255, 0) 15%,
+    rgba(0, 255, 255, 0) 100%
   );
   animation: worm-spin 4s linear infinite;
-}
-
-@keyframes worm-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  z-index: 1;
+  filter: blur(2px);
 }
