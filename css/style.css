@@ -188,6 +188,7 @@ a {
   );
   animation: spin-worm 4s linear infinite;
   filter: blur(3px);
+  transform-origin: center center; /* 🛠️ FIXES STUCK ROTATION */
   mask: radial-gradient(farthest-side, transparent 90%, black 91%);
   -webkit-mask: radial-gradient(farthest-side, transparent 90%, black 91%);
 }
