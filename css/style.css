@@ -173,7 +173,9 @@ a {
   border-radius: 9999px;
   z-index: 0;
 }
-
+.tracing-worm {
+  position: relative;
+}
 .tracing-worm::before {
   content: '';
   position: absolute;
