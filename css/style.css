@@ -192,3 +192,12 @@ a {
   mask: radial-gradient(farthest-side, transparent 90%, black 91%);
   -webkit-mask: radial-gradient(farthest-side, transparent 90%, black 91%);
 }
+@keyframes spin-worm {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
