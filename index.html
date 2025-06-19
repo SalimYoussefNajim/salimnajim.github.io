@@ -112,9 +112,10 @@
   <p class="mt-4 text-lg md:text-xl text-white/60 max-w-xl">
     Where aerospace dreams meet the simplicity of design.
   </p>
-  <button id="openLogin" class="mt-8 px-6 py-3 bg-white/10 border border-white/20 backdrop-blur-xl rounded-full text-lg font-medium text-white hover:scale-105 hover:bg-white/20 transition">
-    Enter Portal
-  </button>
+  <button id="openLogin" class="group mt-8 px-6 py-3 bg-white/10 border border-white/20 backdrop-blur-xl rounded-full text-lg font-medium text-white hover:bg-white/20 transition duration-300 flex items-center gap-3">
+  <span>Enter Portal</span>
+  <img src="assets/rocket.png" alt="rocket" class="w-5 h-5 transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-12" />
+</button>
 </section>
 
 <!-- Cosmic Background -->
@@ -293,27 +294,6 @@
     document.getElementById("registerModal").classList.add("hidden");
     document.getElementById("loginModal").classList.remove("hidden");
   };
-const rocket = document.getElementById("rocketLaunch");
-
-document.getElementById("openLogin").onclick = () => {
-  // Reset
-  rocket.classList.remove("hidden", "launch-up");
-  rocket.classList.add("block");
-
-  // Trigger rocket animation
-  setTimeout(() => {
-    rocket.classList.add("launch-up");
-  }, 50);
-
-  // Show login modal after animation
-  setTimeout(() => {
-    rocket.classList.add("hidden");
-    const modal = document.getElementById("loginModal");
-    modal.classList.remove("hidden");
-    modal.querySelector("div").classList.add("modal-fade-in");
-  }, 1200);
-};
-
 </script>
 
 <script src="js/main.js"></script>
