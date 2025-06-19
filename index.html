@@ -296,20 +296,24 @@
   };
 
   // CLOSE Login
-  document.getElementById("closeLogin").onclick = () => {
-    loginModal.classList.remove("opacity-100");
-    setTimeout(() => {
-      loginModal.classList.add("opacity-0", "pointer-events-none");
-    }, 500);
-  };
+document.getElementById("closeLogin").onclick = () => {
+  loginModal.classList.remove("opacity-100");
+  loginModal.classList.add("pointer-events-none"); // disable instantly
+  setTimeout(() => {
+    loginModal.classList.add("opacity-0");
+  }, 10); // start fade after slight delay
+};
+
 
   // CLOSE Register
-  document.getElementById("closeRegister").onclick = () => {
-    registerModal.classList.remove("opacity-100");
-    setTimeout(() => {
-      registerModal.classList.add("opacity-0", "pointer-events-none");
-    }, 500);
-  };
+ document.getElementById("closeRegister").onclick = () => {
+  loginModal.classList.remove("opacity-100");
+  loginModal.classList.add("pointer-events-none"); // disable instantly
+  setTimeout(() => {
+    loginModal.classList.add("opacity-0");
+  }, 10); // start fade after slight delay
+};
+
 
   // Switch to Register
   document.getElementById("switchToRegister").onclick = () => {
