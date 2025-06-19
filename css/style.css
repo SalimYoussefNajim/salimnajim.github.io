@@ -182,12 +182,12 @@ a {
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    rgba(0, 255, 255, 1) 12deg,
-    rgba(0, 255, 255, 0.3) 18deg,
-    transparent 30deg
+    rgba(0, 255, 255, 1) 10deg,
+    rgba(0, 255, 255, 0.3) 16deg,
+    transparent 26deg
   );
   animation: spin-worm 4s linear infinite;
-  filter: blur(4px);
-  mask: radial-gradient(farthest-side, transparent 82%, black 83%);
-  -webkit-mask: radial-gradient(farthest-side, transparent 82%, black 83%);
+  filter: blur(3px);
+  mask: radial-gradient(farthest-side, transparent 87%, black 88%);
+  -webkit-mask: radial-gradient(farthest-side, transparent 87%, black 88%);
 }
