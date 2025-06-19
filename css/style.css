@@ -175,6 +175,7 @@ a {
 
 .worm-ring::before {
   content: '';
+  display: block; /* 👈 REQUIRED for animation to run */
   position: absolute;
   width: 100%;
   height: 100%;
@@ -188,9 +189,11 @@ a {
   );
   animation: spin-worm 4s linear infinite;
   filter: blur(3px);
-  transform-origin: center center; /* 🛠️ FIXES STUCK ROTATION */
+  transform-origin: center center;
   mask: radial-gradient(farthest-side, transparent 90%, black 91%);
   -webkit-mask: radial-gradient(farthest-side, transparent 90%, black 91%);
+}
+
 }
 @keyframes spin-worm {
   0% {
