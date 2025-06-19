@@ -164,10 +164,10 @@ a {
 
 .worm-ring {
   position: absolute;
-  top: -6px;
-  left: -6px;
-  width: 232px;
-  height: 232px;
+  top: -2px;
+  left: -2px;
+  width: 224px;
+  height: 224px;
   border-radius: 9999px;
   z-index: 1;
   pointer-events: none;
@@ -188,6 +188,6 @@ a {
   );
   animation: spin-worm 4s linear infinite;
   filter: blur(3px);
-  mask: radial-gradient(farthest-side, transparent 87%, black 88%);
-  -webkit-mask: radial-gradient(farthest-side, transparent 87%, black 88%);
+  mask: radial-gradient(farthest-side, transparent 90%, black 91%);
+  -webkit-mask: radial-gradient(farthest-side, transparent 90%, black 91%);
 }
