@@ -173,9 +173,11 @@ a {
   border-radius: 9999px;
   z-index: 0;
 }
+
 .tracing-worm {
   position: relative;
 }
+
 .tracing-worm::before {
   content: '';
   position: absolute;
@@ -185,8 +187,8 @@ a {
   background: conic-gradient(
     from 0deg,
     rgba(0, 255, 255, 0) 0%,
-    rgba(0, 255, 255, 0.8) 10%,
-    rgba(0, 255, 255, 0) 20%
+    rgba(0, 255, 255, 0.8) 6%,
+    rgba(0, 255, 255, 0) 12%
   );
   animation: worm-spin 4s linear infinite;
 }
