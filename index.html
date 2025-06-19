@@ -58,44 +58,6 @@
     }
   }
 </style>
-  <style>
-.tracing-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.tracing-worm {
-  position: relative;
-}
-
-.tracing-worm::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 9999px;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg,
-    rgba(0, 255, 255, 0.9) 10deg,
-    rgba(0, 255, 255, 0.4) 25deg,
-    transparent 40deg
-  );
-  animation: worm-spin 3s linear infinite;
-  z-index: 2;
-  filter: blur(2px);
-}
-
-@keyframes worm-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-</style>
 </head>
 <body class="bg-black text-white overflow-x-hidden">
 
@@ -172,8 +134,8 @@
   
 <section class="flex flex-col md:flex-row items-center justify-center gap-10 py-20">
   <!-- Worm Border Container -->
-  <div class="relative w-52 h-52 rounded-full overflow-hidden">
-    <div class="tracing-ring tracing-worm"></div>
+ <div class="avatar-wrapper">
+  <div class="worm-ring"></div>
     <img src="assets/salim-photo.png" alt="Salim Najim" class="relative z-10 w-full h-full object-cover rounded-full border border-white/10" />
   </div>
 
