@@ -306,13 +306,14 @@ document.getElementById("closeLogin").onclick = () => {
 
 
   // CLOSE Register
- document.getElementById("closeRegister").onclick = () => {
-  loginModal.classList.remove("opacity-100");
-  loginModal.classList.add("pointer-events-none"); // disable instantly
+document.getElementById("closeRegister").onclick = () => {
+  registerModal.classList.remove("opacity-100");
+  registerModal.classList.add("pointer-events-none"); // disable instantly
   setTimeout(() => {
-    loginModal.classList.add("opacity-0");
-  }, 10); // start fade after slight delay
+    registerModal.classList.add("opacity-0");
+  }, 10); // start fade after short delay
 };
+
 
 
   // Switch to Register
