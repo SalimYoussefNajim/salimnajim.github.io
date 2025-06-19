@@ -337,6 +337,21 @@ document.getElementById("closeRegister").onclick = () => {
       loginModal.classList.add("opacity-100");
     }, 300);
   };
+
+  // Handle Enter key in modals
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    const loginVisible = loginModal.classList.contains("opacity-100");
+    const registerVisible = registerModal.classList.contains("opacity-100");
+
+    if (loginVisible) {
+      document.getElementById("loginSubmit").click();
+    } else if (registerVisible) {
+      document.getElementById("registerSubmit").click();
+    }
+  }
+});
+
 </script>
 
 <script src="js/main.js"></script>
