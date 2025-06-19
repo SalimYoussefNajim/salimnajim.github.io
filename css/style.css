@@ -182,18 +182,12 @@ a {
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    rgba(0, 255, 255, 0.9) 8deg,
-    rgba(0, 255, 255, 0.3) 12deg,
-    transparent 20deg
+    rgba(0, 255, 255, 1) 12deg,
+    rgba(0, 255, 255, 0.3) 18deg,
+    transparent 30deg
   );
-  animation: spin-worm 2.5s linear infinite;
-  filter: blur(3px);
-  mask: radial-gradient(farthest-side, transparent 84%, black 85%);
-  -webkit-mask: radial-gradient(farthest-side, transparent 84%, black 85%);
+  animation: spin-worm 4s linear infinite;
+  filter: blur(4px);
+  mask: radial-gradient(farthest-side, transparent 82%, black 83%);
+  -webkit-mask: radial-gradient(farthest-side, transparent 82%, black 83%);
 }
-
-@keyframes spin-worm {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
