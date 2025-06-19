@@ -167,3 +167,29 @@ a {
 .animate-spin-slow {
   animation: spin-slow 20s linear infinite;
 }
+.tracing-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  z-index: 0;
+}
+
+.tracing-worm::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 9999px;
+  background: conic-gradient(
+    from 0deg,
+    rgba(0, 255, 255, 0) 0%,
+    rgba(0, 255, 255, 0.8) 10%,
+    rgba(0, 255, 255, 0) 20%
+  );
+  animation: worm-spin 4s linear infinite;
+}
+
+@keyframes worm-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
