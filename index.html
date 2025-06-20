@@ -377,7 +377,7 @@ document.getElementById("boardingPassForm").addEventListener("submit", async fun
 
   if (!name || !surname) return alert("Please enter both name and surname.");
 
-  const fullName = `${name} ${surname}`;
+  const fullName = `${name.toUpperCase()} ${surname.toUpperCase()}`;
   const canvas = document.createElement("canvas");
   canvas.width = 1000;
   canvas.height = 400;
@@ -399,45 +399,57 @@ document.getElementById("boardingPassForm").addEventListener("submit", async fun
     ]);
 
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
-    ctx.drawImage(logo, 30, 30, 80, 80);
+    ctx.drawImage(logo, 40, 40, 60, 60);
 
-    // Texts
-    ctx.font = "bold 40px 'Segoe UI', sans-serif";
+    // Header
+    ctx.font = "bold 36px 'Segoe UI', sans-serif";
     ctx.fillStyle = "#ffffff";
-    ctx.textAlign = "left";
-    ctx.fillText("BOARDING PASS", 140, 80);
+    ctx.fillText("BOARDING PASS", 120, 75);
 
-    ctx.font = "28px 'Segoe UI', sans-serif";
+    ctx.font = "bold 28px 'Segoe UI', sans-serif";
     ctx.fillStyle = "#00ccff";
-    ctx.fillText(fullName.toUpperCase(), 140, 130);
+    ctx.fillText(fullName, 120, 120);
 
-    ctx.fillStyle = "#ffffffbb";
+    // Flight details
     ctx.font = "20px 'Segoe UI', sans-serif";
-    ctx.fillText("Flight: ST-2025", 140, 180);
-    ctx.fillText("Seat: A17  |  Gate: 07", 140, 210);
-    ctx.fillText("Departure: VBS Spaceport", 140, 240);
+    ctx.fillStyle = "#ffffffd9";
+    ctx.fillText("Flight:", 120, 170);
+    ctx.fillText("ST-2025", 220, 170);
 
-    // Add personal photo
+    ctx.fillText("Seat:", 120, 200);
+    ctx.fillText("A17", 220, 200);
+
+    ctx.fillText("Gate:", 340, 200);
+    ctx.fillText("07", 410, 200);
+
+    ctx.fillText("Departure:", 120, 230);
+    ctx.fillText("VBS Spaceport", 260, 230);
+
+    // Optional: Personal photo
     if (fileInput.files[0]) {
       const reader = new FileReader();
       reader.onload = async function (e) {
         const userImg = await loadImage(e.target.result);
-        ctx.drawImage(userImg, 820, 40, 140, 140);
-        finishBoardingPass(); // call final drawing step
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(870, 90, 50, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.clip();
+        ctx.drawImage(userImg, 820, 40, 100, 100);
+        ctx.restore();
+        drawQR();
       };
       reader.readAsDataURL(fileInput.files[0]);
     } else {
-      finishBoardingPass(); // no photo, just generate
+      drawQR();
     }
 
-    function finishBoardingPass() {
-      // Generate QR Code
+    function drawQR() {
       const qrCanvas = document.createElement("canvas");
       QRCode.toCanvas(qrCanvas, "https://salimyoussefnajim.com", { width: 100 }, (err) => {
         if (err) return alert("QR generation failed");
         ctx.drawImage(qrCanvas, 850, 270, 100, 100);
 
-        // Download
         const link = document.createElement("a");
         link.download = `BoardingPass-${name}_${surname}.png`;
         link.href = canvas.toDataURL("image/png");
