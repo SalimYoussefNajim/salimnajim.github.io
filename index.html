@@ -379,110 +379,87 @@ document.getElementById("boardingPassForm").addEventListener("submit", async fun
 
   const fullName = `${name.toUpperCase()} ${surname.toUpperCase()}`;
   const canvas = document.createElement("canvas");
-canvas.width = 1000;
-canvas.height = 400;
-const ctx = canvas.getContext("2d");
+  canvas.width = 1000;
+  canvas.height = 400;
+  const ctx = canvas.getContext("2d");
 
-// Background
-const background = new Image();
-background.src = "assets/boarding_bg.jpg"; // Make sure it's 1000x400 elegant dark version
+  const loadImage = (src) =>
+    new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = src;
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+    });
 
-background.onload = () => {
-  ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+  try {
+    const [background, logo] = await Promise.all([
+      loadImage("assets/ChatGPT Image Jun 20, 2025, 09_48_34 PM.png"),
+      loadImage("assets/favicon.ico"),
+    ]);
 
-  // Logo
-  const logo = new Image();
-  logo.src = "assets/favicon.png";
-
-  logo.onload = () => {
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     ctx.drawImage(logo, 40, 40, 60, 60);
 
-    // Titles
-    ctx.font = "bold 36px Segoe UI";
-    ctx.fillStyle = "white";
+    // Header
+    ctx.font = "bold 36px 'Segoe UI', sans-serif";
+    ctx.fillStyle = "#ffffff";
     ctx.fillText("BOARDING PASS", 120, 75);
 
-    ctx.font = "bold 26px Segoe UI";
+    ctx.font = "bold 28px 'Segoe UI', sans-serif";
     ctx.fillStyle = "#00ccff";
-    ctx.fillText(fullName.toUpperCase(), 120, 120);
+    ctx.fillText(fullName, 120, 120);
 
-    // Flight Info - Left Section
-    ctx.font = "20px Segoe UI";
-    ctx.fillStyle = "#ffffff";
-    ctx.fillText("Flight:", 60, 170);
-    ctx.fillText("ST-2025", 150, 170);
+    // Flight details
+    ctx.font = "20px 'Segoe UI', sans-serif";
+    ctx.fillStyle = "#ffffffd9";
+    ctx.fillText("Flight:", 120, 170);
+    ctx.fillText("ST-2025", 220, 170);
 
-    ctx.fillText("Seat:", 60, 200);
-    ctx.fillText("A17", 150, 200);
+    ctx.fillText("Seat:", 120, 200);
+    ctx.fillText("A17", 220, 200);
 
-    ctx.fillText("Gate:", 60, 230);
-    ctx.fillText("07", 150, 230);
+    ctx.fillText("Gate:", 340, 200);
+    ctx.fillText("07", 410, 200);
 
-    ctx.fillText("Class:", 60, 260);
-    ctx.fillText("First Class", 150, 260);
+    ctx.fillText("Departure:", 120, 230);
+    ctx.fillText("VBS Spaceport", 260, 230);
 
-    ctx.fillText("From:", 60, 290);
-    ctx.fillText("VBS Spaceport", 150, 290);
-
-    ctx.fillText("To:", 60, 320);
-    ctx.fillText("Andromeda Station", 150, 320);
-
-    ctx.fillText("Date:", 60, 350);
-    ctx.fillText("2025-06-21", 150, 350);
-
-    // Vertical tear line
-    ctx.strokeStyle = "#888";
-    ctx.setLineDash([5, 5]);
-    ctx.beginPath();
-    ctx.moveTo(700, 40);
-    ctx.lineTo(700, 360);
-    ctx.stroke();
-
-    // Right Section (Stub)
-    ctx.setLineDash([]);
-
-    ctx.font = "bold 22px Segoe UI";
-    ctx.fillStyle = "white";
-    ctx.fillText(fullName.toUpperCase(), 730, 100);
-
-    ctx.font = "18px Segoe UI";
-    ctx.fillStyle = "#cccccc";
-    ctx.fillText("Flight: ST-2025", 730, 140);
-    ctx.fillText("Seat: A17", 730, 170);
-    ctx.fillText("Gate: 07", 730, 200);
-
-    // Add uploaded photo (if any)
-    if (uploadedImage) {
-      const img = new Image();
-      img.src = uploadedImage;
-      img.onload = () => {
+    // Optional: Personal photo
+    if (fileInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = async function (e) {
+        const userImg = await loadImage(e.target.result);
         ctx.save();
         ctx.beginPath();
-        ctx.arc(930, 80, 30, 0, Math.PI * 2);
+        ctx.arc(870, 90, 50, 0, Math.PI * 2);
+        ctx.closePath();
         ctx.clip();
-        ctx.drawImage(img, 900, 50, 60, 60);
+        ctx.drawImage(userImg, 820, 40, 100, 100);
         ctx.restore();
-
         drawQR();
       };
+      reader.readAsDataURL(fileInput.files[0]);
     } else {
       drawQR();
     }
 
-      function drawQR() {
+    function drawQR() {
       const qrCanvas = document.createElement("canvas");
       QRCode.toCanvas(qrCanvas, "https://salimyoussefnajim.com", { width: 100 }, (err) => {
         if (err) return alert("QR generation failed");
         ctx.drawImage(qrCanvas, 850, 270, 100, 100);
-        // Final Download
+
         const link = document.createElement("a");
         link.download = `BoardingPass-${name}_${surname}.png`;
         link.href = canvas.toDataURL("image/png");
         link.click();
-      };
+      });
     }
-  };
-};
+  } catch (err) {
+    alert("🚫 Error generating pass: " + err.message);
+  }
+});
 
   // Live Photo Preview
 document.getElementById("bpPhoto").addEventListener("change", function () {
