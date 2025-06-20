@@ -191,7 +191,10 @@
   <form id="boardingPassForm" class="flex flex-col md:flex-row justify-center items-center gap-4 max-w-xl mx-auto" enctype="multipart/form-data">
   <input type="text" id="bpName" placeholder="First Name" class="px-4 py-2 rounded bg-white/10 border border-white/10 text-white w-full md:w-auto" required />
   <input type="text" id="bpSurname" placeholder="Last Name" class="px-4 py-2 rounded bg-white/10 border border-white/10 text-white w-full md:w-auto" required />
-  <input type="file" id="bpPhoto" accept="image/*" class="text-white/60 text-sm" />
+  <label for="bpPhoto" class="cursor-pointer px-4 py-2 rounded bg-white/10 border border-white/10 text-white w-full md:w-auto hover:bg-white/20 transition text-center">
+  Upload Photo
+  <input type="file" id="bpPhoto" accept="image/*" class="hidden" />
+</label>
   <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-600 py-2 px-6 rounded font-bold text-white">Download</button>
 </form>
 </section>
@@ -426,7 +429,7 @@ document.getElementById("boardingPassForm").addEventListener("submit", async fun
     function finishBoardingPass() {
       // Generate QR Code
       const qrCanvas = document.createElement("canvas");
-      QRCode.toCanvas(qrCanvas, fullName + " | VBS-2025", { width: 100 }, (err) => {
+      QRCode.toCanvas(qrCanvas, "https://salimyoussefnajim.com", { width: 100 }, (err) => {
         if (err) return alert("QR generation failed");
         ctx.drawImage(qrCanvas, 850, 270, 100, 100);
 
