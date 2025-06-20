@@ -383,7 +383,7 @@ document.getElementById("boardingPassForm").addEventListener("submit", async fun
   try {
     const [background, logo] = await Promise.all([
       loadImage("assets/boarding_bg.jpg"),
-      loadImage("assets/favicon.png")
+      loadImage("assets/favicon.ico")
     ]);
 
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
