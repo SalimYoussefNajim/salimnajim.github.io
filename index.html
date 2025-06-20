@@ -359,55 +359,61 @@ document.addEventListener("keydown", (e) => {
     }
   }
 });
+document.getElementById("boardingPassForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  const name = document.getElementById("bpName").value.trim();
+  const surname = document.getElementById("bpSurname").value.trim();
+  if (!name || !surname) return alert("Please enter both name and surname.");
 
-   document.getElementById("boardingPassForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const name = document.getElementById("bpName").value.trim();
-    const surname = document.getElementById("bpSurname").value.trim();
-    if (!name || !surname) return alert("Please enter both name and surname.");
+  const fullName = `${name} ${surname}`;
+  const canvas = document.createElement("canvas");
+  canvas.width = 1000;
+  canvas.height = 400;
+  const ctx = canvas.getContext("2d");
 
-    const fullName = `${name} ${surname}`;
-    const canvas = document.createElement("canvas");
-    canvas.width = 1000;
-    canvas.height = 400;
-    const ctx = canvas.getContext("2d");
+  // Load both images first
+  const loadImage = (src) =>
+    new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error("Failed to load " + src));
+    });
 
-    // Background
-    const background = new Image();
-    background.src = "assets/boarding_bg.jpg"; // Use a futuristic background image
+  try {
+    const [background, logo] = await Promise.all([
+      loadImage("assets/boarding_bg.jpg"),
+      loadImage("assets/favicon.png")
+    ]);
 
-    background.onload = () => {
-      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(logo, 30, 30, 80, 80);
 
-      // Add logo (optional)
-      const logo = new Image();
-      logo.src = "assets/favicon.png"; // Add your logo
+    // Draw text
+    ctx.font = "bold 40px 'Segoe UI', sans-serif";
+    ctx.fillStyle = "#ffffff";
+    ctx.textAlign = "center";
+    ctx.fillText("BOARDING PASS", canvas.width / 2, 100);
 
-      logo.onload = () => {
-        ctx.drawImage(logo, 30, 30, 80, 80);
+    ctx.font = "bold 32px 'Segoe UI', sans-serif";
+    ctx.fillStyle = "#00ccff";
+    ctx.fillText(fullName.toUpperCase(), canvas.width / 2, 200);
 
-        // Text
-        ctx.font = "bold 40px 'Segoe UI', sans-serif";
-        ctx.fillStyle = "#ffffff";
-        ctx.textAlign = "center";
-        ctx.fillText("BOARDING PASS", canvas.width / 2, 100);
+    ctx.font = "20px 'Segoe UI', sans-serif";
+    ctx.fillStyle = "#ffffffaa";
+    ctx.fillText("Welcome aboard Vision Beyond Stars ✨", canvas.width / 2, 260);
 
-        ctx.font = "bold 32px 'Segoe UI', sans-serif";
-        ctx.fillStyle = "#00ccff";
-        ctx.fillText(fullName.toUpperCase(), canvas.width / 2, 200);
+    // Download
+    const link = document.createElement("a");
+    link.download = `BoardingPass-${name}_${surname}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
 
-        ctx.font = "20px 'Segoe UI', sans-serif";
-        ctx.fillStyle = "#ffffffaa";
-        ctx.fillText("Welcome aboard Vision Beyond Stars ✨", canvas.width / 2, 260);
+  } catch (error) {
+    alert("🚫 Error generating boarding pass: " + error.message);
+  }
+});
 
-        // Download
-        const link = document.createElement("a");
-        link.download = `BoardingPass-${name}_${surname}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      };
-    };
-  });
 </script>
 
 <script src="js/main.js"></script>
