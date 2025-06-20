@@ -182,6 +182,16 @@
     </div>
   </section>
 
+  <section id="boarding-pass" class="relative z-10 px-6 py-24 bg-black text-white text-center">
+  <h2 class="text-4xl font-semibold mb-8">🎫 Get Your Boarding Pass</h2>
+  <p class="text-white/70 mb-6 max-w-xl mx-auto">Enter your name below and receive a personalized digital boarding pass from Salim Najim's cosmic journey!</p>
+
+  <form id="boardingPassForm" class="flex flex-col md:flex-row justify-center items-center gap-4 max-w-xl mx-auto">
+    <input type="text" id="bpName" placeholder="First Name" class="px-4 py-2 rounded bg-white/10 border border-white/10 text-white w-full md:w-auto" required />
+    <input type="text" id="bpSurname" placeholder="Last Name" class="px-4 py-2 rounded bg-white/10 border border-white/10 text-white w-full md:w-auto" required />
+    <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-600 py-2 px-6 rounded font-bold text-white">Download</button>
+  </form>
+</section>
   <!-- Projects -->
   <section class="relative z-10 px-6 py-20">
     <h2 class="text-4xl font-semibold text-center mb-12">My Works</h2>
@@ -350,6 +360,54 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+   document.getElementById("boardingPassForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const name = document.getElementById("bpName").value.trim();
+    const surname = document.getElementById("bpSurname").value.trim();
+    if (!name || !surname) return alert("Please enter both name and surname.");
+
+    const fullName = `${name} ${surname}`;
+    const canvas = document.createElement("canvas");
+    canvas.width = 1000;
+    canvas.height = 400;
+    const ctx = canvas.getContext("2d");
+
+    // Background
+    const background = new Image();
+    background.src = "assets/boarding_bg.jpg"; // Use a futuristic background image
+
+    background.onload = () => {
+      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+      // Add logo (optional)
+      const logo = new Image();
+      logo.src = "assets/favicon.png"; // Add your logo
+
+      logo.onload = () => {
+        ctx.drawImage(logo, 30, 30, 80, 80);
+
+        // Text
+        ctx.font = "bold 40px 'Segoe UI', sans-serif";
+        ctx.fillStyle = "#ffffff";
+        ctx.textAlign = "center";
+        ctx.fillText("BOARDING PASS", canvas.width / 2, 100);
+
+        ctx.font = "bold 32px 'Segoe UI', sans-serif";
+        ctx.fillStyle = "#00ccff";
+        ctx.fillText(fullName.toUpperCase(), canvas.width / 2, 200);
+
+        ctx.font = "20px 'Segoe UI', sans-serif";
+        ctx.fillStyle = "#ffffffaa";
+        ctx.fillText("Welcome aboard Vision Beyond Stars ✨", canvas.width / 2, 260);
+
+        // Download
+        const link = document.createElement("a");
+        link.download = `BoardingPass-${name}_${surname}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      };
+    };
+  });
 </script>
 
 <script src="js/main.js"></script>
