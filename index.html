@@ -10,6 +10,8 @@
      crossorigin="anonymous"></script>
   <link rel="stylesheet" href="css/style.css" />
 <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
 <style>
   .planet-glow {
     filter: drop-shadow(0 0 40px rgba(0, 150, 255, 0.4));
@@ -186,11 +188,12 @@
   <h2 class="text-4xl font-semibold mb-8">🎫 Get Your Boarding Pass</h2>
   <p class="text-white/70 mb-6 max-w-xl mx-auto">Enter your name below and receive a personalized digital boarding pass from Salim Najim's cosmic journey!</p>
 
-  <form id="boardingPassForm" class="flex flex-col md:flex-row justify-center items-center gap-4 max-w-xl mx-auto">
-    <input type="text" id="bpName" placeholder="First Name" class="px-4 py-2 rounded bg-white/10 border border-white/10 text-white w-full md:w-auto" required />
-    <input type="text" id="bpSurname" placeholder="Last Name" class="px-4 py-2 rounded bg-white/10 border border-white/10 text-white w-full md:w-auto" required />
-    <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-600 py-2 px-6 rounded font-bold text-white">Download</button>
-  </form>
+  <form id="boardingPassForm" class="flex flex-col md:flex-row justify-center items-center gap-4 max-w-xl mx-auto" enctype="multipart/form-data">
+  <input type="text" id="bpName" placeholder="First Name" class="px-4 py-2 rounded bg-white/10 border border-white/10 text-white w-full md:w-auto" required />
+  <input type="text" id="bpSurname" placeholder="Last Name" class="px-4 py-2 rounded bg-white/10 border border-white/10 text-white w-full md:w-auto" required />
+  <input type="file" id="bpPhoto" accept="image/*" class="text-white/60 text-sm" />
+  <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-600 py-2 px-6 rounded font-bold text-white">Download</button>
+</form>
 </section>
   <!-- Projects -->
   <section class="relative z-10 px-6 py-20">
@@ -363,6 +366,8 @@ document.getElementById("boardingPassForm").addEventListener("submit", async fun
   e.preventDefault();
   const name = document.getElementById("bpName").value.trim();
   const surname = document.getElementById("bpSurname").value.trim();
+  const fileInput = document.getElementById("bpPhoto");
+
   if (!name || !surname) return alert("Please enter both name and surname.");
 
   const fullName = `${name} ${surname}`;
@@ -371,49 +376,71 @@ document.getElementById("boardingPassForm").addEventListener("submit", async fun
   canvas.height = 400;
   const ctx = canvas.getContext("2d");
 
-  // Load both images first
   const loadImage = (src) =>
     new Promise((resolve, reject) => {
       const img = new Image();
+      img.crossOrigin = "anonymous";
       img.src = src;
       img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error("Failed to load " + src));
+      img.onerror = reject;
     });
 
   try {
     const [background, logo] = await Promise.all([
       loadImage("assets/boarding_bg000.jpg"),
-      loadImage("assets/favicon.ico")
+      loadImage("assets/favicon.ico"),
     ]);
 
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
     ctx.drawImage(logo, 30, 30, 80, 80);
 
-    // Draw text
+    // Texts
     ctx.font = "bold 40px 'Segoe UI', sans-serif";
     ctx.fillStyle = "#ffffff";
-    ctx.textAlign = "center";
-    ctx.fillText("BOARDING PASS", canvas.width / 2, 100);
+    ctx.textAlign = "left";
+    ctx.fillText("BOARDING PASS", 140, 80);
 
-    ctx.font = "bold 32px 'Segoe UI', sans-serif";
+    ctx.font = "28px 'Segoe UI', sans-serif";
     ctx.fillStyle = "#00ccff";
-    ctx.fillText(fullName.toUpperCase(), canvas.width / 2, 200);
+    ctx.fillText(fullName.toUpperCase(), 140, 130);
 
+    ctx.fillStyle = "#ffffffbb";
     ctx.font = "20px 'Segoe UI', sans-serif";
-    ctx.fillStyle = "#ffffffaa";
-    ctx.fillText("Welcome aboard Vision Beyond Stars ✨", canvas.width / 2, 260);
+    ctx.fillText("Flight: ST-2025", 140, 180);
+    ctx.fillText("Seat: A17  |  Gate: 07", 140, 210);
+    ctx.fillText("Departure: VBS Spaceport", 140, 240);
 
-    // Download
-    const link = document.createElement("a");
-    link.download = `BoardingPass-${name}_${surname}.png`;
-    link.href = canvas.toDataURL("image/png");
-    link.click();
+    // Add personal photo
+    if (fileInput.files[0]) {
+      const reader = new FileReader();
+      reader.onload = async function (e) {
+        const userImg = await loadImage(e.target.result);
+        ctx.drawImage(userImg, 820, 40, 140, 140);
+        finishBoardingPass(); // call final drawing step
+      };
+      reader.readAsDataURL(fileInput.files[0]);
+    } else {
+      finishBoardingPass(); // no photo, just generate
+    }
 
-  } catch (error) {
-    alert("🚫 Error generating boarding pass: " + error.message);
+    function finishBoardingPass() {
+      // Generate QR Code
+      const qrCanvas = document.createElement("canvas");
+      QRCode.toCanvas(qrCanvas, fullName + " | VBS-2025", { width: 100 }, (err) => {
+        if (err) return alert("QR generation failed");
+        ctx.drawImage(qrCanvas, 850, 270, 100, 100);
+
+        // Download
+        const link = document.createElement("a");
+        link.download = `BoardingPass-${name}_${surname}.png`;
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+  } catch (err) {
+    alert("🚫 Error generating pass: " + err.message);
   }
 });
-
 </script>
 
 <script src="js/main.js"></script>
