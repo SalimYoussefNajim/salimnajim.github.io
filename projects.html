@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Najim's Rocket Launch</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #000;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden">
+
+  <!-- Navigation Bar -->
+  <nav class="flex justify-between items-center px-8 py-4 bg-black text-white">
+    <h1 class="text-2xl font-bold tracking-wide">🚀 NajimSpace</h1>
+    <ul class="flex gap-6 text-white/80 text-sm">
+      <li><a href="#mission" class="hover:text-white transition">Mission</a></li>
+      <li><a href="#tech" class="hover:text-white transition">Technology</a></li>
+      <li><a href="#launch" class="hover:text-white transition">Launch</a></li>
+      <li><a href="#contact" class="hover:text-white transition">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section with Diagram to Video Transition -->
+  <section class="relative w-full h-screen overflow-hidden bg-black" id="rocketSection">
+    <!-- Rocket Diagram -->
+    <img src="assets/rocket-diagram.png"
+         alt="Rocket Diagram"
+         id="rocketDiagram"
+         class="absolute inset-0 w-full h-full object-contain transition-opacity duration-1000 z-10" />
+
+    <!-- Rocket Video (initially hidden) -->
+    <video id="rocketVideo"
+           class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000 z-0"
+           muted autoplay loop playsinline>
+      <source src="assets/rocket-launch.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+
+    <!-- Trigger Button -->
+    <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20">
+      <button id="startRocket"
+              class="bg-gradient-to-r from-purple-500 to-blue-600 text-white px-6 py-2 rounded-full hover:scale-105 transition">
+        Launch Sequence
+      </button>
+    </div>
+  </section>
+
+  <!-- Content Sections -->
+  <section id="mission" class="px-10 py-20">
+    <h2 class="text-3xl font-bold mb-4">Our Mission</h2>
+    <p class="text-white/70 max-w-3xl">To inspire the future by blending space-grade technology with everyday imagination. NajimSpace is about pushing limits — in innovation, storytelling, and exploration.</p>
+  </section>
+
+  <section id="tech" class="px-10 py-20 bg-gradient-to-b from-gray-900 via-black to-gray-900">
+    <h2 class="text-3xl font-bold mb-4">Technology Behind the Launch</h2>
+    <p class="text-white/70 max-w-3xl">Powered by clean energy, AI-assisted navigation, and the cosmic dreams of Najim, this launch is built on precision and imagination.</p>
+  </section>
+
+  <section id="launch" class="px-10 py-20">
+    <h2 class="text-3xl font-bold mb-4">Next Launch Window</h2>
+    <ul class="list-disc ml-6 text-white/70">
+      <li>Location: Najim Launch Pad - VBS Zone</li>
+      <li>Date: August 12, 2025</li>
+      <li>Time: 14:00 (GMT+3)</li>
+    </ul>
+  </section>
+
+  <section id="contact" class="px-10 py-20 bg-gray-900">
+    <h2 class="text-3xl font-bold mb-4">Contact Ground Control</h2>
+    <p class="text-white/70">Email: control@najimspace.com</p>
+  </section>
+
+  <!-- JS to Handle Transition -->
+  <script>
+    document.getElementById('startRocket').addEventListener('click', () => {
+      const diagram = document.getElementById('rocketDiagram');
+      const video = document.getElementById('rocketVideo');
+
+      diagram.classList.add('opacity-0');
+      video.classList.add('opacity-100', 'z-20');
+    });
+  </script>
+
+</body>
+</html>
