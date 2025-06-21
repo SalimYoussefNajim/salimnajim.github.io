@@ -425,49 +425,50 @@ document.getElementById("boardingPassForm").addEventListener("submit", async fun
     ctx.fillText("Departure:", 120, 230);
     ctx.fillText("VBS Spaceport", 260, 230);
 
-  if (fileInput.files[0]) {
+if (fileInput.files[0]) {
   const reader = new FileReader();
   reader.onload = async function (e) {
     const userImg = await loadImage(e.target.result);
 
-    // Create a temporary canvas for clean downscale
+    // STEP 1: Crop to square
+    const size = Math.min(userImg.width, userImg.height);
+    const cropX = (userImg.width - size) / 2;
+    const cropY = (userImg.height - size) / 2;
+
     const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = 200;
+    tempCanvas.height = 200;
     const tCtx = tempCanvas.getContext("2d");
 
-    const targetSize = 100;
-    let width = userImg.width;
-    let height = userImg.height;
-
-    // Downscale in steps for better quality
-    while (width > targetSize * 2) {
-      width /= 2;
-      height /= 2;
-    }
-
-    tempCanvas.width = targetSize;
-    tempCanvas.height = targetSize;
     tCtx.imageSmoothingEnabled = true;
     tCtx.imageSmoothingQuality = "high";
-    tCtx.drawImage(userImg, 0, 0, targetSize, targetSize);
 
-    const downscaled = new Image();
-    downscaled.onload = () => {
+    tCtx.drawImage(
+      userImg,
+      cropX, cropY, size, size,  // source crop
+      0, 0, 200, 200              // destination
+    );
+
+    const finalImg = new Image();
+    finalImg.onload = () => {
       ctx.save();
       ctx.beginPath();
       ctx.arc(920, 90, 50, 0, Math.PI * 2);
       ctx.closePath();
       ctx.clip();
 
-      ctx.drawImage(downscaled, 870, 40, 100, 100);
+      ctx.drawImage(finalImg, 870, 40, 100, 100);
       ctx.restore();
-      drawQR(); // continue flow
+
+      drawQR();
     };
-    downscaled.src = tempCanvas.toDataURL();
+    finalImg.src = tempCanvas.toDataURL();
   };
   reader.readAsDataURL(fileInput.files[0]);
 } else {
   drawQR();
 }
+
 
 
     function drawQR() {
