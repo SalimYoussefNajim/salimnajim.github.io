@@ -430,34 +430,36 @@ if (fileInput.files[0]) {
   reader.onload = async function (e) {
     const userImg = await loadImage(e.target.result);
 
-    // STEP 1: Crop to square
+    // Crop to a square first (from the center)
     const size = Math.min(userImg.width, userImg.height);
     const cropX = (userImg.width - size) / 2;
     const cropY = (userImg.height - size) / 2;
 
+    // Create a temporary canvas for high-res crop and smoothing
     const tempCanvas = document.createElement("canvas");
-    tempCanvas.width = 200;
-    tempCanvas.height = 200;
+    tempCanvas.width = 400;
+    tempCanvas.height = 400;
     const tCtx = tempCanvas.getContext("2d");
-
     tCtx.imageSmoothingEnabled = true;
     tCtx.imageSmoothingQuality = "high";
 
+    // Draw the cropped image smoothly
     tCtx.drawImage(
       userImg,
-      cropX, cropY, size, size,  // source crop
-      0, 0, 200, 200              // destination
+      cropX, cropY, size, size,     // source crop
+      0, 0, 400, 400                // destination size
     );
 
+    // Now load the cropped version
     const finalImg = new Image();
     finalImg.onload = () => {
       ctx.save();
       ctx.beginPath();
-      ctx.arc(920, 90, 50, 0, Math.PI * 2);
+      ctx.arc(900, 200, 200, 0, Math.PI * 2); // bigger circle at center right
       ctx.closePath();
       ctx.clip();
 
-      ctx.drawImage(finalImg, 870, 40, 100, 100);
+      ctx.drawImage(finalImg, 700, 0, 400, 400); // render image
       ctx.restore();
 
       drawQR();
@@ -468,6 +470,7 @@ if (fileInput.files[0]) {
 } else {
   drawQR();
 }
+
 
 
 
