@@ -426,23 +426,35 @@ document.getElementById("boardingPassForm").addEventListener("submit", async fun
     ctx.fillText("VBS Spaceport", 260, 230);
 
     // Optional: Personal photo
-    if (fileInput.files[0]) {
-      const reader = new FileReader();
-      reader.onload = async function (e) {
-        const userImg = await loadImage(e.target.result);
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(870, 90, 50, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.clip();
-        ctx.drawImage(userImg, 820, 40, 100, 100);
-        ctx.restore();
-        drawQR();
-      };
-      reader.readAsDataURL(fileInput.files[0]);
-    } else {
-      drawQR();
-    }
+if (fileInput.files[0]) {
+  const reader = new FileReader();
+  reader.onload = async function (e) {
+    const userImg = await loadImage(e.target.result);
+
+    // Crop a square from the center
+    const size = Math.min(userImg.width, userImg.height);
+    const sx = (userImg.width - size) / 2;
+    const sy = (userImg.height - size) / 2;
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(920, 90, 50, 0, Math.PI * 2); // Adjust circle center and radius as needed
+    ctx.closePath();
+    ctx.clip();
+
+    ctx.drawImage(
+      userImg,
+      sx, sy, size, size, // Source crop
+      870, 40, 100, 100   // Destination position and size
+    );
+
+    ctx.restore();
+    drawQR();
+  };
+  reader.readAsDataURL(fileInput.files[0]);
+} else {
+  drawQR();
+}
 
     function drawQR() {
       const qrCanvas = document.createElement("canvas");
