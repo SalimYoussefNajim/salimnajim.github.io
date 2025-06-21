@@ -425,38 +425,50 @@ document.getElementById("boardingPassForm").addEventListener("submit", async fun
     ctx.fillText("Departure:", 120, 230);
     ctx.fillText("VBS Spaceport", 260, 230);
 
-    // Optional: Personal photo
-if (fileInput.files[0]) {
+  if (fileInput.files[0]) {
   const reader = new FileReader();
   reader.onload = async function (e) {
     const userImg = await loadImage(e.target.result);
 
-    // Crop a square from the center
-    const size = Math.min(userImg.width, userImg.height);
-    const sx = (userImg.width - size) / 2;
-    const sy = (userImg.height - size) / 2;
+    // Create a temporary canvas for clean downscale
+    const tempCanvas = document.createElement("canvas");
+    const tCtx = tempCanvas.getContext("2d");
 
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(920, 90, 50, 0, Math.PI * 2); // Adjust circle center and radius as needed
-    ctx.closePath();
-    ctx.clip();
-ctx.imageSmoothingEnabled = true;
-ctx.imageSmoothingQuality = "high";
+    const targetSize = 100;
+    let width = userImg.width;
+    let height = userImg.height;
 
-    ctx.drawImage(
-      userImg,
-      sx, sy, size, size, // Source crop
-      870, 40, 100, 100   // Destination position and size
-    );
+    // Downscale in steps for better quality
+    while (width > targetSize * 2) {
+      width /= 2;
+      height /= 2;
+    }
 
-    ctx.restore();
-    drawQR();
+    tempCanvas.width = targetSize;
+    tempCanvas.height = targetSize;
+    tCtx.imageSmoothingEnabled = true;
+    tCtx.imageSmoothingQuality = "high";
+    tCtx.drawImage(userImg, 0, 0, targetSize, targetSize);
+
+    const downscaled = new Image();
+    downscaled.onload = () => {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(920, 90, 50, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.clip();
+
+      ctx.drawImage(downscaled, 870, 40, 100, 100);
+      ctx.restore();
+      drawQR(); // continue flow
+    };
+    downscaled.src = tempCanvas.toDataURL();
   };
   reader.readAsDataURL(fileInput.files[0]);
 } else {
   drawQR();
 }
+
 
     function drawQR() {
       const qrCanvas = document.createElement("canvas");
