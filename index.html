@@ -441,6 +441,8 @@ if (fileInput.files[0]) {
     ctx.arc(920, 90, 50, 0, Math.PI * 2); // Adjust circle center and radius as needed
     ctx.closePath();
     ctx.clip();
+ctx.imageSmoothingEnabled = true;
+ctx.imageSmoothingQuality = "high";
 
     ctx.drawImage(
       userImg,
