@@ -63,6 +63,44 @@
 <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
 </head>
 <body class="bg-black text-white overflow-x-hidden">
+<!-- ✨ Cosmic-Themed Navigation Menu -->
+<header class="fixed top-0 left-0 w-full bg-black/60 backdrop-blur-md shadow z-50">
+  <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <!-- Logo -->
+    <div class="text-white text-xl font-bold tracking-wide flex items-center gap-2">
+      <img src="assets/logo-sn.svg" alt="Logo" class="w-7 h-7"> SN Portal
+    </div>
+
+    <!-- Desktop Menu -->
+    <ul class="hidden md:flex space-x-8 text-white text-sm font-medium">
+      <li><a href="#home" class="hover:text-purple-400 transition">Home</a></li>
+      <li><a href="#projects" class="hover:text-purple-400 transition">Projects</a></li>
+      <li><a href="#ai-lab" class="hover:text-purple-400 transition">AI Lab</a></li>
+      <li><a href="#trading" class="hover:text-purple-400 transition">Trading Tools</a></li>
+      <li><a href="#portfolio" class="hover:text-purple-400 transition">Portfolio</a></li>
+      <li><a href="#contact" class="hover:text-purple-400 transition">Contact</a></li>
+    </ul>
+
+    <!-- Mobile Button -->
+    <div class="md:hidden text-white">
+      <button id="menuBtn" class="focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Drawer -->
+  <div id="mobileMenu" class="hidden flex-col items-center space-y-4 p-6 bg-black text-white md:hidden">
+    <a href="#home" class="hover:text-purple-400">Home</a>
+    <a href="#projects" class="hover:text-purple-400">Projects</a>
+    <a href="#ai-lab" class="hover:text-purple-400">AI Lab</a>
+    <a href="#trading" class="hover:text-purple-400">Trading Tools</a>
+    <a href="#portfolio" class="hover:text-purple-400">Portfolio</a>
+    <a href="#contact" class="hover:text-purple-400">Contact</a>
+  </div>
+</header>
 
 <!-- Login Modal -->
 <div id="loginModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center text-center opacity-0 pointer-events-none transition-opacity duration-300 z-50">
@@ -232,7 +270,13 @@
 <!-- Scripts -->
 <script type="module">
   const BASE_URL = "https://ai-07vr.onrender.com";
+ // Mobile menu toggle
+  const menuBtn = document.getElementById("menuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
 
+  menuBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
   // Register
   document.getElementById("registerSubmit").onclick = async () => {
     const name = document.getElementById("name").value;
