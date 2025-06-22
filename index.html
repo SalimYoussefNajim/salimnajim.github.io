@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="css/style.css" />
 <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
 <style>
   .planet-glow {
@@ -23,6 +24,12 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.4s ease;
   box-shadow: 0 10px 30px rgba(0, 200, 255, 0.07);
+}
+
+model-viewer {
+  background: transparent;
+  border-radius: 20px;
+  box-shadow: 0 0 60px rgba(0, 200, 255, 0.1);
 }
 
 .floating-navbar.scrolled {
@@ -288,6 +295,22 @@
   <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-600 py-2 px-6 rounded font-bold text-white">Download</button>
 </form>
 </section>
+<div class="section-divider"></div>
+
+<section class="w-full py-24 flex justify-center items-center bg-black text-white" data-aos="fade-up">
+  <model-viewer
+    src="assets/Rocket_Engine.glb"
+    alt="A 3D model"
+    auto-rotate
+    camera-controls
+    shadow-intensity="1"
+    exposure="1"
+    interaction-prompt="auto"
+    ar
+    class="w-full h-[600px] max-w-5xl"
+  ></model-viewer>
+</section>
+
 <div class="section-divider"></div>
 
   <!-- Projects -->
