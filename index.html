@@ -118,7 +118,7 @@ model-viewer {
     </div>
 
     <!-- Desktop Menu -->
-    <ul class="hidden md:flex space-x-10 text-base font-semibold">
+    <ul class="hidden md:flex space-x-8 text-white text-sm font-medium">
       <li><a href="#home" class="hover:text-purple-400 transition">Home</a></li>
       <li><a href="projects.html" class="hover:text-purple-400 transition">Projects</a></li>
       <li><a href="#ai-lab" class="hover:text-purple-400 transition">AI Lab</a></li>
@@ -137,23 +137,13 @@ model-viewer {
   </nav>
 
   <!-- Mobile Menu Drawer -->
- <!-- ✨ Modern Mobile Menu -->
-<!-- Mobile Menu Drawer -->
-<div id="mobileMenu" class="fixed top-0 left-0 w-full h-full bg-black z-50 transform -translate-y-full transition-transform md:hidden flex flex-col items-center justify-center gap-10 text-white text-2xl">
-  <!-- ✖️ Close Button -->
-  <button id="closeMobileMenu" class="absolute top-5 right-5 text-white text-4xl font-bold hover:text-cyan-400 transition-all">
-    &times;
-  </button>
-
-  <!-- 🌐 Links -->
-  <a href="#home" class="hover:text-cyan-400 transition-all">Home</a>
-  <a href="projects.html" class="hover:text-cyan-400 transition-all">Projects</a>
-  <a href="#ai-lab" class="hover:text-cyan-400 transition-all">AI Lab</a>
-  <a href="#portfolio" class="hover:text-cyan-400 transition-all">Portfolio</a>
-  <a href="#contact" class="hover:text-cyan-400 transition-all">Contact</a>
-</div>
-
-
+  <div id="mobileMenu" class="hidden flex-col items-center space-y-4 p-6 bg-black text-white md:hidden">
+    <a href="#home" class="hover:text-purple-400">Home</a>
+    <a href="projects.html" class="hover:text-purple-400">Projects</a>
+    <a href="#ai-lab" class="hover:text-purple-400">AI Lab</a>
+    <a href="#portfolio" class="hover:text-purple-400">Portfolio</a>
+    <a href="#contact" class="hover:text-purple-400">Contact</a>
+  </div>
 </header>
 
 <!-- Login Modal -->
@@ -355,25 +345,11 @@ model-viewer {
   const BASE_URL = "https://ai-07vr.onrender.com";
  // Mobile menu toggle
   const menuBtn = document.getElementById("menuBtn");
-const mobileMenu = document.getElementById("mobileMenu");
-const closeBtn = document.getElementById("closeMobileMenu");
+  const mobileMenu = document.getElementById("mobileMenu");
 
-menuBtn.addEventListener("click", () => {
-  const isOpen = mobileMenu.classList.contains("translate-y-0");
-  if (isOpen) {
-    mobileMenu.classList.remove("translate-y-0");
-    mobileMenu.classList.add("-translate-y-full");
-  } else {
-    mobileMenu.classList.remove("-translate-y-full");
-    mobileMenu.classList.add("translate-y-0");
-  }
-});
-
-closeBtn.addEventListener("click", () => {
-  mobileMenu.classList.remove("translate-y-0");
-  mobileMenu.classList.add("-translate-y-full");
-});
-
+  menuBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
   // Register
   document.getElementById("registerSubmit").onclick = async () => {
     const name = document.getElementById("name").value;
@@ -659,6 +635,7 @@ window.addEventListener("scroll", () => {
     nav.classList.remove("scrolled");
   }
 });
+
 
 </script>
 
