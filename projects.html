@@ -58,60 +58,54 @@
 
   <!-- Three.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.155/build/three.min.js"></script>
-  <!-- GLTF Loader -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.155/examples/js/loaders/GLTFLoader.js"></script>
-  <!-- OrbitControls (optional) -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.155/examples/js/controls/OrbitControls.js"></script>
+ <script type="module">
+  import * as THREE from 'https://unpkg.com/three@0.155.0/build/three.module.js';
+  import { GLTFLoader } from 'https://unpkg.com/three@0.155.0/examples/jsm/loaders/GLTFLoader.js';
+  import { OrbitControls } from 'https://unpkg.com/three@0.155.0/examples/jsm/controls/OrbitControls.js';
 
-  <script>
-    const container = document.getElementById('scene-container');
+  const container = document.getElementById('scene-container');
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 100);
-    camera.position.set(0, 1, 4);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.set(0, 1, 4);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  container.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.enableZoom = false;
+
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(5, 5, 5);
+  scene.add(light);
+
+  const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(ambient);
+
+  const loader = new GLTFLoader();
+  loader.load('assets/x1.glb', function (gltf) {
+    const model = gltf.scene;
+    model.scale.set(1, 1, 1);
+    model.position.set(0, 0, 0);
+    scene.add(model);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      model.rotation.y += 0.01;
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+  }, undefined, function (error) {
+    console.error('Error loading model:', error);
+  });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    container.appendChild(renderer.domElement);
-
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.enableZoom = false;
-
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(5, 5, 5);
-    scene.add(light);
-
-    const ambient = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambient);
-
-    // Load GLB Model
-    const loader = new THREE.GLTFLoader();
-    loader.load('assets/x1.glb', function (gltf) {
-      const model = gltf.scene;
-      model.scale.set(1, 1, 1);
-      model.position.set(0, 0, 0);
-      scene.add(model);
-
-      // Rotate the model continuously
-      function animate() {
-        requestAnimationFrame(animate);
-        model.rotation.y += 0.01; // 360° in ~10s
-        controls.update();
-        renderer.render(scene, camera);
-      }
-      animate();
-    }, undefined, function (error) {
-      console.error('Error loading model:', error);
-    });
-
-    // Responsive Resize
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-  </script>
-</body>
-</html>
+  });
+</script>
