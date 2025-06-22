@@ -5,49 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Rocket Launch · Salim Najim</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      overflow: hidden;
-      background: black;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    #scene-container {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-    }
-
-    .overlay-text {
-      position: absolute;
-      z-index: 2;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      text-align: center;
-      text-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
-    }
-
-    .overlay-text h1 {
-      font-size: 3rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .overlay-text p {
-      font-size: 1.2rem;
-      color: #ccc;
-    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%;overflow:hidden;background:#000;font-family:'Segoe UI',sans-serif}
+    #scene-container{position:fixed;inset:0;z-index:0}
+    .overlay-text{position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);
+                  z-index:2;text-align:center;color:#fff;text-shadow:0 0 20px rgba(0,200,255,.3)}
+    .overlay-text h1{font-size:3rem;font-weight:700;margin-bottom:.6rem}
+    .overlay-text p{font-size:1.2rem;color:#ccc}
   </style>
+
+  <!-- 🗺️  Tell the browser where to find the 'three' package -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.155.0/build/three.module.js"
+    }
+  }
+  </script>
 </head>
 <body>
   <div id="scene-container"></div>
@@ -57,18 +31,17 @@
     <p>Welcome aboard the journey with Salim Najim</p>
   </div>
 
-  <!-- Three.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.155/build/three.min.js"></script>
-  <!-- GLTF Loader -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.155/examples/js/loaders/GLTFLoader.js"></script>
-  <!-- OrbitControls (optional) -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.155/examples/js/controls/OrbitControls.js"></script>
+  <!-- 🌐  E-S-M script -->
+  <script type="module">
+    import * as THREE              from 'three';
+    import { GLTFLoader }          from 'https://unpkg.com/three@0.155.0/examples/jsm/loaders/GLTFLoader.js';
+    import { OrbitControls }       from 'https://unpkg.com/three@0.155.0/examples/jsm/controls/OrbitControls.js';
 
-  <script>
+    /* ---------- basic scene ---------- */
     const container = document.getElementById('scene-container');
+    const scene     = new THREE.Scene();
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 100);
+    const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 100);
     camera.position.set(0, 1, 4);
 
     const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
@@ -76,40 +49,33 @@
     renderer.setPixelRatio(devicePixelRatio);
     container.appendChild(renderer.domElement);
 
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.enableZoom = false;
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; controls.enableZoom = false;
 
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(5, 5, 5);
-    scene.add(light);
+    scene.add(new THREE.DirectionalLight(0xffffff, 1).position.set(5,5,5));
+    scene.add(new THREE.AmbientLight   (0xffffff, .6));
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambient);
+    /* ---------- load model ---------- */
+    const loader = new GLTFLoader();
+    loader.load('assets/x1.glb', ({scene:rocket}) => {
+        rocket.scale.set(1,1,1);
+        scene.add(rocket);
 
-    // Load GLB Model
-    const loader = new THREE.GLTFLoader();
-    loader.load('assets/x1.glb', function (gltf) {
-      const model = gltf.scene;
-      model.scale.set(1, 1, 1);
-      model.position.set(0, 0, 0);
-      scene.add(model);
+        const tick = () => {
+          requestAnimationFrame(tick);
+          rocket.rotation.y += 0.01;   // steady spin
+          controls.update();
+          renderer.render(scene, camera);
+        };
+        tick();
+      },
+      undefined,
+      err => console.error('❌ GLB load error:', err)
+    );
 
-      // Rotate the model continuously
-      function animate() {
-        requestAnimationFrame(animate);
-        model.rotation.y += 0.01; // 360° in ~10s
-        controls.update();
-        renderer.render(scene, camera);
-      }
-      animate();
-    }, undefined, function (error) {
-      console.error('Error loading model:', error);
-    });
-
-    // Responsive Resize
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
+    /* ---------- handle resize ---------- */
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth/innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(innerWidth, innerHeight);
     });
