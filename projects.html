@@ -1,96 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Rocket Launch · Salim Najim</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    html,body{height:100%;overflow:hidden;background:#000;font-family:'Segoe UI',sans-serif}
-    #scene-container{position:fixed;inset:0;z-index:0}
-    .overlay-text{position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);
-                  z-index:2;text-align:center;color:#fff;text-shadow:0 0 20px rgba(0,200,255,.3)}
-    .overlay-text h1{font-size:3rem;font-weight:700;margin-bottom:.6rem}
-    .overlay-text p{font-size:1.2rem;color:#ccc}
-  </style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rocket Launch · Salim Najim</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <style>
+      html, body {
+        margin: 0;
+        height: 100%;
+        background: black;
+        overflow: hidden;
+        font-family: 'Segoe UI', sans-serif;
+      }
 
-  <!-- 🗺️  Tell the browser where to find the 'three' package -->
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://unpkg.com/three@0.155.0/build/three.module.js"
-    }
-  }
-  </script>
-</head>
-<body>
-  <div id="scene-container"></div>
+      model-viewer {
+        width: 100vw;
+        height: 100vh;
+        background: transparent;
+      }
 
-  <div class="overlay-text">
-    <h1>Igniting Beyond Limits</h1>
-    <p>Welcome aboard the journey with Salim Najim</p>
-  </div>
+      .overlay-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        text-align: center;
+        text-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
+        z-index: 2;
+      }
 
-  <!-- 🌐  E-S-M script -->
-  <script type="module">
-    import * as THREE              from 'three';
-    import { GLTFLoader }          from 'https://unpkg.com/three@0.155.0/examples/jsm/loaders/GLTFLoader.js';
-    import { OrbitControls }       from 'https://unpkg.com/three@0.155.0/examples/jsm/controls/OrbitControls.js';
+      .overlay-text h1 {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
 
-    /* ---------- basic scene ---------- */
-    const container = document.getElementById('scene-container');
-    const scene     = new THREE.Scene();
+      .overlay-text p {
+        font-size: 1.2rem;
+        color: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ✅ Replace this path with your own uploaded GLB file -->
+    <model-viewer
+      src="assets/x1.glb"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      camera-controls
+      auto-rotate
+      tone-mapping="neutral"
+      shadow-intensity="1"
+      exposure="1.1"
+      environment-image="https://modelviewer.dev/shared-assets/environments/moon_1k.hdr"
+      alt="Rocket Model"
+    >
+      <div class="progress-bar hide" slot="progress-bar">
+        <div class="update-bar"></div>
+      </div>
+      <button slot="ar-button" id="ar-button">
+        View in your space
+      </button>
+      <div id="ar-prompt">
+        <img src="https://modelviewer.dev/shared-assets/icons/hand.png">
+      </div>
+    </model-viewer>
 
-    const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.1, 100);
-    camera.position.set(0, 1, 4);
-
-    const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
-    renderer.setSize(innerWidth, innerHeight);
-    renderer.setPixelRatio(devicePixelRatio);
-    container.appendChild(renderer.domElement);
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true; controls.enableZoom = false;
-
-    scene.add(new THREE.DirectionalLight(0xffffff, 1).position.set(5,5,5));
-    scene.add(new THREE.AmbientLight   (0xffffff, .6));
-
-    /* ---------- load model ---------- */
-   import { GLTFLoader } from 'https://unpkg.com/three@0.155.0/examples/jsm/loaders/GLTFLoader.js';
-import { KTX2Loader } from 'https://unpkg.com/three@0.155.0/examples/jsm/loaders/KTX2Loader.js';
-
-const loader = new GLTFLoader(); // 👈 must come first!
-
-const ktx2Loader = new KTX2Loader()
-  .setTranscoderPath('https://unpkg.com/three@0.155.0/examples/jsm/libs/basis/')
-  .detectSupport(renderer);
-
-loader.setKTX2Loader(ktx2Loader); // 👈 after loader is defined!
-
-loader.load('assets/x1.glb', function (gltf) {
-  const model = gltf.scene;
-  model.scale.set(1, 1, 1);
-  model.position.set(0, 0, 0);
-  scene.add(model);
-
-  function animate() {
-    requestAnimationFrame(animate);
-    model.rotation.y += 0.01;
-    controls.update();
-    renderer.render(scene, camera);
-  }
-  animate();
-}, undefined, function (error) {
-  console.error('❌ GLB load error:', error);
-});
-
-
-    /* ---------- handle resize ---------- */
-    addEventListener('resize', () => {
-      camera.aspect = innerWidth/innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth, innerHeight);
-    });
-  </script>
-</body>
+    <div class="overlay-text">
+      <h1>Igniting Beyond Limits</h1>
+      <p>Welcome aboard the journey with Salim Najim</p>
+    </div>
+  </body>
 </html>
