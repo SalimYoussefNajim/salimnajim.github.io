@@ -104,45 +104,53 @@ model-viewer {
   50% { left: 100%; }
   100% { left: -30%; }
 }
+  @keyframes fadeDown {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fade-down {
+    animation: fadeDown 0.3s ease-out;
+  }
+
 </style>
   <!-- AOS CSS -->
 <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
 </head>
 <body class="bg-black text-white overflow-x-hidden">
 <!-- ✨ Cosmic-Themed Navigation Menu -->
-<header id="navbar" class="floating-navbar fixed top-0 left-0 w-full z-50">
-  <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-    <!-- Logo -->
-    <div class="text-white text-xl font-bold tracking-wide flex items-center gap-2">
-      <img src="assets/favicon.ico" alt="Logo" class="w-7 h-7"> SN Portal
-    </div>
+<header class="w-full fixed top-0 left-0 z-50 backdrop-blur-xl bg-black/60 shadow-lg border-b border-white/10">
+  <div class="max-w-screen-xl mx-auto px-4 py-4 flex items-center justify-between">
+    <a href="/" class="flex items-center space-x-2">
+      <img src="assets/favicon.ico" alt="SN Logo" class="h-8 drop-shadow-md">
+      <span class="font-bold text-xl text-white">SN Portal</span>
+    </a>
+
+    <!-- Hamburger -->
+    <button id="menuToggle" class="lg:hidden focus:outline-none text-white hover:scale-110 transition">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2"
+           viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
 
     <!-- Desktop Menu -->
-    <ul class="hidden md:flex space-x-8 text-white text-sm font-medium">
-      <li><a href="#home" class="hover:text-purple-400 transition">Home</a></li>
-      <li><a href="projects.html" class="hover:text-purple-400 transition">Projects</a></li>
-      <li><a href="#ai-lab" class="hover:text-purple-400 transition">AI Lab</a></li>
-      <li><a href="#portfolio" class="hover:text-purple-400 transition">Portfolio</a></li>
-      <li><a href="#contact" class="hover:text-purple-400 transition">Contact</a></li>
-    </ul>
+    <nav class="hidden lg:flex items-center space-x-8 text-white/90 text-sm font-medium">
+      <a href="#home" class="hover:text-purple-400 transition">Home</a>
+      <a href="#projects" class="hover:text-purple-400 transition">Projects</a>
+      <a href="#ai" class="hover:text-purple-400 transition">AI Lab</a>
+      <a href="#portfolio" class="hover:text-purple-400 transition">Portfolio</a>
+      <a href="#contact" class="hover:text-purple-400 transition">Contact</a>
+    </nav>
+  </div>
 
-    <!-- Mobile Button -->
-    <div class="md:hidden text-white">
-      <button id="menuBtn" class="focus:outline-none">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </div>
-  </nav>
-
-  <!-- Mobile Menu Drawer -->
-  <div id="mobileMenu" class="hidden flex-col items-center space-y-4 p-6 bg-black text-white md:hidden">
-    <a href="#home" class="hover:text-purple-400">Home</a>
-    <a href="projects.html" class="hover:text-purple-400">Projects</a>
-    <a href="#ai-lab" class="hover:text-purple-400">AI Lab</a>
-    <a href="#portfolio" class="hover:text-purple-400">Portfolio</a>
-    <a href="#contact" class="hover:text-purple-400">Contact</a>
+  <!-- Mobile Dropdown -->
+  <div id="dropdown" class="hidden flex flex-col items-center text-white/90 text-sm bg-black/70 backdrop-blur-lg border-t border-white/10 space-y-4 py-6 px-4 shadow-xl animate-fade-down">
+    <a href="#home" class="hover:text-purple-400 transition">Home</a>
+    <a href="#projects" class="hover:text-purple-400 transition">Projects</a>
+    <a href="#ai" class="hover:text-purple-400 transition">AI Lab</a>
+    <a href="#portfolio" class="hover:text-purple-400 transition">Portfolio</a>
+    <a href="#contact" class="hover:text-purple-400 transition">Contact</a>
   </div>
 </header>
 
@@ -636,7 +644,12 @@ window.addEventListener("scroll", () => {
   }
 });
 
+ const toggle = document.getElementById('menuToggle');
+  const dropdown = document.getElementById('dropdown');
 
+  toggle.addEventListener('click', () => {
+    dropdown.classList.toggle('hidden');
+  });
 </script>
 
 <script src="js/main.js"></script>
