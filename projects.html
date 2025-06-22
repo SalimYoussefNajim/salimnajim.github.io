@@ -56,6 +56,14 @@
     scene.add(new THREE.AmbientLight   (0xffffff, .6));
 
     /* ---------- load model ---------- */
+    import { KTX2Loader } from 'https://unpkg.com/three@0.155.0/examples/jsm/loaders/KTX2Loader.js';
+
+const ktx2Loader = new KTX2Loader()
+  .setTranscoderPath('https://unpkg.com/three@0.155.0/examples/jsm/libs/basis/')
+  .detectSupport(renderer);
+
+loader.setKTX2Loader(ktx2Loader);
+
     const loader = new GLTFLoader();
     loader.load('assets/x1.glb', ({scene:rocket}) => {
         rocket.scale.set(1,1,1);
