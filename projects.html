@@ -56,30 +56,34 @@
     scene.add(new THREE.AmbientLight   (0xffffff, .6));
 
     /* ---------- load model ---------- */
-    import { KTX2Loader } from 'https://unpkg.com/three@0.155.0/examples/jsm/loaders/KTX2Loader.js';
+   import { GLTFLoader } from 'https://unpkg.com/three@0.155.0/examples/jsm/loaders/GLTFLoader.js';
+import { KTX2Loader } from 'https://unpkg.com/three@0.155.0/examples/jsm/loaders/KTX2Loader.js';
+
+const loader = new GLTFLoader(); // 👈 must come first!
 
 const ktx2Loader = new KTX2Loader()
   .setTranscoderPath('https://unpkg.com/three@0.155.0/examples/jsm/libs/basis/')
   .detectSupport(renderer);
 
-loader.setKTX2Loader(ktx2Loader);
+loader.setKTX2Loader(ktx2Loader); // 👈 after loader is defined!
 
-    const loader = new GLTFLoader();
-    loader.load('assets/x1.glb', ({scene:rocket}) => {
-        rocket.scale.set(1,1,1);
-        scene.add(rocket);
+loader.load('assets/x1.glb', function (gltf) {
+  const model = gltf.scene;
+  model.scale.set(1, 1, 1);
+  model.position.set(0, 0, 0);
+  scene.add(model);
 
-        const tick = () => {
-          requestAnimationFrame(tick);
-          rocket.rotation.y += 0.01;   // steady spin
-          controls.update();
-          renderer.render(scene, camera);
-        };
-        tick();
-      },
-      undefined,
-      err => console.error('❌ GLB load error:', err)
-    );
+  function animate() {
+    requestAnimationFrame(animate);
+    model.rotation.y += 0.01;
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+}, undefined, function (error) {
+  console.error('❌ GLB load error:', error);
+});
+
 
     /* ---------- handle resize ---------- */
     addEventListener('resize', () => {
