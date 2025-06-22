@@ -70,6 +70,33 @@
       transform: scale(1) translateY(0);
     }
   }
+  .section-divider {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, rgba(0, 200, 255, 0), rgba(0, 200, 255, 0.6), rgba(0, 200, 255, 0));
+  margin: 100px auto;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.2);
+}
+
+.section-divider::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -30%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, white, transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -30%; }
+  50% { left: 100%; }
+  100% { left: -30%; }
+}
 </style>
   <!-- AOS CSS -->
 <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
@@ -182,6 +209,9 @@
 <!-- Cosmic Background -->
   <div id="stars" class="absolute inset-0 z-0"></div>
   <div id="shooting-stars" class="absolute inset-0 z-0"></div>
+
+  <div class="section-divider"></div>
+
   
 <section class="flex flex-col md:flex-row items-center justify-center gap-10 py-20" data-aos="fade-up">
   <!-- Worm Border Container -->
@@ -199,6 +229,9 @@
     </p>
   </div>
 </section>
+
+<div class="section-divider"></div>
+
 
   <!-- What I Do -->
   <section class="bg-black" data-aos="fade-up">
@@ -219,6 +252,9 @@
     </div>
   </section>
 
+  <div class="section-divider"></div>
+
+
   <!-- Tech Stack -->
   <section class="relative z-10 px-6 py-24" data-aos="fade-up">
     <h2 class="text-4xl font-semibold text-center mb-12">Technologies I Use</h2>
@@ -231,6 +267,8 @@
       <img src="assets/icons8-adobe-after-effects-96.png" alt="After Effects" class="h-12 hover:scale-110 transition" loading="lazy">
     </div>
   </section>
+
+  <div class="section-divider"></div>
 
   <section id="boarding-pass" class="relative z-10 px-6 py-24 bg-black text-white text-center" data-aos="fade-up">
   <h2 class="text-4xl font-semibold mb-8">🎫 Get Your Boarding Pass</h2>
@@ -250,6 +288,8 @@
   <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-600 py-2 px-6 rounded font-bold text-white">Download</button>
 </form>
 </section>
+<div class="section-divider"></div>
+
   <!-- Projects -->
   <section class="relative z-10 px-6 py-20" data-aos="fade-up">
     <h2 class="text-4xl font-semibold text-center mb-12">My Works</h2>
