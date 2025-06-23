@@ -14,6 +14,19 @@
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
 <style>
+  #mobileMenu ul li a {
+  display: block;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.02);
+  transition: all 0.3s ease;
+}
+
+#mobileMenu ul li a:hover {
+  background-color: rgba(0, 200, 255, 0.08);
+  text-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+}
+
   .planet-glow {
     filter: drop-shadow(0 0 40px rgba(0, 150, 255, 0.4));
   }
@@ -137,13 +150,15 @@ model-viewer {
   </nav>
 
   <!-- Mobile Menu Drawer -->
-  <div id="mobileMenu" class="hidden flex-col items-center space-y-4 p-6 bg-black text-white md:hidden">
-    <a href="#home" class="hover:text-purple-400">Home</a>
-    <a href="projects.html" class="hover:text-purple-400">Projects</a>
-    <a href="#ai-lab" class="hover:text-purple-400">AI Lab</a>
-    <a href="#portfolio" class="hover:text-purple-400">Portfolio</a>
-    <a href="#contact" class="hover:text-purple-400">Contact</a>
-  </div>
+  <div id="mobileMenu" class="hidden md:hidden fixed top-16 left-0 w-full bg-gradient-to-b from-black/90 to-black/60 backdrop-blur-xl text-white shadow-lg z-40">
+  <ul class="flex flex-col space-y-4 p-6 text-center text-lg font-semibold">
+    <li><a href="#home" class="hover:text-cyan-400 transition-all duration-200">Home</a></li>
+    <li><a href="projects.html" class="hover:text-cyan-400 transition-all duration-200">Projects</a></li>
+    <li><a href="#ai-lab" class="hover:text-cyan-400 transition-all duration-200">AI Lab</a></li>
+    <li><a href="#portfolio" class="hover:text-cyan-400 transition-all duration-200">Portfolio</a></li>
+    <li><a href="#contact" class="hover:text-cyan-400 transition-all duration-200">Contact</a></li>
+  </ul>
+</div>
 </header>
 
 <!-- Login Modal -->
