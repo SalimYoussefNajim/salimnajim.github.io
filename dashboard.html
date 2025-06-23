@@ -7,7 +7,32 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6974115975105547"
      crossorigin="anonymous"></script>
+     <style>
+/* ✨ Stars Background */
+.starry-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000 100%);
+  overflow: hidden;
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: twinkle 4s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+</style>
+
 </head>
+<div class="starry-bg" id="starsContainer"></div>
 <body class="bg-black text-white font-sans">
 
   <!-- 🔐 Not Authenticated Message -->
@@ -102,6 +127,23 @@
         updateLastMessage("❌ Error: " + err.message);
       }
     });
+// 🌌 Background animation when typing
+userInput.addEventListener("input", () => {
+  const spark = document.createElement("div");
+  spark.className = "star";
+  spark.style.width = "4px";
+  spark.style.height = "4px";
+  spark.style.top = Math.random() * 100 + "%";
+  spark.style.left = Math.random() * 100 + "%";
+  spark.style.opacity = 1;
+  spark.style.animation = "twinkle 1s ease-out";
+
+  document.getElementById("starsContainer").appendChild(spark);
+
+  setTimeout(() => {
+    spark.remove();
+  }, 1000);
+});
 
     // 💬 UI helpers
     function addMessage(role, content) {
@@ -129,6 +171,21 @@
 
     // ⏳ On page load
     window.onload = verifyUser;
+    function generateStars(count = 100) {
+  const container = document.getElementById('starsContainer');
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement("div");
+    const size = Math.random() * 2 + 1 + "px";
+    star.className = "star";
+    star.style.width = size;
+    star.style.height = size;
+    star.style.top = Math.random() * 100 + "%";
+    star.style.left = Math.random() * 100 + "%";
+    star.style.animationDelay = Math.random() * 4 + "s";
+    container.appendChild(star);
+  }
+}
+generateStars();
   </script>
 </body>
 </html>
