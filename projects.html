@@ -57,8 +57,43 @@
 <body>
 
   <header class="text-center mt-12 mb-6">
-    <h1>Projects</h1>
-    <p class="text-slate-400 text-lg mt-2">Concepts that imagine the future.</p>
+    <!-- ✨ Cosmic-Themed Navigation Menu -->
+<header id="navbar" class="floating-navbar fixed top-0 left-0 w-full z-50">
+  <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <!-- Logo -->
+    <div class="text-white text-xl font-bold tracking-wide flex items-center gap-2">
+      <img src="assets/favicon.ico" alt="Logo" class="w-7 h-7"> SN Portal
+    </div>
+
+    <!-- Desktop Menu -->
+    <ul class="hidden md:flex space-x-8 text-white text-sm font-medium">
+      <li><a href="#home" class="hover:text-purple-400 transition">Home</a></li>
+      <li><a href="projects.html" class="hover:text-purple-400 transition">Projects</a></li>
+      <li><a href="#" id="aiLabLink" class="hover:text-purple-400 transition">AI Lab</a></li>
+      <li><a href="#portfolio" class="hover:text-purple-400 transition">Portfolio</a></li>
+      <li><a href="#contact" class="hover:text-purple-400 transition">Contact</a></li>
+    </ul>
+
+    <!-- Mobile Button -->
+    <div class="md:hidden text-white">
+      <button id="menuBtn" class="focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Drawer -->
+  <div id="mobileMenu" class="hidden md:hidden fixed top-16 left-0 w-full bg-gradient-to-b from-black/90 to-black/60 backdrop-blur-xl text-white shadow-lg z-40">
+  <ul class="flex flex-col space-y-4 p-6 text-center text-lg font-semibold">
+    <li><a href="#home" class="hover:text-cyan-400 transition-all duration-200">Home</a></li>
+    <li><a href="projects.html" class="hover:text-cyan-400 transition-all duration-200">Projects</a></li>
+    <a href="#" id="aiLabMobile" class="hover:text-purple-400">AI Lab</a>
+    <li><a href="#portfolio" class="hover:text-cyan-400 transition-all duration-200">Portfolio</a></li>
+    <li><a href="#contact" class="hover:text-cyan-400 transition-all duration-200">Contact</a></li>
+  </ul>
+</div>
   </header>
 
   <section class="project-container">
@@ -82,6 +117,14 @@
   <footer class="text-center text-slate-500 text-sm py-8">
     &copy; 2025 Salim Najim — Vision Beyond Stars
   </footer>
+<script>
+    // Mobile menu toggle
+  const menuBtn = document.getElementById("menuBtn");
+  const mobileMenu = document.getElementById("mobileMenu");
 
+  menuBtn.addEventListener("click", () => {
+    mobileMenu.classList.toggle("hidden");
+  });
+</script>
 </body>
 </html>
