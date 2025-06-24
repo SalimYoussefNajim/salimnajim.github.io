@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projects · Salim Najim</title>
+  <link rel="icon" href="assets/favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body {
+      background: radial-gradient(ellipse at top, #0a0f2c, #000);
+      color: #cbd5e1;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      color: #38bdf8;
+      font-weight: 700;
+      text-shadow: 0 0 10px #38bdf833;
+    }
+
+    .project-container {
+      background: #111827;
+      border: 1px solid #38bdf811;
+      border-radius: 1rem;
+      padding: 2rem;
+      max-width: 960px;
+      margin: 2rem auto;
+      box-shadow: 0 0 20px #0ea5e933;
+    }
+
+    .project-title {
+      font-size: 1.8rem;
+      color: #ffffff;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .project-description {
+      font-size: 1.1rem;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 520px;
+      margin-top: 2rem;
+      border-radius: 0.75rem;
+      background: #0f172a;
+      box-shadow: 0 0 20px #38bdf844;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="text-center mt-12 mb-6">
+    <h1>Projects</h1>
+    <p class="text-slate-400 text-lg mt-2">Concepts that imagine the future.</p>
+  </header>
+
+  <section class="project-container">
+    <div class="project-title">Tesla Coil in a Futuristic City</div>
+    <p class="project-description">
+      What if energy was limitless, wireless, and beautifully integrated into the world around us? 
+      This concept reimagines a city built around a Tesla coil power system — where technology hums in harmony with design, and the skyline glows with silent, sustainable force.
+    </p>
+
+    <model-viewer 
+      src="assets/untitled.glb" 
+      alt="Tesla Coil City Model"
+      auto-rotate 
+      camera-controls 
+      shadow-intensity="1" 
+      exposure="1.2" 
+      ar
+    ></model-viewer>
+  </section>
+
+  <footer class="text-center text-slate-500 text-sm py-8">
+    &copy; 2025 Salim Najim — Vision Beyond Stars
+  </footer>
+
+</body>
+</html>
