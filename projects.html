@@ -2,129 +2,122 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projects · Salim Najim</title>
   <link rel="icon" href="assets/favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
   <style>
     body {
-      background: radial-gradient(ellipse at top, #0a0f2c, #000);
-      color: #cbd5e1;
+      background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000 100%);
+      color: #fff;
       font-family: 'Segoe UI', sans-serif;
+      overflow-x: hidden;
     }
-
-    header h1 {
-      font-size: 3rem;
-      color: #38bdf8;
-      font-weight: 700;
-      text-shadow: 0 0 10px #38bdf833;
+    .divider {
+      height: 2px;
+      background: linear-gradient(to right, transparent, #00f0ff, transparent);
+      margin: 3rem 0;
     }
-
-    .project-container {
-      background: #111827;
-      border: 1px solid #38bdf811;
-      border-radius: 1rem;
+    .card {
+      background: rgba(17, 17, 17, 0.9);
+      border: 1px solid #333;
+      border-radius: 1.5rem;
       padding: 2rem;
-      max-width: 960px;
-      margin: 2rem auto;
-      box-shadow: 0 0 20px #0ea5e933;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+    }
+    .planet {
+      position: absolute;
+      border-radius: 50%;
+      filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.4));
+      animation: float 6s ease-in-out infinite;
+    }
+    .planet:nth-child(1) { top: 10%; left: 5%; width: 80px; animation-delay: 0s; }
+    .planet:nth-child(2) { top: 30%; right: 10%; width: 100px; animation-delay: 2s; }
+    .planet:nth-child(3) { bottom: 10%; left: 20%; width: 70px; animation-delay: 4s; }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
     }
 
-    .project-title {
-      font-size: 1.8rem;
-      color: #ffffff;
-      font-weight: 600;
-      margin-bottom: 1rem;
+    .spark {
+      animation: spark 0.6s ease-out forwards;
     }
 
-    .project-description {
-      font-size: 1.1rem;
-      color: #94a3b8;
-      line-height: 1.6;
+    @keyframes spark {
+      0% { box-shadow: 0 0 0px #0ff; }
+      50% { box-shadow: 0 0 30px #0ff, 0 0 60px #00f0ff; }
+      100% { box-shadow: 0 0 0px #0ff; }
     }
 
-    model-viewer {
-      width: 100%;
-      height: 520px;
-      margin-top: 2rem;
-      border-radius: 0.75rem;
-      background: #0f172a;
-      box-shadow: 0 0 20px #38bdf844;
+    .neuro-glow {
+      animation: neuroPulse 1s ease-out forwards;
+    }
+
+    @keyframes neuroPulse {
+      0% { box-shadow: 0 0 0px #9f7aea; }
+      50% { box-shadow: 0 0 20px #9f7aea, 0 0 40px #c084fc; }
+      100% { box-shadow: 0 0 0px #9f7aea; }
     }
   </style>
 </head>
-<body>
+<body class="px-6 py-10 relative overflow-hidden">
+  <!-- Planets -->
+  <img src="assets/planet1.png" alt="Planet" class="planet" />
+  <img src="assets/planet2.png" alt="Planet" class="planet" />
+  <img src="assets/planet3.png" alt="Planet" class="planet" />
 
-  <header class="text-center mt-12 mb-6">
-    <!-- ✨ Cosmic-Themed Navigation Menu -->
-<header id="navbar" class="floating-navbar fixed top-0 left-0 w-full z-50">
-  <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-    <!-- Logo -->
-    <div class="text-white text-xl font-bold tracking-wide flex items-center gap-2">
-      <img src="assets/favicon.ico" alt="Logo" class="w-7 h-7"> SN Portal
+  <h1 class="text-5xl font-extrabold text-center mb-16 text-cyan-400 tracking-wide drop-shadow-md">Salim Najim · Signature Projects</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <!-- Tesla Coil City -->
+    <div class="card" id="teslaCard">
+      <h2 class="text-3xl font-semibold mb-4 text-teal-300">Tesla Coil City</h2>
+      <button onclick="showTesla()" class="px-5 py-2 bg-cyan-600 hover:bg-cyan-700 rounded-full text-white font-semibold transition">⚡ Show Innovation</button>
+      <p id="teslaText" class="text-lg leading-relaxed text-white/90 mt-4 hidden">
+        Tesla Coil City is a visionary prototype demonstrating a self-sustaining smart city entirely powered by wireless energy through Tesla coils. This miniature urban utopia shows how clean, safe electricity can be transmitted invisibly through the air, transforming our approach to sustainable infrastructure. With glowing towers, ambient lighting, and silent power flow, the model has ignited conversations around the future of energy and smart cities.
+      </p>
     </div>
 
-    <!-- Desktop Menu -->
-    <ul class="hidden md:flex space-x-8 text-white text-sm font-medium">
-      <li><a href="index.html" class="hover:text-purple-400 transition">Home</a></li>
-      <li><a href="projects.html" class="hover:text-purple-400 transition">Projects</a></li>
-      <li><a href="#" id="aiLabLink" class="hover:text-purple-400 transition">AI Lab</a></li>
-      <li><a href="#portfolio" class="hover:text-purple-400 transition">Portfolio</a></li>
-      <li><a href="#contact" class="hover:text-purple-400 transition">Contact</a></li>
-    </ul>
-
-    <!-- Mobile Button -->
-    <div class="md:hidden text-white">
-      <button id="menuBtn" class="focus:outline-none">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+    <!-- NeuroLens AI -->
+    <div class="card" id="neuroCard">
+      <h2 class="text-3xl font-semibold mb-4 text-purple-300">NeuroLens AI</h2>
+      <button onclick="showNeuro()" class="px-5 py-2 bg-purple-600 hover:bg-purple-700 rounded-full text-white font-semibold transition">🧠 Show Innovation</button>
+      <p id="neuroText" class="text-lg leading-relaxed text-white/90 mt-4 hidden">
+        NeuroLens AI is a game-changing concept: a smart contact lens embedded with augmented reality, focus-tracking, and AI-driven memory recall. Designed for students and professionals alike, this lens becomes your second brain—monitoring cognitive load, improving attention span, and enhancing memory with real-time AR overlays. NeuroLens merges neuroscience and wearable tech to empower learning in a way never imagined before.
+      </p>
     </div>
-  </nav>
+  </div>
 
-  <!-- Mobile Menu Drawer -->
-  <div id="mobileMenu" class="hidden md:hidden fixed top-16 left-0 w-full bg-gradient-to-b from-black/90 to-black/60 backdrop-blur-xl text-white shadow-lg z-40">
-  <ul class="flex flex-col space-y-4 p-6 text-center text-lg font-semibold">
-    <li><a href="index.html" class="hover:text-cyan-400 transition-all duration-200">Home</a></li>
-    <li><a href="projects.html" class="hover:text-cyan-400 transition-all duration-200">Projects</a></li>
-    <a href="#" id="aiLabMobile" class="hover:text-purple-400">AI Lab</a>
-    <li><a href="#portfolio" class="hover:text-cyan-400 transition-all duration-200">Portfolio</a></li>
-    <li><a href="#contact" class="hover:text-cyan-400 transition-all duration-200">Contact</a></li>
-  </ul>
-</div>
-  </header>
+  <div class="divider"></div>
+  <p class="text-center text-white/60 mt-10">© 2025 Salim Youssef Najim. All rights reserved.</p>
 
-  <section class="project-container">
-    <div class="project-title">Tesla Coil in a Futuristic City</div>
-    <p class="project-description">
-      What if energy was limitless, wireless, and beautifully integrated into the world around us? 
-      This concept reimagines a city built around a Tesla coil power system — where technology hums in harmony with design, and the skyline glows with silent, sustainable force.
-    </p>
+  <script>
+    function showTesla() {
+      const card = document.getElementById('teslaCard');
+      const text = document.getElementById('teslaText');
+      text.classList.remove('hidden');
+      card.classList.add('spark');
+      setTimeout(() => card.classList.remove('spark'), 700);
+    }
 
-    <model-viewer 
-      src="assets/untitled.glb" 
-      alt="Tesla Coil City Model"
-      auto-rotate 
-      camera-controls 
-      shadow-intensity="1" 
-      exposure="1.2" 
-      ar
-    ></model-viewer>
-  </section>
-
-  <footer class="text-center text-slate-500 text-sm py-8">
-    &copy; 2025 Salim Najim — Vision Beyond Stars
-  </footer>
-<script>
-    // Mobile menu toggle
-  const menuBtn = document.getElementById("menuBtn");
-  const mobileMenu = document.getElementById("mobileMenu");
-
-  menuBtn.addEventListener("click", () => {
-    mobileMenu.classList.toggle("hidden");
-  });
-</script>
+    function showNeuro() {
+      const card = document.getElementById('neuroCard');
+      const text = document.getElementById('neuroText');
+      text.classList.remove('hidden');
+      card.classList.add('neuro-glow');
+      setTimeout(() => card.classList.remove('neuro-glow'), 700);
+    }
+  </script>
 </body>
 </html>
