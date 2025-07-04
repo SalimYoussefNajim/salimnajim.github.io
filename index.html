@@ -31,23 +31,25 @@
     filter: drop-shadow(0 0 40px rgba(0, 150, 255, 0.4));
   }
 /* Floating Glass Navigation */
-.floating-navbar {
+/* Glassy Floating Navbar */
+#navbar {
   backdrop-filter: blur(20px);
-  background-color: rgba(255, 255, 255, 0.03);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.4s ease;
-  box-shadow: 0 10px 30px rgba(0, 200, 255, 0.07);
+  background-color: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 200, 255, 0.06);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
+
+#navbar.scrolled {
+  background-color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 20px rgba(0, 200, 255, 0.15);
+}
+
 
 model-viewer {
   background: transparent;
   border-radius: 20px;
   box-shadow: 0 0 60px rgba(0, 200, 255, 0.1);
-}
-
-.floating-navbar.scrolled {
-  background-color: rgba(0, 0, 0, 0.7);
-  box-shadow: 0 10px 30px rgba(0, 200, 255, 0.15);
 }
   .glass-card {
     backdrop-filter: blur(12px);
@@ -123,7 +125,7 @@ model-viewer {
 </head>
 <body class="bg-black text-white overflow-x-hidden">
 <!-- ✨ Cosmic-Themed Navigation Menu -->
-<header id="navbar" class="floating-navbar fixed top-0 left-0 w-full z-50">
+<header id="navbar" class="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-white/5 border-b border-white/10 shadow-lg transition-all duration-300 ease-in-out">
   <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
     <!-- Logo -->
     <div class="text-white text-xl font-bold tracking-wide flex items-center gap-2">
@@ -131,12 +133,12 @@ model-viewer {
     </div>
 
     <!-- Desktop Menu -->
-    <ul class="hidden md:flex space-x-8 text-white text-sm font-medium">
-      <li><a href="index.html" class="hover:text-purple-400 transition">Home</a></li>
-      <li><a href="projects.html" class="hover:text-purple-400 transition">Projects</a></li>
-      <li><a href="#" id="aiLabLink" class="hover:text-purple-400 transition">AI Lab</a></li>
-      <li><a href="#portfolio" class="hover:text-purple-400 transition">Portfolio</a></li>
-      <li><a href="#contact" class="hover:text-purple-400 transition">Contact</a></li>
+    <ul class="hidden md:flex space-x-8 text-white/80 text-sm font-medium">
+      <li><a href="index.html" class="hover:text-cyan-400 transition">Home</a></li>
+      <li><a href="projects.html" class="hover:text-cyan-400 transition">Projects</a></li>
+      <li><a href="#" id="aiLabLink" class="hover:text-cyan-400 transition">AI Lab</a></li>
+      <li><a href="#portfolio" class="hover:text-cyan-400 transition">Portfolio</a></li>
+      <li><a href="#contact" class="hover:text-cyan-400 transition">Contact</a></li>
     </ul>
 
     <!-- Mobile Button -->
@@ -150,16 +152,17 @@ model-viewer {
   </nav>
 
   <!-- Mobile Menu Drawer -->
-  <div id="mobileMenu" class="hidden md:hidden fixed top-16 left-0 w-full bg-gradient-to-b from-black/90 to-black/60 backdrop-blur-xl text-white shadow-lg z-40">
-  <ul class="flex flex-col space-y-4 p-6 text-center text-lg font-semibold">
-    <li><a href="index.html" class="hover:text-cyan-400 transition-all duration-200">Home</a></li>
-    <li><a href="projects.html" class="hover:text-cyan-400 transition-all duration-200">Projects</a></li>
-    <a href="#" id="aiLabMobile" class="hover:text-purple-400">AI Lab</a>
-    <li><a href="#portfolio" class="hover:text-cyan-400 transition-all duration-200">Portfolio</a></li>
-    <li><a href="#contact" class="hover:text-cyan-400 transition-all duration-200">Contact</a></li>
-  </ul>
-</div>
+  <div id="mobileMenu" class="hidden md:hidden fixed top-16 left-0 w-full bg-black/70 backdrop-blur-lg text-white z-40">
+    <ul class="flex flex-col space-y-4 p-6 text-center text-lg font-semibold">
+      <li><a href="index.html" class="hover:text-cyan-400 transition-all">Home</a></li>
+      <li><a href="projects.html" class="hover:text-cyan-400 transition-all">Projects</a></li>
+      <li><a href="#" id="aiLabMobile" class="hover:text-cyan-400 transition-all">AI Lab</a></li>
+      <li><a href="#portfolio" class="hover:text-cyan-400 transition-all">Portfolio</a></li>
+      <li><a href="#contact" class="hover:text-cyan-400 transition-all">Contact</a></li>
+    </ul>
+  </div>
 </header>
+
 
 <!-- Login Modal -->
 <div id="loginModal" class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center text-center opacity-0 pointer-events-none transition-opacity duration-300 z-50">
