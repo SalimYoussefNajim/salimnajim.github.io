@@ -319,13 +319,6 @@ model-viewer {
 <!-- Scripts -->
 <script type="module">
   const BASE_URL = "https://ai-07vr.onrender.com";
- // Mobile menu toggle
-  const menuBtn = document.getElementById("menuBtn");
-  const mobileMenu = document.getElementById("mobileMenu");
-
-  menuBtn.addEventListener("click", () => {
-    mobileMenu.classList.toggle("hidden");
-  });
   // Register
   document.getElementById("registerSubmit").onclick = async () => {
     const name = document.getElementById("name").value;
