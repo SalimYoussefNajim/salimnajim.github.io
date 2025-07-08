@@ -202,3 +202,115 @@ a {
     transform: rotate(360deg);
   }
 }
+.flip-card {
+  overflow: visible;
+  width: 280px;
+  height: 360px;
+  perspective: 1000px;
+}
+
+.flip-content {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s;
+  position: relative;
+  border-radius: 8px;
+}
+
+.flip-card:hover .flip-content,
+.flip-card.flipped .flip-content {
+  transform: rotateY(180deg);
+}
+
+.flip-front, .flip-back {
+  background-color: #151515;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.flip-front {
+  z-index: 2;
+  transform: rotateY(0deg);
+}
+
+.flip-back {
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.flip-back-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.flip-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#flip-bottom {
+  background-color: #ff8866;
+  left: 50px;
+  top: 0px;
+  width: 150px;
+  height: 150px;
+  animation-delay: -800ms;
+}
+
+#flip-right {
+  background-color: #ff2233;
+  left: 160px;
+  top: -80px;
+  width: 30px;
+  height: 30px;
+  animation-delay: -1800ms;
+}
+
+@keyframes floating {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(10px); }
+  100% { transform: translateY(0px); }
+}
+
+.flip-front-content {
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+  width: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
+}
+
+.flip-badge {
+  background-color: #00000055;
+  padding: 2px 10px;
+  border-radius: 10px;
+  width: fit-content;
+  font-size: 0.75rem;
+}
+
+.flip-title {
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.flip-footer {
+  color: #ffffff88;
+  margin-top: 5px;
+  font-size: 10px;
+}
+
