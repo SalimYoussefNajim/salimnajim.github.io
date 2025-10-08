@@ -253,26 +253,6 @@ model-viewer {
 
   <div class="section-divider"></div>
 
-  <section id="boarding-pass" class="relative z-10 px-6 py-24 bg-black text-white text-center" data-aos="fade-up">
-  <h2 class="text-4xl font-semibold mb-8">🎫 Get Your Boarding Pass</h2>
-  <p class="text-white/70 mb-6 max-w-xl mx-auto">Enter your name below and receive a personalized digital boarding pass from Salim Najim's cosmic journey!</p>
-
-  <form id="boardingPassForm" class="flex flex-col md:flex-row justify-center items-center gap-4 max-w-xl mx-auto" enctype="multipart/form-data">
-  <input type="text" id="bpName" placeholder="First Name" class="px-4 py-2 rounded bg-white/10 border border-white/10 text-white w-full md:w-auto" required />
-  <input type="text" id="bpSurname" placeholder="Last Name" class="px-4 py-2 rounded bg-white/10 border border-white/10 text-white w-full md:w-auto" required />
-  <div class="flex flex-col items-center gap-2">
-  <label for="bpPhoto" class="cursor-pointer px-4 py-2 rounded bg-white/10 border border-white/10 text-white w-full md:w-auto hover:bg-white/20 transition text-center">
-    Upload Photo
-    <input type="file" id="bpPhoto" accept="image/*" class="hidden" />
-  </label>
-  <img id="photoPreview" src="" alt="Preview" class="hidden rounded-xl border border-white/10 mt-2 w-32 h-32 object-cover" />
-</div>
-
-  <button type="submit" class="bg-gradient-to-r from-blue-500 to-purple-600 py-2 px-6 rounded font-bold text-white">Download</button>
-</form>
-</section>
-<div class="section-divider"></div>
-
 <section class="w-full py-24 flex justify-center items-center bg-black text-white" data-aos="fade-up">
   <model-viewer
     src="assets/Rocket_Engine.glb"
