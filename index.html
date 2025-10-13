@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Salim Najim · Vision Beyond Stars</title>
   <link rel="icon" href="assets/favicon.ico" />
+   
   <script src="https://cdn.tailwindcss.com"></script>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6974115975105547"
      crossorigin="anonymous"></script>
@@ -204,11 +205,12 @@ model-viewer {
   <div id="stars" class="absolute inset-0 z-0"></div>
   <div id="shooting-stars" class="absolute inset-0 z-0"></div>
 
-  <div class="section-divider"></div>
 
+<div class="section-divider"></div>
   
  <section class="flex flex-col items-center justify-center gap-6 py-20" data-aos="fade-up">
   <!-- Profile Card -->
+   <canvas class="webgl absolute"></canvas>
   <div class="flip-card" id="salimCard">
     <div class="flip-content">
       <div class="flip-back">
@@ -235,11 +237,10 @@ model-viewer {
     </div>
   </div>
 
-  <div class="section-divider"></div>
-
-
+  </section>
+<div class="section-divider"></div>
   <!-- Tech Stack -->
-  <section class="relative z-10 px-6 py-24" data-aos="fade-up">
+  <section class="relative z-10 px-10 py-24" data-aos="fade-up">
     <h2 class="text-4xl font-semibold text-center mb-12">Technologies I Use</h2>
     <div class="flex flex-wrap justify-center gap-10">
       <img src="assets/icons8-html-96.png" alt="HTML" class="h-12 hover:scale-110 transition" loading="lazy">
@@ -247,7 +248,7 @@ model-viewer {
       <img src="assets/icons8-java-script-96.png" alt="JavaScript" class="h-12 hover:scale-110 transition" loading="lazy">
       <img src="assets/icons8-python-96.png" alt="Python" class="h-12 hover:scale-110 transition" loading="lazy">
       <img src="assets/icons8-ai-96.png" alt="AI/ML" class="h-12 hover:scale-110 transition" loading="lazy">
-      <img src="assets/icons8-adobe-after-effects-96.png" alt="After Effects" class="h-12 hover:scale-110 transition" loading="lazy">
+
     </div>
   </section>
 
@@ -297,6 +298,7 @@ model-viewer {
 </footer>
 
 <!-- Scripts -->
+ <script type="module" src="js/Universe.js"></script>
 <script type="module">
   const BASE_URL = "https://ai-07vr.onrender.com";
   // Register
