@@ -136,7 +136,7 @@ body label.mercury > .preview {
   background: url("https://www.solarsystemscope.com/images/textures/full/2k_makemake_fictional.jpg") !important;
 }
 body label.venus > .preview {
-  background: url("https://nasa3d.arc.nasa.gov/shared_assets/images/ven0aaa2/ven0aaa2-copy-428-321.jpg") !important;
+  background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Solarsystemscope_texture_8k_venus_surface.jpg/2560px-Solarsystemscope_texture_8k_venus_surface.jpg") !important;
 }
 body label.earth > .preview {
   background: url("https://img00.deviantart.net/04ef/i/2009/114/3/e/new_earth_texture_map_by_lightondesigns.jpg") !important;
@@ -145,7 +145,7 @@ body label.mars > .preview {
   background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/217233/mars_texture.jpg") !important;
 }
 body label.jupiter > .preview {
-  background: url("https://www.jpl.nasa.gov/spaceimages/images/largesize/PIA07782_hires.jpg") !important;
+  background: url("https://i.pinimg.com/736x/be/ba/b4/bebab4e9768b78a4f5dc8b7a2b24daaf.jpg") !important;
 }
 body label.saturn > .preview {
   background: url("https://www.solarsystemscope.com/images/textures/full/2k_saturn.jpg") !important;
@@ -1855,7 +1855,7 @@ body .solar_systm .planet.mars .deimos {
   left: 900px;
   top: -100px;
   transform: scale(0.45);
-  background: url("https://www.jpl.nasa.gov/spaceimages/images/largesize/PIA07782_hires.jpg");
+  background: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/9b7029c3-9717-4658-9066-11c30aa24029/dcrr1qe-3e4bf609-919c-4f4a-9171-8da4017b4320.png/v1/fill/w_1264,h_632,q_70,strp/deimos_texture_map__upd_2024__by_oleg_pluton_dcrr1qe-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6Ii9mLzliNzAyOWMzLTk3MTctNDY1OC05MDY2LTExYzMwYWEyNDAyOS9kY3JyMXFlLTNlNGJmNjA5LTkxOWMtNGY0YS05MTcxLThkYTQwMTdiNDMyMC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.gXvDGyFyqqXfuHAvy9QRdWWp1TVMVhe7R2PkS8HhFjI");
   z-index: -1;
   box-shadow: 0px -30px 30px 10px black inset;
 }
@@ -1875,12 +1875,12 @@ body .solar_systm .planet.mars .phoebos {
   left: 100px;
   top: -160px;
   transform: scale(0.5);
-  background: url("https://www.jpl.nasa.gov/spaceimages/images/largesize/PIA07782_hires.jpg");
+  background: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/5938ae9e-47de-424a-8836-f98e6658d37b/dcyuzcx-398c9062-444d-48c4-9e60-3b3d502d9063.png/v1/fill/w_1264,h_632,q_70,strp/phobos_texture_map_by_askaniy_dcyuzcx-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MjA0OCIsInBhdGgiOiIvZi81OTM4YWU5ZS00N2RlLTQyNGEtODgzNi1mOThlNjY1OGQzN2IvZGN5dXpjeC0zOThjOTA2Mi00NDRkLTQ4YzQtOWU2MC0zYjNkNTAyZDkwNjMucG5nIiwid2lkdGgiOiI8PTQwOTYifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.UI5-Y3sH7x_37VzOQh9_gKDNwTFCyKO7PD4k13MKKKY");
   z-index: -1;
   box-shadow: 0px -30px 30px 10px black inset;
 }
 body .solar_systm .planet.jupiter {
-  background: url("https://www.jpl.nasa.gov/spaceimages/images/largesize/PIA07782_hires.jpg");
+  background: url("https://i.pinimg.com/736x/be/ba/b4/bebab4e9768b78a4f5dc8b7a2b24daaf.jpg");
   box-shadow: 0 -590px 150px black inset, 0 0px 130px 40px rgba(234, 205, 199, 0.6) inset, 0 0px 23px 4px rgba(234, 205, 199, 0.6) inset, 0 -10px 130px rgba(188, 143, 127, 0.6);
 }
 body .solar_systm .planet.jupiter .moon h3 {
@@ -1924,7 +1924,7 @@ body .solar_systm .planet.jupiter .ganymede {
   left: 900px;
   top: -70px;
   transform: scale(0.4);
-  background: url("https://vignette.wikia.nocookie.net/planet-texture-maps/images/1/14/Ganymede.jpg/revision/latest?cb=20180104001948");
+  background: url("https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Ganymede_map_by_Askaniy.png/1200px-Ganymede_map_by_Askaniy.png");
   z-index: -1;
   box-shadow: 0px -30px 30px 10px black inset;
 }
