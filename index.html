@@ -93,27 +93,6 @@ model-viewer {
       transform: scale(1) translateY(0);
     }
   }
-  .section-divider {
-  position: relative;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(to right, rgba(0, 200, 255, 0), rgba(0, 200, 255, 0.6), rgba(0, 200, 255, 0));
-  margin: 100px auto;
-  border-radius: 999px;
-  overflow: hidden;
-  box-shadow: 0 0 20px rgba(0, 200, 255, 0.2);
-}
-
-.section-divider::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -30%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(to right, transparent, white, transparent);
-  animation: shimmer 3s infinite;
-}
 
 @keyframes shimmer {
   0% { left: -30%; }
