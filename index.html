@@ -93,6 +93,27 @@ model-viewer {
       transform: scale(1) translateY(0);
     }
   }
+  .section-divider {
+  position: relative;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, rgba(0, 200, 255, 0), rgba(0, 200, 255, 0.6), rgba(0, 200, 255, 0));
+  margin: 100px auto;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.2);
+}
+
+.section-divider::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -30%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, white, transparent);
+  animation: shimmer 3s infinite;
+}
 
 @keyframes shimmer {
   0% { left: -30%; }
@@ -217,8 +238,59 @@ model-viewer {
   </div>
 
   </section>
+<div class="section-divider"></div>
+  <!-- Tech Stack -->
+  <section class="relative z-10 px-10 py-24" data-aos="fade-up">
+    <h2 class="text-4xl font-semibold text-center mb-12">Technologies I Use</h2>
+    <div class="flex flex-wrap justify-center gap-10">
+      <img src="assets/icons8-html-96.png" alt="HTML" class="h-12 hover:scale-110 transition" loading="lazy">
+      <img src="assets/icons8-css-96.png" alt="CSS" class="h-12 hover:scale-110 transition" loading="lazy">
+      <img src="assets/icons8-java-script-96.png" alt="JavaScript" class="h-12 hover:scale-110 transition" loading="lazy">
+      <img src="assets/icons8-python-96.png" alt="Python" class="h-12 hover:scale-110 transition" loading="lazy">
+      <img src="assets/icons8-ai-96.png" alt="AI/ML" class="h-12 hover:scale-110 transition" loading="lazy">
 
+    </div>
+  </section>
 
+  <div class="section-divider"></div>
+
+<section class="w-full py-24 flex justify-center items-center bg-black text-white" data-aos="fade-up">
+  <model-viewer
+    src="assets/Rocket_Engine.glb"
+    alt="A 3D model"
+    auto-rotate
+    camera-controls
+    shadow-intensity="1"
+    exposure="1"
+    interaction-prompt="auto"
+    ar
+    class="w-full h-[600px] max-w-5xl"
+  ></model-viewer>
+</section>
+
+<div class="section-divider"></div>
+
+  <!-- Projects -->
+  <section class="relative z-10 px-6 py-20" data-aos="fade-up">
+    <h2 class="text-4xl font-semibold text-center mb-12">My Works</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div class="card" data-aos="fade-up">
+        <img src="assets/project1.png" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
+        <h3 class="text-xl font-bold mb-1">Tesla Coil City</h3>
+        <p class="text-sm text-white/70">An electrifying Tesla Coil invention showcased in a full city demo.</p>
+      </div>
+      <div class="card" data-aos="fade-up">
+        <img src="assets/project2.png" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
+        <h3 class="text-xl font-bold mb-1">NeuroLens AR</h3>
+        <p class="text-sm text-white/70">A smart AI-powered contact lens for real-time student learning enhancement.</p>
+      </div>
+      <div class="card" data-aos="fade-up">
+        <img src="assets/project3.jpg" loading="lazy" class="rounded-xl h-40 w-full object-cover mb-4" />
+        <h3 class="text-xl font-bold mb-1">Najim’s Production</h3>
+        <p class="text-sm text-white/70">Video storytelling with cinematic edge and emotional power.</p>
+      </div>
+    </div>
+  </section>
 
 <!-- Footer -->
 <footer class="text-center py-10 text-white/40 text-sm border-t border-white/10 mt-10">
