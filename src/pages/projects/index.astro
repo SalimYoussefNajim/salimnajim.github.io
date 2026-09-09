@@ -4,6 +4,11 @@ import FeaturedProject from '../../components/FeaturedProject.astro';
 import ContactCta from '../../components/ContactCta.astro';
 import { projects } from '../../data/site';
 ---
-<Layout title="Selected Projects — Salim Youssef Najim" description="Selected engineering work by Salim Youssef Najim, including LUMOS, a student concept exploring decentralized urban lighting.">
-  <section class="page-hero section-pad"><p class="eyebrow section-index">Selected work / Engineering & exploration</p><h1>Thinking,<br/><span>made tangible.</span></h1><p class="lead">A closer look at the questions, systems and decisions behind the work.</p></section><section class="project-index"><div class="section-pad section-heading"><p class="eyebrow">Project index</p><p class="eyebrow">{String(projects.length).padStart(2,'0')} selected study</p></div><FeaturedProject/></section><ContactCta/>
+<Layout title="Engineering Projects — Salim Youssef Najim" description="Selected engineering work by Salim Youssef Najim, including the LUMOS student concept for decentralized urban lighting.">
+  <section class="page-hero section-pad"><p class="eyebrow section-index">Selected work</p><h1>Engineering<br/><span>projects.</span></h1><p class="lead">The ideas, system choices and open questions behind the work. Each case study explains the concept, my role and its stage of development.</p></section>
+  <section class="project-index">
+    <div class="section-pad section-heading"><h2 class="eyebrow">Project index</h2><p class="eyebrow">{projects.length} selected {projects.length === 1 ? 'study' : 'studies'}</p></div>
+    <FeaturedProject/>
+  </section>
+  <ContactCta/>
 </Layout>

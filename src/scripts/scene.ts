@@ -5,10 +5,17 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 export function mountScene(host: HTMLElement): () => void {
   const mount = host.querySelector<HTMLElement>('[data-scene-canvas]');
   if (!mount) return () => {};
+  const compactMedia = window.matchMedia('(max-width: 700px), (pointer: coarse), (hover: none)');
+  const dragMedia = window.matchMedia('(min-width: 701px) and (pointer: fine) and (hover: hover)');
+  const deviceHints = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
+  const lowDetail = compactMedia.matches || Boolean(deviceHints.connection?.saveData)
+    || (deviceHints.deviceMemory !== undefined && deviceHints.deviceMemory <= 4)
+    || (navigator.hardwareConcurrency > 0 && navigator.hardwareConcurrency <= 4);
+  const radialSegments = lowDetail ? 32 : 64;
 
   let renderer: THREE.WebGLRenderer;
   try {
-    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: window.innerWidth > 700, powerPreference: 'low-power' });
+    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !lowDetail, powerPreference: 'low-power' });
   } catch {
     host.dataset.sceneState = 'fallback';
     return () => {};
@@ -21,7 +28,7 @@ export function mountScene(host: HTMLElement): () => void {
   renderer.setClearColor(0x000000, 0);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.03;
+  renderer.toneMappingExposure = 0.94;
   renderer.domElement.setAttribute('aria-hidden', 'true');
   mount.appendChild(renderer.domElement);
 
@@ -29,7 +36,7 @@ export function mountScene(host: HTMLElement): () => void {
     const room = new RoomEnvironment();
     const pmrem = new THREE.PMREMGenerator(renderer);
     try {
-      return pmrem.fromScene(room, 0.04);
+      return pmrem.fromScene(room, 0.04, 0.1, 100, { size: lowDetail ? 128 : 256 });
     } finally {
       room.dispose();
       pmrem.dispose();
@@ -45,6 +52,7 @@ export function mountScene(host: HTMLElement): () => void {
     return () => {};
   }
   scene.environment = environment.texture;
+  scene.environmentIntensity = 0.85;
 
   const geometries = new Set<THREE.BufferGeometry>();
   const materials = new Set<THREE.Material>();
@@ -54,12 +62,12 @@ export function mountScene(host: HTMLElement): () => void {
     materials.add(result);
     return result;
   }
-  const titanium = material(0xa6a9b0, 0.96, 0.26);
-  const bladeMetal = material(0xd8dde3, 0.9, 0.3);
-  const darkMetal = material(0x30353d, 0.88, 0.34);
-  const edgeMetal = material(0xe7e5dc, 0.94, 0.2);
-  const copper = material(0xa7865d, 0.9, 0.28);
-  const boltMetal = material(0x75808e, 0.92, 0.32);
+  const titanium = material(0x87939d, 0.96, 0.36);
+  const bladeMetal = material(0xb6c1cb, 0.94, 0.35);
+  const darkMetal = material(0x26333f, 0.92, 0.39);
+  const edgeMetal = material(0xd0d8df, 0.98, 0.26);
+  const copper = material(0x9b8265, 0.93, 0.36);
+  const boltMetal = material(0x75808e, 0.94, 0.36);
   const assembly = new THREE.Group();
   scene.add(assembly);
   const baseRotation = new THREE.Euler(-0.04, -0.22, -0.28);
@@ -72,12 +80,12 @@ export function mountScene(host: HTMLElement): () => void {
     return object;
   }
   function ring(radius: number, thickness: number, z: number, surface: THREE.Material, parent = assembly): THREE.Mesh {
-    const object = mesh(new THREE.TorusGeometry(radius, thickness, 12, 112), surface, parent);
+    const object = mesh(new THREE.TorusGeometry(radius, thickness, lowDetail ? 8 : 12, lowDetail ? 56 : 112), surface, parent);
     object.position.z = z;
     return object;
   }
   function cylinder(top: number, bottom: number, length: number, z: number, surface: THREE.Material, parent = assembly): THREE.Mesh {
-    const object = mesh(new THREE.CylinderGeometry(top, bottom, length, 64), surface, parent);
+    const object = mesh(new THREE.CylinderGeometry(top, bottom, length, radialSegments), surface, parent);
     object.rotation.x = Math.PI / 2;
     object.position.z = z;
     return object;
@@ -98,8 +106,8 @@ export function mountScene(host: HTMLElement): () => void {
   function bladeGeometry(inner: number, outer: number, angularWidth: number, sweep: number): THREE.BufferGeometry {
     const positions: number[] = [];
     const indices: number[] = [];
-    const rows = 16;
-    const columns = 5;
+    const rows = lowDetail ? 8 : 16;
+    const columns = lowDetail ? 3 : 5;
     for (let side = 0; side < 2; side++) {
       for (let row = 0; row <= rows; row++) {
         const t = row / rows;
@@ -158,14 +166,15 @@ export function mountScene(host: HTMLElement): () => void {
   cylinder(0.43, 0.43, 0.22, -0.03, darkMetal, fanRotor);
   // Base-to-tip winding keeps the closed spinner's polished outer face visible.
   const spinnerPoints = [new THREE.Vector2(0, -0.13)];
-  for (let step = 0; step <= 32; step++) {
-    const angle = step / 32 * Math.PI / 2;
+  const spinnerSteps = lowDetail ? 16 : 32;
+  for (let step = 0; step <= spinnerSteps; step++) {
+    const angle = step / spinnerSteps * Math.PI / 2;
     spinnerPoints.push(new THREE.Vector2(
-      step === 32 ? 0 : 0.405 * Math.cos(angle),
+      step === spinnerSteps ? 0 : 0.405 * Math.cos(angle),
       -0.13 + 0.72 * Math.sin(angle),
     ));
   }
-  const spinner = mesh(new THREE.LatheGeometry(spinnerPoints, 64), titanium, fanRotor);
+  const spinner = mesh(new THREE.LatheGeometry(spinnerPoints, radialSegments), titanium, fanRotor);
   spinner.rotation.x = Math.PI / 2;
   ring(0.395, 0.018, -0.07, edgeMetal, fanRotor);
 
@@ -203,37 +212,39 @@ export function mountScene(host: HTMLElement): () => void {
   cylinder(0.255, 0.255, 0.025, -2.7, darkMetal);
 
   const boltGeometry = new THREE.CylinderGeometry(0.027, 0.027, 0.04, 6);
-  for (let i = 0; i < 32; i++) {
-    const a = i / 32 * Math.PI * 2;
+  const boltCount = lowDetail ? 16 : 32;
+  for (let i = 0; i < boltCount; i++) {
+    const a = i / boltCount * Math.PI * 2;
     const bolt = mesh(boltGeometry, boltMetal, fan);
     bolt.rotation.x = Math.PI / 2;
     bolt.position.set(Math.cos(a) * 1.7, Math.sin(a) * 1.7, 0.055);
   }
 
-  scene.add(new THREE.HemisphereLight(0xc9ddff, 0x4a3a2b, 2));
-  const key = new THREE.DirectionalLight(0xfff4df, 4.5);
+  scene.add(new THREE.HemisphereLight(0xc9ddff, 0x34404c, 0.65));
+  const key = new THREE.DirectionalLight(0xf2f5f7, 2.4);
   key.position.set(2, 6, 6);
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0xa6c9ff, 3);
+  const rim = new THREE.DirectionalLight(0xa6c9ff, 1.8);
   rim.position.set(-5, 2, -3);
   scene.add(rim);
-  const fill = new THREE.DirectionalLight(0xe6e8ef, 1.3);
+  const fill = new THREE.DirectionalLight(0xe6e8ef, 0.45);
   fill.position.set(-1, -4, 4);
   scene.add(fill);
 
   const media = window.matchMedia('(prefers-reduced-motion: reduce)');
   let reduced = media.matches;
-  let userPaused = host.dataset.sceneUserPaused === 'true';
+  // Phones start with a single rendered frame. Animation is an explicit choice.
+  let userPaused = host.dataset.sceneUserPaused === undefined ? lowDetail : host.dataset.sceneUserPaused === 'true';
   let paused = reduced || userPaused;
   let visible = false;
   let disposed = false;
   let contextLost = false;
   let frame = 0;
   let lastTime = 0;
+  let lastPaintTime = 0;
   let elapsed = 0;
   let drag = false;
   let activePointer: number | null = null;
-  let touchPending = false;
   let lastX = 0;
   let lastY = 0;
   let yaw = 0;
@@ -242,6 +253,14 @@ export function mountScene(host: HTMLElement): () => void {
   let pointerY = 0;
   let exploded = false;
   let separation = 0;
+  let fitKey = '';
+  const modelBounds = new THREE.Box3();
+  const cameraTarget = new THREE.Vector3();
+  const cameraOffset = new THREE.Vector3(5.8, 3.1, 7.2);
+  const worldToClip = new THREE.Matrix4();
+  const objectToClip = new THREE.Matrix4();
+  const instanceMatrix = new THREE.Matrix4();
+  const corner = new THREE.Vector3();
   const aborter = new AbortController();
   const { signal } = aborter;
   const motionButton = host.querySelector<HTMLButtonElement>('[data-scene-motion]');
@@ -263,18 +282,58 @@ export function mountScene(host: HTMLElement): () => void {
       baseRotation.z + Math.sin(elapsed * 0.22) * 0.025);
     assembly.position.y = Math.sin(elapsed * 0.35) * 0.025;
     for (const stage of stages) stage.group.position.z = stage.z + stage.distance * separation;
+    // Frame the actual model after a view/stage change, rather than relying on
+    // one desktop zoom value. Allow margin for hover motion and rotor movement.
+    const nextFitKey = `${yaw.toFixed(2)}/${pitch.toFixed(2)}/${separation.toFixed(2)}/${camera.aspect.toFixed(3)}`;
+    if (fitKey !== nextFitKey) {
+      fitKey = nextFitKey;
+      camera.zoom = 1;
+      assembly.updateWorldMatrix(true, true);
+      modelBounds.setFromObject(assembly).getCenter(cameraTarget);
+      camera.position.copy(cameraTarget).add(cameraOffset);
+      camera.lookAt(cameraTarget);
+      camera.updateProjectionMatrix();
+      camera.updateMatrixWorld();
+      worldToClip.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
+      // Project the actual silhouette only when the view or stage layout changes.
+      // Axis-aligned boxes have empty corners that made the angled model tiny.
+      let requiredScale = 0.25;
+      assembly.traverseVisible((object) => {
+        if (!(object instanceof THREE.Mesh)) return;
+        const positions = object.geometry.attributes.position;
+        const count = object instanceof THREE.InstancedMesh ? object.count : 1;
+        for (let instance = 0; instance < count; instance++) {
+          objectToClip.multiplyMatrices(worldToClip, object.matrixWorld);
+          if (object instanceof THREE.InstancedMesh) {
+            object.getMatrixAt(instance, instanceMatrix);
+            objectToClip.multiply(instanceMatrix);
+          }
+          for (let vertex = 0; vertex < positions.count; vertex++) {
+            corner.fromBufferAttribute(positions, vertex).applyMatrix4(objectToClip);
+            requiredScale = Math.max(requiredScale, Math.abs(corner.x) / 0.92, Math.abs(corner.y) / 0.86);
+          }
+        }
+      });
+      camera.zoom = 1 / requiredScale;
+      camera.updateProjectionMatrix();
+    }
     renderer.render(scene, camera);
     if (host.dataset.sceneState !== 'ready') {
       host.dataset.sceneState = 'ready';
-      mount!.tabIndex = 0;
+      mount!.tabIndex = dragMedia.matches ? 0 : -1;
     }
   }
 
   function animate(time: number): void {
     frame = 0;
     if (disposed || contextLost || !visible || document.hidden) return;
+    if (lowDetail && !paused && lastPaintTime && time - lastPaintTime < 1000 / 30 - 1) {
+      frame = requestAnimationFrame(animate);
+      return;
+    }
     const dt = Math.min((time - (lastTime || time)) / 1000, 0.05);
     lastTime = time;
+    lastPaintTime = time;
     if (!paused && !reduced) {
       elapsed += dt;
       rotors.forEach((rotor, i) => { rotor.rotation.z += dt * (i === 0 ? 0.065 : (i % 2 ? -0.08 : 0.08)); });
@@ -293,28 +352,39 @@ export function mountScene(host: HTMLElement): () => void {
     cancelAnimationFrame(frame);
     frame = 0;
     lastTime = 0;
+    lastPaintTime = 0;
   }
 
   function resize(): void {
     if (disposed) return;
     const { width, height } = mount!.getBoundingClientRect();
     if (width <= 0 || height <= 0) return;
-    renderer.setPixelRatio(window.innerWidth <= 700 ? 1 : Math.min(window.devicePixelRatio, 1.5));
+    const constrained = lowDetail || compactMedia.matches;
+    const pixelBudget = constrained ? 500_000 : 1_400_000;
+    renderer.setPixelRatio(Math.max(0.5, Math.min(window.devicePixelRatio || 1, constrained ? 1 : 1.5, Math.sqrt(pixelBudget / (width * height)))));
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
-    camera.zoom = width < 500 ? 0.87 : 1;
+    fitKey = '';
     camera.updateProjectionMatrix();
+    host.dataset.sceneInput = dragMedia.matches ? 'mouse' : 'controls';
+    mount!.tabIndex = host.dataset.sceneState === 'ready' && dragMedia.matches ? 0 : -1;
+    mount!.setAttribute('aria-label', dragMedia.matches
+      ? 'Interactive turbine study. Drag or use arrow keys to rotate. Press Home to reset the view.'
+      : 'Turbine study. Use the buttons below to rotate, separate stages, or play motion.');
     schedule();
   }
 
-  const resizeObserver = new ResizeObserver(resize);
-  resizeObserver.observe(mount);
-  const visibilityObserver = new IntersectionObserver(([entry]) => {
+  const resizeObserver = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(resize);
+  resizeObserver?.observe(mount);
+  window.addEventListener('resize', resize, { passive: true, signal });
+  dragMedia.addEventListener('change', () => { endDrag(); resize(); }, { signal });
+  const visibilityObserver = typeof IntersectionObserver === 'undefined' ? null : new IntersectionObserver(([entry]) => {
     visible = Boolean(entry?.isIntersecting);
     if (visible) schedule();
     else stop();
   }, { threshold: 0.01 });
-  visibilityObserver.observe(host);
+  visibilityObserver?.observe(host);
+  if (!visibilityObserver) visible = true;
   document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); else schedule(); }, { signal });
   media.addEventListener('change', () => {
     reduced = media.matches;
@@ -366,31 +436,19 @@ export function mountScene(host: HTMLElement): () => void {
   }, { signal });
 
   mount.addEventListener('pointerdown', (event) => {
-    if (event.button !== 0 || !event.isPrimary || activePointer !== null) return;
+    // Touch/pen gestures always belong to the page. Rotation buttons remain
+    // available on phones, and the canvas never captures a touch pointer.
+    if (event.pointerType !== 'mouse' || !dragMedia.matches || event.button !== 0 || !event.isPrimary || activePointer !== null) return;
     activePointer = event.pointerId;
-    touchPending = event.pointerType === 'touch';
-    drag = !touchPending;
+    drag = true;
     lastX = event.clientX;
     lastY = event.clientY;
-    if (drag) mount.setPointerCapture(event.pointerId);
+    mount.setPointerCapture(event.pointerId);
     host.dataset.dragging = String(drag);
-  }, { signal });
+  }, { passive: true, signal });
   mount.addEventListener('pointermove', (event) => {
+    if (event.pointerType !== 'mouse' || !dragMedia.matches) return;
     if (activePointer !== null && event.pointerId !== activePointer) return;
-    if (touchPending) {
-      const dx = Math.abs(event.clientX - lastX);
-      const dy = Math.abs(event.clientY - lastY);
-      if (Math.max(dx, dy) < 7) return;
-      // Vertical gestures belong to the page; only horizontal intent starts a drag.
-      if (dy >= dx) {
-        endDrag();
-        return;
-      }
-      touchPending = false;
-      drag = true;
-      mount.setPointerCapture(event.pointerId);
-      host.dataset.dragging = 'true';
-    }
     if (drag) {
       yaw += (event.clientX - lastX) * 0.006;
       pitch = THREE.MathUtils.clamp(pitch + (event.clientY - lastY) * 0.004, -0.65, 0.65);
@@ -402,20 +460,19 @@ export function mountScene(host: HTMLElement): () => void {
       pointerX = (event.clientX - bounds.left) / bounds.width - 0.5;
       pointerY = (event.clientY - bounds.top) / bounds.height - 0.5;
     }
-  }, { signal });
+  }, { passive: true, signal });
   function endDrag(event?: PointerEvent): void {
     if (event && event.pointerId !== activePointer) return;
     const pointer = activePointer;
     activePointer = null;
-    touchPending = false;
     drag = false;
     host.dataset.dragging = 'false';
     if (pointer !== null && mount!.hasPointerCapture(pointer)) mount!.releasePointerCapture(pointer);
   }
-  mount.addEventListener('pointerup', endDrag, { signal });
-  mount.addEventListener('pointercancel', endDrag, { signal });
-  mount.addEventListener('lostpointercapture', endDrag, { signal });
-  mount.addEventListener('pointerleave', () => { if (!paused && !reduced) pointerX = pointerY = 0; }, { signal });
+  mount.addEventListener('pointerup', endDrag, { passive: true, signal });
+  mount.addEventListener('pointercancel', endDrag, { passive: true, signal });
+  mount.addEventListener('lostpointercapture', endDrag, { passive: true, signal });
+  mount.addEventListener('pointerleave', (event) => { if (event.pointerType === 'mouse' && !paused && !reduced) pointerX = pointerY = 0; }, { passive: true, signal });
   mount.addEventListener('keydown', (event) => {
     if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home'].includes(event.key)) return;
     event.preventDefault();
@@ -458,8 +515,8 @@ export function mountScene(host: HTMLElement): () => void {
     stop();
     endDrag();
     aborter.abort();
-    visibilityObserver.disconnect();
-    resizeObserver.disconnect();
+    visibilityObserver?.disconnect();
+    resizeObserver?.disconnect();
     geometries.forEach((geometry) => geometry.dispose());
     materials.forEach((surface) => surface.dispose());
     instances.forEach((array) => array.dispose());

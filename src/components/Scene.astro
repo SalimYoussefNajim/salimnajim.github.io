@@ -49,7 +49,7 @@ const blades = Array.from({ length: 26 }, (_, i) => i * 360 / 26);
       </g>
     </svg>
   </div>
-  <div class="scene__canvas" data-scene-canvas tabindex="-1" role="group" aria-label="Interactive turbine study. Drag or use arrow keys to rotate. Press Home to reset the view."></div>
+  <div class="scene__canvas" data-scene-canvas tabindex="-1" role="group" aria-label="Turbine study. Use the buttons below to explore the model."></div>
   <figcaption class="scene__caption">
     <span class="scene__index">01 / PROPULSION</span>
     <span class="scene__name">A study in motion.</span>
@@ -68,7 +68,7 @@ const blades = Array.from({ length: 26 }, (_, i) => i * 360 / 26);
       <span data-scene-motion-label>Pause motion</span>
     </button>
   </div>
-  <span class="scene__hint">DRAG TO EXPLORE <span aria-hidden="true">↗</span></span>
+  <span class="scene__hint"><span class="scene__hint-mouse">Drag to explore</span><span class="scene__hint-controls">Explore with the controls</span><span aria-hidden="true">↗</span></span>
   <span class="scene__sr-only" data-scene-status role="status" aria-live="polite"></span>
 </figure>
 
@@ -77,12 +77,10 @@ const blades = Array.from({ length: 26 }, (_, i) => i * 360 / 26);
   const loading = new Set<HTMLElement>();
   let active = true;
   let generation = 0;
-  const observer = new IntersectionObserver(async (entries) => {
-    for (const entry of entries) {
-      const host = entry.target as HTMLElement;
-      if (!entry.isIntersecting || loading.has(host) || cleanup.has(host)) continue;
+  async function loadScene(host: HTMLElement) {
+      if (loading.has(host) || cleanup.has(host)) return;
       loading.add(host);
-      observer.unobserve(host);
+      observer?.unobserve(host);
       const generationAtStart = generation;
       try {
         const { mountScene } = await import('../scripts/scene');
@@ -90,13 +88,19 @@ const blades = Array.from({ length: 26 }, (_, i) => i * 360 / 26);
       } catch {
         host.dataset.sceneState = 'fallback';
       }
-    }
-  }, { rootMargin: '160px' });
-  document.querySelectorAll<HTMLElement>('[data-scene]').forEach((host) => observer.observe(host));
+  }
+  const observer = typeof IntersectionObserver === 'undefined' ? null : new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) void loadScene(entry.target as HTMLElement); });
+  }, { rootMargin: '80px' });
+  const observeScenes = () => document.querySelectorAll<HTMLElement>('[data-scene]').forEach((host) => {
+    if (observer) observer.observe(host);
+    else void loadScene(host);
+  });
+  observeScenes();
   window.addEventListener('pagehide', () => {
     active = false;
     generation++;
-    observer.disconnect();
+    observer?.disconnect();
     cleanup.forEach((dispose) => dispose());
     cleanup.clear();
     loading.clear();
@@ -104,7 +108,7 @@ const blades = Array.from({ length: 26 }, (_, i) => i * 360 / 26);
   window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
       active = true;
-      document.querySelectorAll<HTMLElement>('[data-scene]').forEach((host) => observer.observe(host));
+      observeScenes();
     }
   });
 </script>
@@ -121,9 +125,10 @@ const blades = Array.from({ length: 26 }, (_, i) => i * 360 / 26);
   .scene__fallback,.scene__canvas{position:absolute;inset:0;transition:opacity .65s ease}
   .scene__fallback{pointer-events:none;opacity:1}
   .scene__fallback svg{display:block;width:100%;height:100%}
-  .scene__canvas{opacity:0;visibility:hidden;pointer-events:none;touch-action:pan-y pinch-zoom;cursor:grab;outline-offset:-5px;border-radius:4px}
+  .scene__canvas{opacity:0;visibility:hidden;pointer-events:none;touch-action:auto;cursor:default;outline-offset:-5px;border-radius:4px}
   .scene__canvas :global(canvas){display:block;width:100%;height:100%}
-  .scene[data-scene-state='ready'] .scene__canvas{opacity:1;visibility:visible;pointer-events:auto}
+  .scene[data-scene-state='ready'] .scene__canvas{opacity:1;visibility:visible}
+  .scene[data-scene-state='ready'][data-scene-input='mouse'] .scene__canvas{pointer-events:auto;cursor:grab}
   .scene[data-scene-state='ready'] .scene__fallback{opacity:0}
   .scene[data-dragging='true'] .scene__canvas{cursor:grabbing}
   .scene__caption{position:absolute;left:5%;top:5%;display:flex;flex-direction:column;gap:8px;pointer-events:none}
@@ -134,22 +139,24 @@ const blades = Array.from({ length: 26 }, (_, i) => i * 360 / 26);
   .scene__annotation span{width:36px;height:1px;background:#7c818747}
   .scene__controls{position:absolute;left:5%;bottom:5%;display:flex;flex-wrap:wrap;gap:6px;max-width:90%;opacity:0;visibility:hidden;transition:opacity .3s}
   .scene[data-scene-state='ready'] .scene__controls{opacity:1;visibility:visible}
-  .scene__controls button{border:1px solid #777d872d;background:#12161ad9;color:#aeb2b8;font:inherit;font-size:10px;line-height:1;letter-spacing:.025em;min-height:36px;padding:10px 12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:3px;cursor:pointer;transition:color .2s,border-color .2s,background .2s}
+  .scene__controls button{border:1px solid #777d872d;background:#12161ad9;color:#aeb2b8;font:inherit;font-size:10px;line-height:1;letter-spacing:.025em;min-height:44px;padding:10px 12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:3px;cursor:pointer;transition:color .2s,border-color .2s,background .2s;touch-action:manipulation}
   .scene__controls button:hover{color:#f0eee8;border-color:#9b907566;background:#1d2127}
   .scene__controls button:focus-visible,.scene__canvas:focus-visible{outline:2px solid #acd0e9;outline-offset:4px}
   .scene__controls button[aria-pressed='true'],.scene[data-motion='paused'] [data-scene-motion]{border-color:#92b2ce5c;color:#c4dbee}
   .scene__play-icon{display:none}
   .scene[data-motion='paused'] .scene__play-icon{display:block}
   .scene[data-motion='paused'] .scene__pause-icon{display:none}
-  .scene__controls .scene__icon-button{font-size:16px;min-width:36px;padding:8px}
+  .scene__controls .scene__icon-button{font-size:16px;min-width:44px;padding:8px}
   .scene__hint{position:absolute;right:3%;bottom:6.5%;font-size:8px;color:#757c83;display:flex;gap:12px;pointer-events:none;visibility:hidden}
   .scene[data-scene-state='ready'] .scene__hint{visibility:visible}
-  .scene__hint span{font-size:12px}
+  .scene__hint>span[aria-hidden]{font-size:12px}
+  .scene__hint-controls{display:none}.scene[data-scene-input='controls'] .scene__hint-mouse{display:none}.scene[data-scene-input='controls'] .scene__hint-controls{display:inline}
   .scene__sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   .scene--lab{aspect-ratio:1.5;min-height:440px;max-height:680px;background:radial-gradient(ellipse at 50% 48%,#19212942,transparent 65%)}
   .scene--lab .scene__hint{bottom:17%}
+  .scene--lab .scene__canvas,.scene--lab .scene__fallback{bottom:60px}
   @container (max-width: 500px){
-    .scene__annotation{top:21%;font-size:7px}.scene__annotation span{width:19px}.scene__caption{top:5%}.scene__index{font-size:8px}.scene__name{font-size:11px}.scene__controls{bottom:3%}.scene__hint{bottom:5%;font-size:7px}.scene__controls button{min-height:40px}.scene__corner--br{bottom:17%}
+    .scene__annotation{top:21%;font-size:7px}.scene__annotation span{width:19px}.scene__caption{top:5%}.scene__index{font-size:8px}.scene__name{font-size:11px}.scene__controls{bottom:3%}.scene__hint{bottom:5%;font-size:7px}.scene__corner--br{bottom:17%}.scene--lab .scene__canvas,.scene--lab .scene__fallback{bottom:108px}.scene--lab .scene__hint{display:none}
   }
   @media(max-width:700px){.scene{aspect-ratio:.95}.scene--lab{aspect-ratio:.9;min-height:410px;max-height:none}.scene--lab .scene__hint{bottom:20%}.scene--lab .scene__controls{gap:5px}.scene--lab .scene__controls button{font-size:9px;padding:10px}.scene__annotation{right:4%}.scene__hint{right:4%}}
   @media(prefers-reduced-motion:reduce){.scene__fallback,.scene__canvas,.scene__controls,.scene__controls button{transition:none}}
