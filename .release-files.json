@@ -35,15 +35,15 @@
     },
     {
       "path": "ads.txt",
-      "sha256": "08b03d8fd43857ef8d9e3cc3b107c13eca38c712219b6d1433c9071d38d3fac6"
+      "sha256": "6451a9a875b290a1ce4adceedc3e31294fc7e9c7d6b49a73d0cccc546117259c"
     },
     {
       "path": "aerospace/index.html",
-      "sha256": "fba9c05746d5079d60820b499482558b6a1b4e989742c5cdd764d87053b1a22e"
+      "sha256": "66f59b58f2d8447e43bdecd01e0897f57502bdc6e8a5bc23ecf56f93b33a4a63"
     },
     {
       "path": "CNAME",
-      "sha256": "2eba3806dc90c2e8ecd3707854b612bdcd19f8f1ffc190420e9c05ff1e5bb65f"
+      "sha256": "4653c7331bf528c55cc10331296c103323f9ceba275c7669ab13e6d769412270"
     },
     {
       "path": "contact/index.html",
@@ -91,7 +91,11 @@
     },
     {
       "path": "index.html",
-      "sha256": "f582097ea57196161293efb085270a875cf13d59b2533b5e0471b82b12d5e0a7"
+      "sha256": "eebc8f24a18f370a4690c7447db3b8618c52f0c833a2f4696de2123edc7a67d0"
+    },
+    {
+      "path": "licenses/three-LICENSE.txt",
+      "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc"
     },
     {
       "path": "projects.html",
