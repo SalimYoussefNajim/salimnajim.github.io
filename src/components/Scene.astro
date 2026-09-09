@@ -1,0 +1,157 @@
+---
+interface Props {
+  variant?: 'hero' | 'lab';
+  interactive?: boolean;
+  class?: string;
+}
+const { variant = 'hero', interactive = variant === 'lab', class: className = '' } = Astro.props;
+const uid = `turbine-${variant}`;
+const blades = Array.from({ length: 26 }, (_, i) => i * 360 / 26);
+---
+
+<figure class:list={['scene', `scene--${variant}`, className]} data-scene data-scene-state="fallback">
+  <div class="scene__halo" aria-hidden="true"></div>
+  <div class="scene__orbit scene__orbit--one" aria-hidden="true"></div>
+  <div class="scene__orbit scene__orbit--two" aria-hidden="true"></div>
+  <div class="scene__corner scene__corner--tl" aria-hidden="true"></div>
+  <div class="scene__corner scene__corner--br" aria-hidden="true"></div>
+  <div class="scene__fallback" aria-hidden="true">
+    <svg viewBox="0 0 750 650" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id={`${uid}-metal`} x1="180" y1="180" x2="520" y2="475" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#F0F0E9" /><stop offset=".23" stop-color="#65717C" /><stop offset=".43" stop-color="#C9CDD1" /><stop offset=".67" stop-color="#373E48" /><stop offset="1" stop-color="#BAC2C9" />
+        </linearGradient>
+        <linearGradient id={`${uid}-blade`} x1="-20" y1="-130" x2="48" y2="-38" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#EFF0ED" /><stop offset=".4" stop-color="#9CA6AF" /><stop offset="1" stop-color="#343D47" />
+        </linearGradient>
+        <radialGradient id={`${uid}-hub`} cx=".3" cy=".25" r=".8"><stop stop-color="#E5E5DF" /><stop offset=".5" stop-color="#929AA1" /><stop offset="1" stop-color="#222B35" /></radialGradient>
+      </defs>
+      <g transform="translate(32 44) rotate(-18 355 305)">
+        <path d="M320 175 555 226 590 255 590 339 552 365 320 428" fill="#14191E" stroke="#687380" />
+        {[0, 1, 2, 3, 4, 5].map((stage) => <g transform={`translate(${400 + stage * 29} 296)`}>
+          <ellipse rx={61 - stage * 4} ry={104 - stage * 7} fill="#20272F" stroke={`url(#${uid}-metal)`} stroke-width="8" />
+          <ellipse rx={54 - stage * 4} ry={96 - stage * 7} stroke="#AAA28F" stroke-width="1.2" />
+          <path d={`M0 ${-91 + stage * 7} Q-24 0 0 ${91 - stage * 7}`} stroke="#959FAA" stroke-width="2" />
+        </g>)}
+        <path d="M556 255 598 271 614 294 598 325 556 338" fill={`url(#${uid}-metal)`} stroke="#85909A" />
+        <ellipse cx="608" cy="296" rx="10" ry="22" fill="#12181F" stroke="#ACB0B2" stroke-width="3" />
+        <path d="M329 173 532 223M331 425 532 367" stroke="#6A727B" stroke-width="5" />
+        <g transform="translate(301 302) scale(.83 1)">
+          <circle r="173" fill="#141C25" stroke={`url(#${uid}-metal)`} stroke-width="19" />
+          <circle r="164" stroke="#C9CDD1" stroke-width="2" />
+          <circle r="177" stroke="#9D825E" stroke-width="1" />
+          {blades.map((angle) => <path transform={`rotate(${angle})`} d="M-14-43 Q-54-96-33-157 Q-18-164-1-161 Q-25-100 13-47Z" fill={`url(#${uid}-blade)`} stroke="#D5D9DC" stroke-opacity=".28" stroke-width=".65" />)}
+          <circle r="48" fill="#3D4751" stroke="#B0B6BB" stroke-width="2" />
+          <ellipse cx="-4" cy="-4" rx="43" ry="44" fill={`url(#${uid}-hub)`} />
+          <path d="M-31-25 Q-17-43 0-38" stroke="#E0E4E5" stroke-opacity=".7" stroke-width="1.5" />
+          {Array.from({ length: 32 }, (_, i) => <circle cx={Math.cos(i * Math.PI / 16) * 173} cy={Math.sin(i * Math.PI / 16) * 173} r="2" fill="#D4D6D4" />)}
+        </g>
+      </g>
+    </svg>
+  </div>
+  <div class="scene__canvas" data-scene-canvas tabindex="-1" role="group" aria-label="Interactive turbine study. Drag or use arrow keys to rotate. Press Home to reset the view."></div>
+  <figcaption class="scene__caption">
+    <span class="scene__index">01 / PROPULSION</span>
+    <span class="scene__name">A study in motion.</span>
+    <span class="scene__sr-only">A silver turbine with swept fan blades and an open assembly of layered compressor stages.</span>
+  </figcaption>
+  <div class="scene__annotation" aria-hidden="true"><span></span> AXIAL TURBINE STUDY</div>
+  <div class="scene__controls" role="group" aria-label="Turbine controls">
+    {interactive && <>
+      <button type="button" class="scene__icon-button" data-scene-rotate="-1" aria-label="Rotate turbine left">←</button>
+      <button type="button" class="scene__icon-button" data-scene-rotate="1" aria-label="Rotate turbine right">→</button>
+      <button type="button" data-scene-explode aria-pressed="false"><span data-scene-explode-label>Separate stages</span></button>
+      <button type="button" data-scene-reset>Reset</button>
+    </>}
+    <button type="button" data-scene-motion aria-label="Pause turbine motion">
+      <svg class="scene__motion-icon" width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path class="scene__pause-icon" d="M2 1h2v8H2zm4 0h2v8H6z" /><path class="scene__play-icon" d="m2 1 7 4-7 4z" /></svg>
+      <span data-scene-motion-label>Pause motion</span>
+    </button>
+  </div>
+  <span class="scene__hint">DRAG TO EXPLORE <span aria-hidden="true">↗</span></span>
+  <span class="scene__sr-only" data-scene-status role="status" aria-live="polite"></span>
+</figure>
+
+<script>
+  const cleanup = new Map<HTMLElement, () => void>();
+  const loading = new Set<HTMLElement>();
+  let active = true;
+  let generation = 0;
+  const observer = new IntersectionObserver(async (entries) => {
+    for (const entry of entries) {
+      const host = entry.target as HTMLElement;
+      if (!entry.isIntersecting || loading.has(host) || cleanup.has(host)) continue;
+      loading.add(host);
+      observer.unobserve(host);
+      const generationAtStart = generation;
+      try {
+        const { mountScene } = await import('../scripts/scene');
+        if (active && generationAtStart === generation && host.isConnected) cleanup.set(host, mountScene(host));
+      } catch {
+        host.dataset.sceneState = 'fallback';
+      }
+    }
+  }, { rootMargin: '160px' });
+  document.querySelectorAll<HTMLElement>('[data-scene]').forEach((host) => observer.observe(host));
+  window.addEventListener('pagehide', () => {
+    active = false;
+    generation++;
+    observer.disconnect();
+    cleanup.forEach((dispose) => dispose());
+    cleanup.clear();
+    loading.clear();
+  });
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      active = true;
+      document.querySelectorAll<HTMLElement>('[data-scene]').forEach((host) => observer.observe(host));
+    }
+  });
+</script>
+
+<style>
+  @layer base {
+  .scene{position:relative;isolation:isolate;width:100%;aspect-ratio:1.14;margin:0;overflow:hidden;color:#aeb2b8;container-type:inline-size}
+  .scene__halo{position:absolute;inset:9% 3% 9% 2%;z-index:-1;background:radial-gradient(ellipse at 50% 49%,#28354238 0%,#15212c1a 42%,transparent 69%);pointer-events:none}
+  .scene__orbit{position:absolute;left:50%;top:47%;width:78%;aspect-ratio:1;border:1px solid #bac5d50b;border-radius:50%;transform:translate(-50%,-50%);z-index:-1;pointer-events:none}
+  .scene__orbit--two{width:97%;border-style:dashed;border-color:#bac5d508}
+  .scene__corner{position:absolute;width:15px;height:15px;opacity:.34;pointer-events:none}
+  .scene__corner--tl{top:10%;left:5%;border-left:1px solid #848a92;border-top:1px solid #848a92}
+  .scene__corner--br{bottom:13%;right:3%;border-right:1px solid #848a92;border-bottom:1px solid #848a92}
+  .scene__fallback,.scene__canvas{position:absolute;inset:0;transition:opacity .65s ease}
+  .scene__fallback{pointer-events:none;opacity:1}
+  .scene__fallback svg{display:block;width:100%;height:100%}
+  .scene__canvas{opacity:0;visibility:hidden;pointer-events:none;touch-action:pan-y pinch-zoom;cursor:grab;outline-offset:-5px;border-radius:4px}
+  .scene__canvas :global(canvas){display:block;width:100%;height:100%}
+  .scene[data-scene-state='ready'] .scene__canvas{opacity:1;visibility:visible;pointer-events:auto}
+  .scene[data-scene-state='ready'] .scene__fallback{opacity:0}
+  .scene[data-dragging='true'] .scene__canvas{cursor:grabbing}
+  .scene__caption{position:absolute;left:5%;top:5%;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+  .scene__index,.scene__annotation,.scene__hint{font-family:var(--mono,'Courier New',monospace);font-size:9px;letter-spacing:.13em;line-height:1.5}
+  .scene__index{color:#929498}
+  .scene__name{font-size:12px;letter-spacing:.015em;color:#b4b7ba}
+  .scene__annotation{position:absolute;right:3%;top:18%;font-size:8px;color:#777e87;display:flex;align-items:center;gap:10px;pointer-events:none}
+  .scene__annotation span{width:36px;height:1px;background:#7c818747}
+  .scene__controls{position:absolute;left:5%;bottom:5%;display:flex;flex-wrap:wrap;gap:6px;max-width:90%;opacity:0;visibility:hidden;transition:opacity .3s}
+  .scene[data-scene-state='ready'] .scene__controls{opacity:1;visibility:visible}
+  .scene__controls button{border:1px solid #777d872d;background:#12161ad9;color:#aeb2b8;font:inherit;font-size:10px;line-height:1;letter-spacing:.025em;min-height:36px;padding:10px 12px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:3px;cursor:pointer;transition:color .2s,border-color .2s,background .2s}
+  .scene__controls button:hover{color:#f0eee8;border-color:#9b907566;background:#1d2127}
+  .scene__controls button:focus-visible,.scene__canvas:focus-visible{outline:2px solid #acd0e9;outline-offset:4px}
+  .scene__controls button[aria-pressed='true'],.scene[data-motion='paused'] [data-scene-motion]{border-color:#92b2ce5c;color:#c4dbee}
+  .scene__play-icon{display:none}
+  .scene[data-motion='paused'] .scene__play-icon{display:block}
+  .scene[data-motion='paused'] .scene__pause-icon{display:none}
+  .scene__controls .scene__icon-button{font-size:16px;min-width:36px;padding:8px}
+  .scene__hint{position:absolute;right:3%;bottom:6.5%;font-size:8px;color:#757c83;display:flex;gap:12px;pointer-events:none;visibility:hidden}
+  .scene[data-scene-state='ready'] .scene__hint{visibility:visible}
+  .scene__hint span{font-size:12px}
+  .scene__sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .scene--lab{aspect-ratio:1.5;min-height:440px;max-height:680px;background:radial-gradient(ellipse at 50% 48%,#19212942,transparent 65%)}
+  .scene--lab .scene__hint{bottom:17%}
+  @container (max-width: 500px){
+    .scene__annotation{top:21%;font-size:7px}.scene__annotation span{width:19px}.scene__caption{top:5%}.scene__index{font-size:8px}.scene__name{font-size:11px}.scene__controls{bottom:3%}.scene__hint{bottom:5%;font-size:7px}.scene__controls button{min-height:40px}.scene__corner--br{bottom:17%}
+  }
+  @media(max-width:700px){.scene{aspect-ratio:.95}.scene--lab{aspect-ratio:.9;min-height:410px;max-height:none}.scene--lab .scene__hint{bottom:20%}.scene--lab .scene__controls{gap:5px}.scene--lab .scene__controls button{font-size:9px;padding:10px}.scene__annotation{right:4%}.scene__hint{right:4%}}
+  @media(prefers-reduced-motion:reduce){.scene__fallback,.scene__canvas,.scene__controls,.scene__controls button{transition:none}}
+  }
+</style>

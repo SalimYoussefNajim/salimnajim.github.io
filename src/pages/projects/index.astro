@@ -1,0 +1,9 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import FeaturedProject from '../../components/FeaturedProject.astro';
+import ContactCta from '../../components/ContactCta.astro';
+import { projects } from '../../data/site';
+---
+<Layout title="Selected Projects — Salim Youssef Najim" description="Selected engineering work by Salim Youssef Najim, including LUMOS, a student concept exploring decentralized urban lighting.">
+  <section class="page-hero section-pad"><p class="eyebrow section-index">Selected work / Engineering & exploration</p><h1>Thinking,<br/><span>made tangible.</span></h1><p class="lead">A closer look at the questions, systems and decisions behind the work.</p></section><section class="project-index"><div class="section-pad section-heading"><p class="eyebrow">Project index</p><p class="eyebrow">{String(projects.length).padStart(2,'0')} selected study</p></div><FeaturedProject/></section><ContactCta/>
+</Layout>
