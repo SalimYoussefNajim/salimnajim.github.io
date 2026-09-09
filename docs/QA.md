@@ -5,7 +5,7 @@ The redesign is prepared on `redesign-v2`. Production remains on `main` with Git
 ## Completed
 
 - Production static build passes. Astro/TypeScript: 0 errors, 0 warnings, 0 hints. ESLint passes.
-- Automated artifact verification: 12 HTML files (9 designed pages plus 3 legacy redirects), 343 internal references, local assets, anchors, page metadata, sitemap, robots, manifest, CNAME and ads.txt.
+- Automated artifact verification: 12 HTML files (9 designed pages plus 3 legacy redirects), 352 internal references, local assets, anchors, page metadata, sitemap, robots, manifest, CNAME and ads.txt.
 - Production browser layout matrix: 9 pages × 10 viewport widths (320, 375, 390, 430, 768, 1024, 1280, 1440, 1920, 2560). One LUMOS title overflow at 320 was fixed and rechecked. No other horizontal overflow or missing images found.
 - Visual review of all nine designed routes: home, profile, aerospace, ventures, projects, LUMOS, achievements, contact and 404 at representative desktop/mobile sizes. Fullscreen mobile navigation opens, contains keyboard focus, closes with Escape and restores focus to its trigger.
 - Production preview console inspection returned no errors or warnings after homepage and achievements navigation. Homepage visual review confirmed the fully loaded turbine scene.
@@ -17,6 +17,7 @@ The redesign is prepared on `redesign-v2`. Production remains on `main` with Git
 - User-confirmed email included. GPA, national rank and President’s List omitted per user instruction. No invented businesses, clients, revenue, testimonials, publications or project performance figures.
 - npm installation audit reported zero vulnerabilities.
 - Release staging validated in isolation for traversal, protected paths, modified generated files, stale output cleanup and Windows junctions; it preserves source and performs no deployment.
+- Publication artifact parity: `npm run check:site -- --release` checks the current build against every staged root file and manifest digest. It passed against the reviewed artifact, and isolated fixtures confirmed that modified root output and an invalid manifest path are rejected. Run it again after the final build and staging; it compares that exact artifact rather than rebuilding.
 
 ## Dependency portability
 
@@ -26,7 +27,7 @@ The failure was reproduced with CI's npm 11.19.0. Regenerating the lock in an em
 
 ## Size and performance scope
 
-The static artifact is approximately 0.93 MB total before HTTP compression. The lazy 3D module is approximately 548 KB minified / 136 KB gzip; it loads only for pages with the scene. The bundler reports its standard >500 KB chunk advisory. This is the isolated Three.js renderer, not the initial page shell. No model or texture downloads; the former 17.7 MB GLB is excluded.
+The static artifact is approximately 0.94 MB total before HTTP compression. The lazy 3D module is approximately 548 KB minified / 136 KB gzip; it loads only for pages with the scene. The bundler reports its standard >500 KB chunk advisory. This is the isolated Three.js renderer, not the initial page shell. No model or texture downloads; the former 17.7 MB GLB is excluded.
 
 Fonts are self-hosted Latin WOFF2 subsets. Portrait is local WebP. Normal content is static HTML, readable before JavaScript. Animations respect reduced motion; 3D stops offscreen.
 
@@ -41,3 +42,12 @@ No active venture or book publication was confirmed. The Ventures page communica
 ## Historical infrastructure
 
 Custom domain and AdSense publisher record are preserved. Ads are not loaded in the new public experience. The old AI service is untouched; its former frontend, unused stock imagery and oversized model remain recoverable from Git history at the original baseline `47e29dde7265286bafc1285e4f887a394149a588`. Legacy routes lead to the corresponding new public pages.
+
+## Final publication pass
+
+- Repeated all 90 page/viewport layout checks after typography and navigation polish; no overflow, missing images or incorrect H1 counts.
+- Verified animated mobile menu focus, current-page indication and automatic close/unlock on desktop resize.
+- Verified whitespace validation, prepare → edit → old draft hidden → prepare updated email. No mail sent.
+- Verified LUMOS arrow-key stage selection and turbine pause/stage separation in the production preview, with no recorded console warnings or errors.
+- Focused scene harness covers reduced-motion changes, manual-pause persistence, touch scroll intent, hidden/offscreen suspension, context recovery and disposal.
+- Native CSS page transitions and reading progress enhance supporting browsers; ordinary navigation and content remain the fallback.

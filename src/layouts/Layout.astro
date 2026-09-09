@@ -26,6 +26,7 @@ const graph = [{ '@type': 'Person', '@id': `${site.url}/#person`, name: site.nam
     <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png"/>
     <link rel="manifest" href="/site.webmanifest"/>
+    <link rel="preload" href="/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin/>
     <script is:inline type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c')}/>
   </head>
   <body class={pageClass}>
@@ -38,7 +39,7 @@ const graph = [{ '@type': 'Person', '@id': `${site.url}/#person`, name: site.nam
     </header>
     <dialog id="mobile-menu" class="mobile-menu" aria-label="Site navigation">
       <div class="menu-top"><a class="brand" href="/"><Mark/>Salim Najim</a><button class="menu-close" aria-label="Close navigation">Close <span>×</span></button></div>
-      <nav aria-label="Mobile navigation">{[{label:'Home',href:'/'}, ...navigation, {label:'Contact',href:'/contact/'}].map((item,i) => <a href={item.href}><span class="eyebrow">0{i+1}</span>{item.label}<Arrow diagonal/></a>)}</nav>
+      <nav aria-label="Mobile navigation">{[{label:'Home',href:'/'}, ...navigation, {label:'Contact',href:'/contact/'}].map((item,i) => <a href={item.href} style={`--menu-order:${i}`} aria-current={(item.href === '/' ? Astro.url.pathname === '/' : Astro.url.pathname.startsWith(item.href)) ? 'page' : undefined}><span class="eyebrow">0{i+1}</span>{item.label}<Arrow diagonal/></a>)}</nav>
       <p class="menu-foot">Aerospace Engineering · Entrepreneurship · Projects</p>
     </dialog>
     <main id="main" tabindex="-1"><slot/></main>

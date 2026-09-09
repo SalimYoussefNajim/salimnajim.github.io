@@ -2,20 +2,20 @@
   "version": 1,
   "files": [
     {
-      "path": "_astro/Layout.1bmQLb3N.css",
-      "sha256": "e7e2b8075de72d42c66fa7c09e5c62c25047213b14638833a62258e72fad1693"
+      "path": "_astro/Layout.B5uC2_9W.css",
+      "sha256": "4710dad54b3d092bb6dd9cd41b26c2047de34a62167f3cbd02e04a886d81b9ee"
     },
     {
-      "path": "_astro/Scene.astro_astro_type_script_index_0_lang.CrGozde0.js",
-      "sha256": "d76784b7edd7b010c638fc153d6c2fad3c8e354f38cea7cd8f9139ae95079679"
+      "path": "_astro/Scene.astro_astro_type_script_index_0_lang.DMb9s3-6.js",
+      "sha256": "ebca4344a6063e1ae3b126495b604005c9a15ac2796c85c9a776ec19ff396f11"
     },
     {
-      "path": "_astro/Scene.Bs_JFxkj.css",
-      "sha256": "07ab2236d581f2b8a91a7ebdd2c70820d1a1cf41cdc56f243718a67780a45a32"
+      "path": "_astro/Scene.BUW7Rp5N.css",
+      "sha256": "b4ef95ecf12b632da9bda290d8ff52bad211c22e56a83545e9c89137a2def47d"
     },
     {
-      "path": "_astro/scene.evX9K7D_.js",
-      "sha256": "a6fa6077d0188dc00a9ccb4dd8d60d80207763af60fa667661215d7193a275ec"
+      "path": "_astro/scene.C0Mst0Su.js",
+      "sha256": "5c11e66e1edcd9923a72c4a6cb5d675b6a24ee830169112a1787a7159f389167"
     },
     {
       "path": ".nojekyll",
@@ -23,15 +23,15 @@
     },
     {
       "path": "404.html",
-      "sha256": "c75c2a769290df2e1699e295a2d18153b3f29c08adeb0b5ebb2fbad12f0d74e2"
+      "sha256": "27421964ad828a86e32cb3c15c6c7dedf2b29ef9cdf8350840c66179d5b2d7c0"
     },
     {
       "path": "about/index.html",
-      "sha256": "b1fbb070369e76a165ff781aaf0d648b0c36e22e01b40d7853d5e5b94429d30a"
+      "sha256": "33169688fbc00d2762bf363e66c57c0757c692133e49005b426185998e3b6862"
     },
     {
       "path": "achievements/index.html",
-      "sha256": "f8507350ef55ee1b7acc94364a866877e414b67e4d73faf99cfaa350c83f16ae"
+      "sha256": "761cfcc93c6db335e510c19e8f449f528694d913dc23883f65989e4f5e2951a9"
     },
     {
       "path": "ads.txt",
@@ -39,7 +39,7 @@
     },
     {
       "path": "aerospace/index.html",
-      "sha256": "66f59b58f2d8447e43bdecd01e0897f57502bdc6e8a5bc23ecf56f93b33a4a63"
+      "sha256": "c6813d2ba8ec519f29d1f728ad0c58813cfc8af85fc2791d00f925bd28078481"
     },
     {
       "path": "CNAME",
@@ -47,7 +47,7 @@
     },
     {
       "path": "contact/index.html",
-      "sha256": "8c25380cc551c9870d4229dfed74ea6cf2f77a8c1a53a25bbb2e4635c0b4c168"
+      "sha256": "e21a19e446554fcffa3568d088636c3d34531bc92563c0bd700df7d533ffdc72"
     },
     {
       "path": "dashboard.html",
@@ -91,7 +91,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "eebc8f24a18f370a4690c7447db3b8618c52f0c833a2f4696de2123edc7a67d0"
+      "sha256": "98f312cd040ba2ca2e4d22c0231a9b5bfd03bb11b5b3eafdd7671e8447ca80e1"
     },
     {
       "path": "licenses/three-LICENSE.txt",
@@ -103,11 +103,11 @@
     },
     {
       "path": "projects/index.html",
-      "sha256": "9f444b08c02a80d0d2a3326028009b22bfb2219ab56795f08a276a1abe7bf797"
+      "sha256": "39b418341115ce74451d08935052667ebdd1eb683f83814989958a138ff74641"
     },
     {
       "path": "projects/lumos/index.html",
-      "sha256": "5552397d862b0234a32a0d0fc879b68369f44061fd80e674ea817900d6127fb8"
+      "sha256": "fd964a7b89a45b31f1394a3f92e149f09d58a77ee6758b2f1b2c639e601c8bca"
     },
     {
       "path": "robots.txt",
@@ -127,7 +127,7 @@
     },
     {
       "path": "ventures/index.html",
-      "sha256": "bce0fb4458e79f70d94fa79d1bc181c3dac4be6d2d28737274243a8dcb2123b8"
+      "sha256": "c627f64463dd88ecd5999eae3afc9130cebb39027203847bf3248320fd4d033c"
     }
   ]
 }

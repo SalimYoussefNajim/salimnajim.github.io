@@ -25,12 +25,26 @@ export function mountScene(host: HTMLElement): () => void {
   renderer.domElement.setAttribute('aria-hidden', 'true');
   mount.appendChild(renderer.domElement);
 
-  const room = new RoomEnvironment();
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  const environment = pmrem.fromScene(room, 0.04);
+  function createEnvironment(): THREE.WebGLRenderTarget {
+    const room = new RoomEnvironment();
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    try {
+      return pmrem.fromScene(room, 0.04);
+    } finally {
+      room.dispose();
+      pmrem.dispose();
+    }
+  }
+  let environment: THREE.WebGLRenderTarget;
+  try {
+    environment = createEnvironment();
+  } catch {
+    renderer.dispose();
+    renderer.domElement.remove();
+    host.dataset.sceneState = 'fallback';
+    return () => {};
+  }
   scene.environment = environment.texture;
-  room.dispose();
-  pmrem.dispose();
 
   const geometries = new Set<THREE.BufferGeometry>();
   const materials = new Set<THREE.Material>();
@@ -209,7 +223,8 @@ export function mountScene(host: HTMLElement): () => void {
 
   const media = window.matchMedia('(prefers-reduced-motion: reduce)');
   let reduced = media.matches;
-  let paused = reduced;
+  let userPaused = host.dataset.sceneUserPaused === 'true';
+  let paused = reduced || userPaused;
   let visible = false;
   let disposed = false;
   let contextLost = false;
@@ -217,6 +232,8 @@ export function mountScene(host: HTMLElement): () => void {
   let lastTime = 0;
   let elapsed = 0;
   let drag = false;
+  let activePointer: number | null = null;
+  let touchPending = false;
   let lastX = 0;
   let lastY = 0;
   let yaw = 0;
@@ -233,7 +250,6 @@ export function mountScene(host: HTMLElement): () => void {
 
   function updateMotionControl(): void {
     if (!motionButton) return;
-    motionButton.setAttribute('aria-pressed', String(paused));
     motionButton.setAttribute('aria-label', paused ? 'Play turbine motion' : 'Pause turbine motion');
     const label = motionButton.querySelector('[data-scene-motion-label]');
     if (label) label.textContent = paused ? 'Play motion' : 'Pause motion';
@@ -244,8 +260,8 @@ export function mountScene(host: HTMLElement): () => void {
     if (disposed || contextLost || !visible || document.hidden) return;
     assembly.rotation.set(baseRotation.x + pitch + pointerY * 0.06,
       baseRotation.y + yaw + pointerX * 0.09,
-      baseRotation.z + (!paused && !reduced ? Math.sin(elapsed * 0.22) * 0.025 : 0));
-    assembly.position.y = !paused && !reduced ? Math.sin(elapsed * 0.35) * 0.025 : 0;
+      baseRotation.z + Math.sin(elapsed * 0.22) * 0.025);
+    assembly.position.y = Math.sin(elapsed * 0.35) * 0.025;
     for (const stage of stages) stage.group.position.z = stage.z + stage.distance * separation;
     renderer.render(scene, camera);
     if (host.dataset.sceneState !== 'ready') {
@@ -280,6 +296,7 @@ export function mountScene(host: HTMLElement): () => void {
   }
 
   function resize(): void {
+    if (disposed) return;
     const { width, height } = mount!.getBoundingClientRect();
     if (width <= 0 || height <= 0) return;
     renderer.setPixelRatio(window.innerWidth <= 700 ? 1 : Math.min(window.devicePixelRatio, 1.5));
@@ -301,7 +318,7 @@ export function mountScene(host: HTMLElement): () => void {
   document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); else schedule(); }, { signal });
   media.addEventListener('change', () => {
     reduced = media.matches;
-    paused = reduced;
+    paused = reduced || userPaused;
     pointerX = 0;
     pointerY = 0;
     updateMotionControl();
@@ -311,6 +328,8 @@ export function mountScene(host: HTMLElement): () => void {
 
   motionButton?.addEventListener('click', () => {
     paused = !paused;
+    userPaused = paused;
+    host.dataset.sceneUserPaused = String(userPaused);
     // A deliberate request to play is allowed even when reduced motion is preferred.
     if (!paused) reduced = false;
     updateMotionControl();
@@ -347,14 +366,31 @@ export function mountScene(host: HTMLElement): () => void {
   }, { signal });
 
   mount.addEventListener('pointerdown', (event) => {
-    if (event.button !== 0) return;
-    drag = true;
+    if (event.button !== 0 || !event.isPrimary || activePointer !== null) return;
+    activePointer = event.pointerId;
+    touchPending = event.pointerType === 'touch';
+    drag = !touchPending;
     lastX = event.clientX;
     lastY = event.clientY;
-    mount.setPointerCapture(event.pointerId);
-    host.dataset.dragging = 'true';
+    if (drag) mount.setPointerCapture(event.pointerId);
+    host.dataset.dragging = String(drag);
   }, { signal });
   mount.addEventListener('pointermove', (event) => {
+    if (activePointer !== null && event.pointerId !== activePointer) return;
+    if (touchPending) {
+      const dx = Math.abs(event.clientX - lastX);
+      const dy = Math.abs(event.clientY - lastY);
+      if (Math.max(dx, dy) < 7) return;
+      // Vertical gestures belong to the page; only horizontal intent starts a drag.
+      if (dy >= dx) {
+        endDrag();
+        return;
+      }
+      touchPending = false;
+      drag = true;
+      mount.setPointerCapture(event.pointerId);
+      host.dataset.dragging = 'true';
+    }
     if (drag) {
       yaw += (event.clientX - lastX) * 0.006;
       pitch = THREE.MathUtils.clamp(pitch + (event.clientY - lastY) * 0.004, -0.65, 0.65);
@@ -367,11 +403,19 @@ export function mountScene(host: HTMLElement): () => void {
       pointerY = (event.clientY - bounds.top) / bounds.height - 0.5;
     }
   }, { signal });
-  const endDrag = () => { drag = false; host.dataset.dragging = 'false'; };
+  function endDrag(event?: PointerEvent): void {
+    if (event && event.pointerId !== activePointer) return;
+    const pointer = activePointer;
+    activePointer = null;
+    touchPending = false;
+    drag = false;
+    host.dataset.dragging = 'false';
+    if (pointer !== null && mount!.hasPointerCapture(pointer)) mount!.releasePointerCapture(pointer);
+  }
   mount.addEventListener('pointerup', endDrag, { signal });
   mount.addEventListener('pointercancel', endDrag, { signal });
   mount.addEventListener('lostpointercapture', endDrag, { signal });
-  mount.addEventListener('pointerleave', () => { pointerX = pointerY = 0; }, { signal });
+  mount.addEventListener('pointerleave', () => { if (!paused && !reduced) pointerX = pointerY = 0; }, { signal });
   mount.addEventListener('keydown', (event) => {
     if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home'].includes(event.key)) return;
     event.preventDefault();
@@ -388,11 +432,21 @@ export function mountScene(host: HTMLElement): () => void {
     contextLost = true;
     host.dataset.sceneState = 'fallback';
     mount.tabIndex = -1;
+    endDrag();
     stop();
   }, { signal });
   renderer.domElement.addEventListener('webglcontextrestored', () => {
-    contextLost = false;
-    schedule();
+    // Render-target reflections have no source pixels to re-upload after context loss.
+    try {
+      const restoredEnvironment = createEnvironment();
+      environment.dispose();
+      environment = restoredEnvironment;
+      scene.environment = environment.texture;
+      contextLost = false;
+      schedule();
+    } catch {
+      host.dataset.sceneState = 'fallback';
+    }
   }, { signal });
 
   updateMotionControl();
@@ -402,6 +456,7 @@ export function mountScene(host: HTMLElement): () => void {
     if (disposed) return;
     disposed = true;
     stop();
+    endDrag();
     aborter.abort();
     visibilityObserver.disconnect();
     resizeObserver.disconnect();

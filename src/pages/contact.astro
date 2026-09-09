@@ -10,15 +10,36 @@ import { site } from '../data/site';
     const status = document.querySelector<HTMLElement>('#form-status');
     const fallback = document.querySelector<HTMLAnchorElement>('#email-fallback');
     const submit = form?.querySelector<HTMLButtonElement>('button[type=submit]');
-    if (submit) submit.disabled = false;
+    const nameInput = form?.querySelector<HTMLInputElement>('#name');
+    const messageInput = form?.querySelector<HTMLTextAreaElement>('#message');
+
+    const updateDraft = () => {
+      nameInput?.setCustomValidity('');
+      messageInput?.setCustomValidity('');
+      if (!fallback || fallback.hidden) return;
+      fallback.hidden = true;
+      fallback.href = `mailto:${form?.dataset.recipient}`;
+      if (status) {
+        status.dataset.error = 'false';
+        status.textContent = 'Your message has changed. Prepare the email again to include your latest changes.';
+      }
+    };
+    form?.addEventListener('input', updateDraft);
+    form?.addEventListener('change', updateDraft);
     form?.addEventListener('submit', event => {
       event.preventDefault();
-      if (!form.reportValidity() || !status || !fallback) return;
+      if (!status || !fallback || !nameInput || !messageInput) return;
       const data = new FormData(form);
       if (data.get('company-site')) return;
-      const name = String(data.get('name') ?? '').trim();
-      const message = String(data.get('message') ?? '').trim();
-      if (!name || message.length < 10) { status.textContent = 'Please add your name and at least 10 characters about your idea.'; status.dataset.error='true'; return; }
+      const name = nameInput.value.trim();
+      const message = messageInput.value.trim();
+      nameInput.setCustomValidity(name ? '' : 'Please enter your name.');
+      messageInput.setCustomValidity(message.length >= 10 ? '' : 'Please add at least 10 characters about your idea.');
+      if (!form.reportValidity()) {
+        status.textContent = 'Please complete the highlighted field before preparing your email.';
+        status.dataset.error = 'true';
+        return;
+      }
       const body = `${message}\n\nFrom: ${name}\nReply to: ${data.get('email')}`;
       const uri = `mailto:${form.dataset.recipient}?subject=${encodeURIComponent(`${data.get('topic')} — ${name}`)}&body=${encodeURIComponent(body)}`;
       fallback.href = uri; fallback.hidden=false;
@@ -26,5 +47,6 @@ import { site } from '../data/site';
       status.textContent='Your email draft is ready. Open it using the link below, then review and send it from your email app.';
       fallback.focus();
     });
+    if (submit) submit.disabled = false;
   </script>
 </Layout>

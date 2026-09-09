@@ -1,4 +1,5 @@
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync, readdirSync, realpathSync, statSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -7,9 +8,14 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 const origin = 'https://salimyoussefnajim.com';
 const publicEmail = 'salim.najim.06@gmail.com'; // Explicitly confirmed by the owner.
+const verifyRelease = process.argv.includes('--release');
 const routes = ['/', '/about/', '/aerospace/', '/ventures/', '/projects/', '/projects/lumos/', '/achievements/', '/contact/', '/404.html'];
 const errors = new Set();
 const fail = (where, message) => errors.add(`${where}: ${message}`);
+if (process.argv.slice(2).some(argument => argument !== '--release')) {
+  console.error('Usage: npm run check:site -- [--release]');
+  process.exit(1);
+}
 if (!existsSync(dist)) {
   console.error('No dist/ artifact. Run npm run build first.');
   process.exit(1);
@@ -205,6 +211,57 @@ try {
   for (const icon of manifest.icons ?? []) checkReference(icon.src, '/site.webmanifest', 'manifest icon', false);
 } catch { fail('site.webmanifest', 'invalid JSON'); }
 
+// Pages publishes committed root files. A valid dist/ alone does not prove that
+// those published files correspond to the source that was just checked.
+if (verifyRelease) {
+  const manifestFile = path.join(root, '.release-files.json');
+  const info = lstatSync(manifestFile, { throwIfNoEntry: false });
+  if (!info?.isFile() || info.isSymbolicLink()) {
+    fail('.release-files.json', 'missing or invalid release manifest; run release:stage after building');
+  } else {
+    try {
+      const manifest = JSON.parse(readFileSync(manifestFile, 'utf8'));
+      if (manifest.version !== 1 || !Array.isArray(manifest.files)) throw new Error('unsupported manifest format');
+      const expected = new Map(files.map(file => [path.relative(dist, file).split(path.sep).join('/'), file]));
+      const recorded = new Set();
+      const digest = file => createHash('sha256').update(readFileSync(file)).digest('hex');
+      const realRoot = realpathSync(root);
+      for (const entry of manifest.files) {
+        // Only exact paths discovered inside the build may be inspected in root.
+        // Manifest input can never direct reads outside the checkout.
+        if (!entry || !expected.has(entry.path) || !/^[a-f0-9]{64}$/.test(entry.sha256 ?? '')) {
+          fail('.release-files.json', `obsolete or invalid entry: ${String(entry?.path)}`);
+          continue;
+        }
+        if (recorded.has(entry.path)) fail('.release-files.json', `duplicate entry: ${entry.path}`);
+        recorded.add(entry.path);
+        const builtHash = digest(expected.get(entry.path));
+        if (entry.sha256 !== builtHash) fail(entry.path, 'release manifest is stale relative to dist/; run release:stage');
+        const target = path.join(root, ...entry.path.split('/'));
+        let current = root;
+        let safe = true;
+        for (const segment of entry.path.split('/')) {
+          current = path.join(current, segment);
+          const targetInfo = lstatSync(current, { throwIfNoEntry: false });
+          if (!targetInfo || targetInfo.isSymbolicLink()) {
+            fail(entry.path, 'release path is missing or contains a symbolic link');
+            safe = false;
+            break;
+          }
+          const resolved = realpathSync(current);
+          if (!resolved.startsWith(`${realRoot}${path.sep}`)) {
+            fail(entry.path, 'resolved release path escapes the checkout');
+            safe = false;
+            break;
+          }
+        }
+        if (safe && (!lstatSync(target).isFile() || digest(target) !== builtHash)) fail(entry.path, 'published root file differs from the verified build');
+      }
+      for (const relative of expected.keys()) if (!recorded.has(relative)) fail(relative, 'build file is absent from the release manifest');
+    } catch (error) { fail('.release-files.json', `could not verify release: ${error.message}`); }
+  }
+}
+
 if (errors.size) {
   console.error(`Site verification failed (${errors.size}):\n${[...errors].map(error => `  - ${error}`).join('\n')}`);
   process.exitCode = 1;
@@ -212,5 +269,6 @@ if (errors.size) {
   const bytes = files.reduce((sum, file) => sum + statSync(file).size, 0);
   console.log(`Site verification passed: ${pages.size} HTML pages, ${checkedReferences} internal references, ${(bytes / 1024 / 1024).toFixed(2)} MB total artifact.`);
   console.log('Verified routes, local assets, anchors, metadata, contact identity, domain, sitemap, manifest, and excluded academic claims.');
+  if (verifyRelease) console.log('Verified that the root release files and their recorded hashes match every file in dist/.');
   console.log('External availability, browser behavior, contact delivery, and performance still require their separate checks.');
 }

@@ -38,9 +38,10 @@ Use the local staging command to copy the **contents** of verified `dist/` into 
 ```sh
 npm run release:stage -- --dry-run
 npm run release:stage
+npm run check:site -- --release
 ```
 
-The first command validates and reports proposed cleanup without changing files. The second prepares a local diff only: it performs no Git action, network request, merge, or deployment. Both run `check:site` first. Do not stage while another process is rebuilding `dist/`.
+The first command validates and reports proposed cleanup without changing files. The second prepares a local diff only: it performs no Git action, network request, merge, or deployment. Both run `check:site` first. The final read-only check verifies that every root release file and its manifest hash match the current `dist/`; this catches a stale or incomplete artifact before Pages publishes it. Do not stage while another process is rebuilding `dist/`.
 
 The script records generated paths and SHA-256 digests in `.release-files.json`; commit that manifest with the release files. On later runs it only deletes obsolete individual files recorded there, after checking their contents have not been edited. It rejects traversal, absolute paths, case collisions, symlinks, and protected source/configuration paths, including `.git/`, `src/`, `scripts/`, `docs/`, `node_modules/`, `public/`, legacy asset directories, and package files. All validation finishes before the first copy or deletion. Unmanaged files are preserved; the first run may replace only the known old landing/legacy HTML and domain/publisher records, or files already byte-identical to the build. A conflicting unmanaged file or edited generated file stops staging for review. Do not manually add source files to the manifest to bypass that check.
 
