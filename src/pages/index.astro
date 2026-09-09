@@ -1,0 +1,20 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Scene from '../components/Scene.astro';
+import Arrow from '../components/Arrow.astro';
+import FeaturedProject from '../components/FeaturedProject.astro';
+import ContactCta from '../components/ContactCta.astro';
+---
+<Layout title="Salim Youssef Najim — Ideas into flight" class="home-page">
+  <section class="hero section-pad">
+    <div class="hero-topline eyebrow"><span><i class="status-dot"></i> Aerospace / Entrepreneurship / Projects</span><span>Independent perspective. Shared ambition.</span></div>
+    <div class="hero-body"><p class="hero-name">Salim Youssef Najim</p><h1><span>Ideas</span><span>into <em>flight.</em></span></h1><p class="hero-description">An engineering mind.<br/>A business perspective.<br/>Building across the space between.</p><div class="button-row"><a class="button button-light" href="/projects/">Explore the work <Arrow/></a><a class="text-link" href="/about/">Meet Salim <Arrow/></a></div></div>
+    <Scene class="hero-scene"/>
+    <div class="hero-bottom"><a href="#perspective" class="scroll-cue eyebrow"><span>↓</span> A world in the making</a><p class="eyebrow">Studying Aerospace Engineering<br/>Khalifa University</p></div>
+  </section>
+  <section id="perspective" class="intro-section section-pad reveal"><p class="eyebrow section-index">01 / Perspective</p><div><h2>Curiosity starts the idea.<br/>Engineering gives it structure.<br/><span>Building makes it real.</span></h2><a class="text-link" href="/about/">The person behind the work <Arrow/></a></div></section>
+  <section class="world-section section-pad reveal"><div class="section-heading"><h2 class="eyebrow section-index">02 / Areas of focus</h2><p class="eyebrow">Different disciplines. One direction.</p></div><a class="world-row" href="/aerospace/"><span class="eyebrow">01</span><h3>Aerospace</h3><p>Flight, physics and the way complex systems come together.</p><span class="circle-arrow"><Arrow diagonal/></span></a><a class="world-row" href="/ventures/"><span class="eyebrow">02</span><h3>Ventures</h3><p>A business perspective on useful ideas and the people they serve.</p><span class="circle-arrow"><Arrow diagonal/></span></a><a class="world-row" href="/projects/"><span class="eyebrow">03</span><h3>Projects</h3><p>Questions made tangible through concepts, experiments and engineering.</p><span class="circle-arrow"><Arrow diagonal/></span></a></section>
+  <FeaturedProject/>
+  <section class="profile-teaser section-pad reveal"><div><p class="eyebrow section-index">04 / The person</p><h2>Grounded in<br/>engineering.<br/><span class="muted">Looking beyond.</span></h2><p>I’m Salim, an Aerospace Engineering student at Khalifa University. I’m interested in what happens when technical thinking meets the drive to build something useful.</p><a class="text-link" href="/about/">A closer look <Arrow/></a></div><figure class="portrait-frame"><img src="/images/salim.webp" alt="Salim Youssef Najim" width="826" height="826" loading="lazy" decoding="async"/><figcaption class="eyebrow">Salim Youssef Najim / Profile</figcaption></figure></section>
+  <ContactCta/>
+</Layout>

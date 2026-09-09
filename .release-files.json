@@ -1,0 +1,129 @@
+{
+  "version": 1,
+  "files": [
+    {
+      "path": "_astro/Layout.1bmQLb3N.css",
+      "sha256": "e7e2b8075de72d42c66fa7c09e5c62c25047213b14638833a62258e72fad1693"
+    },
+    {
+      "path": "_astro/Scene.astro_astro_type_script_index_0_lang.CrGozde0.js",
+      "sha256": "d76784b7edd7b010c638fc153d6c2fad3c8e354f38cea7cd8f9139ae95079679"
+    },
+    {
+      "path": "_astro/Scene.Bs_JFxkj.css",
+      "sha256": "07ab2236d581f2b8a91a7ebdd2c70820d1a1cf41cdc56f243718a67780a45a32"
+    },
+    {
+      "path": "_astro/scene.evX9K7D_.js",
+      "sha256": "a6fa6077d0188dc00a9ccb4dd8d60d80207763af60fa667661215d7193a275ec"
+    },
+    {
+      "path": ".nojekyll",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "path": "404.html",
+      "sha256": "c75c2a769290df2e1699e295a2d18153b3f29c08adeb0b5ebb2fbad12f0d74e2"
+    },
+    {
+      "path": "about/index.html",
+      "sha256": "b1fbb070369e76a165ff781aaf0d648b0c36e22e01b40d7853d5e5b94429d30a"
+    },
+    {
+      "path": "achievements/index.html",
+      "sha256": "f8507350ef55ee1b7acc94364a866877e414b67e4d73faf99cfaa350c83f16ae"
+    },
+    {
+      "path": "ads.txt",
+      "sha256": "08b03d8fd43857ef8d9e3cc3b107c13eca38c712219b6d1433c9071d38d3fac6"
+    },
+    {
+      "path": "aerospace/index.html",
+      "sha256": "fba9c05746d5079d60820b499482558b6a1b4e989742c5cdd764d87053b1a22e"
+    },
+    {
+      "path": "CNAME",
+      "sha256": "2eba3806dc90c2e8ecd3707854b612bdcd19f8f1ffc190420e9c05ff1e5bb65f"
+    },
+    {
+      "path": "contact/index.html",
+      "sha256": "8c25380cc551c9870d4229dfed74ea6cf2f77a8c1a53a25bbb2e4635c0b4c168"
+    },
+    {
+      "path": "dashboard.html",
+      "sha256": "7fac11fe49cf49276cf36e975f4d6d4c24c2c68d514d962c640f3c6d151f36fe"
+    },
+    {
+      "path": "favicon.svg",
+      "sha256": "35c2b9cf52a7247cb5a8f48f75977f001cbcad64d070c1bcb75ffff573b80b06"
+    },
+    {
+      "path": "fonts/ibm-plex-mono-latin.woff2",
+      "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+    },
+    {
+      "path": "fonts/ibm-plex-mono-LICENSE.txt",
+      "sha256": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f"
+    },
+    {
+      "path": "fonts/manrope-latin.woff2",
+      "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+    },
+    {
+      "path": "fonts/manrope-LICENSE.txt",
+      "sha256": "d826ab6583b12c26807d8716a545bdbbb672df04f48608a364ba9efdbe501c30"
+    },
+    {
+      "path": "images/apple-touch-icon.png",
+      "sha256": "ce1127d70b1789a7e23078c9a716f2727b8cf012415e6b1b2bb1436d1c6aee02"
+    },
+    {
+      "path": "images/salim.webp",
+      "sha256": "30913996fa05a2f1bfe821806dda59b075276bbdddada3699967f7862bd936bb"
+    },
+    {
+      "path": "images/social-preview.png",
+      "sha256": "d278ec62902eaa69d17057f458f3c40a06007aec563240b1de332844f5237a79"
+    },
+    {
+      "path": "images/social-preview.svg",
+      "sha256": "f900cad509b103124795ab88eae931ce72e35b125794d169cf6d38959fbe27ac"
+    },
+    {
+      "path": "index.html",
+      "sha256": "f582097ea57196161293efb085270a875cf13d59b2533b5e0471b82b12d5e0a7"
+    },
+    {
+      "path": "projects.html",
+      "sha256": "0b88e67d8fc606026cca53a05e9943541121dbcd740fb1a439ac5b97604cdcd6"
+    },
+    {
+      "path": "projects/index.html",
+      "sha256": "9f444b08c02a80d0d2a3326028009b22bfb2219ab56795f08a276a1abe7bf797"
+    },
+    {
+      "path": "projects/lumos/index.html",
+      "sha256": "5552397d862b0234a32a0d0fc879b68369f44061fd80e674ea817900d6127fb8"
+    },
+    {
+      "path": "robots.txt",
+      "sha256": "520f86d706dd05f895d538c8451f795307a3bf118550242e5c02f6406fec387c"
+    },
+    {
+      "path": "salim.html",
+      "sha256": "6384bade0b2e3f844bacf48d5848ab3ffe0dc57669cee0008a09d23fe1fa45fa"
+    },
+    {
+      "path": "site.webmanifest",
+      "sha256": "5a70bde9948d36ee63365c0e9f7dcf31712f88916b117b86398ef24dbb9bd9af"
+    },
+    {
+      "path": "sitemap.xml",
+      "sha256": "816678879862de4133f015d8c90df78478002a59dacb38ea781ae9d57c0bd828"
+    },
+    {
+      "path": "ventures/index.html",
+      "sha256": "bce0fb4458e79f70d94fa79d1bc181c3dac4be6d2d28737274243a8dcb2123b8"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { milestones } from '../data/site';
+import ContactCta from '../components/ContactCta.astro';
+---
+<Layout title="Milestones & Achievements — Salim Youssef Najim" description="A selected record of Salim Youssef Najim’s engineering path, from Aerospace Engineering at Khalifa University to leading the LUMOS student project.">
+  <section class="page-hero section-pad"><p class="eyebrow section-index">Achievements / Selected milestones</p><h1>Progress,<br/><span>through the work.</span></h1><p class="lead">An engineering foundation. Experience leading a team. A growing body of work.</p></section><section class="milestones section-pad">{milestones.map((item,i)=><article class="milestone reveal"><span class="milestone-index">0{i+1}</span><div><p class="eyebrow" style="margin-bottom:22px">{item.category}</p><h2>{item.title}</h2><p>{item.context}</p></div><p>{item.detail}</p></article>)}</section><ContactCta/>
+</Layout>
