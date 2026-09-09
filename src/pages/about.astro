@@ -3,7 +3,29 @@ import Layout from '../layouts/Layout.astro';
 import ContactCta from '../components/ContactCta.astro';
 import Arrow from '../components/Arrow.astro';
 ---
-<Layout title="Profile — Salim Youssef Najim" description="Meet Salim Youssef Najim, an Aerospace Engineering student at Khalifa University building across engineering, entrepreneurship and creative ideas.">
-  <section class="page-hero split-hero section-pad"><div><p class="eyebrow section-index">Profile / Salim Youssef Najim</p><h1>Curiosity,<br/><span>put to work.</span></h1><p class="lead">I study Aerospace Engineering at Khalifa University, build engineering projects and approach ideas with a business mindset.</p></div><figure class="portrait-frame"><img src="/images/salim.webp" alt="Portrait of Salim Youssef Najim" width="826" height="826" fetchpriority="high"/><figcaption class="eyebrow">The person behind the work</figcaption></figure></section>
-  <section class="chapter-section section-pad"><p class="eyebrow section-index">An evolving perspective</p><div class="chapters"><article class="chapter reveal"><span class="eyebrow">01</span><div><h2>An engineering foundation.</h2><p>Aerospace is my academic path. It brings together the subjects that draw me in: flight, physics and the way complex systems work.</p><a class="text-link" href="/aerospace/">Explore aerospace <Arrow/></a></div></article><article class="chapter reveal"><span class="eyebrow">02</span><div><h2>Learning through building.</h2><p>For LUMOS, I led a team developing a decentralized urban lighting concept around sustainable energy. The project explored wind generation, storage, a wireless energy transfer demonstration and light sensing.</p><a class="text-link" href="/projects/lumos/">Explore LUMOS <Arrow/></a></div></article><article class="chapter reveal"><span class="eyebrow">03</span><div><h2>A business perspective.</h2><p>I’m interested in what happens beyond an idea: who it serves, how it works and what it takes to build it. Engineering and entrepreneurship give me different ways to ask those questions.</p><a class="text-link" href="/ventures/">The venture perspective <Arrow/></a></div></article></div></section><ContactCta/>
+<Layout title="About Salim Youssef Najim — Engineering & Entrepreneurship" description="Salim Youssef Najim studies Aerospace Engineering at Khalifa University and led the team behind LUMOS, a student urban lighting concept.">
+  <section class="page-hero split-hero section-pad">
+    <div>
+      <p class="eyebrow section-index">Profile</p>
+      <h1>Salim<br/><span>Youssef Najim.</span></h1>
+      <p class="lead">Aerospace Engineering student. Project builder. A business perspective on technical ideas.</p>
+      <dl class="page-facts">
+        <div><dt>Education</dt><dd>Khalifa University</dd></div>
+        <div><dt>Field</dt><dd>Aerospace Engineering</dd></div>
+      </dl>
+    </div>
+    <figure class="portrait-frame">
+      <img src="/images/salim.webp" alt="Portrait of Salim Youssef Najim" width="826" height="826" fetchpriority="high"/>
+      <figcaption class="eyebrow">Salim Youssef Najim</figcaption>
+    </figure>
+  </section>
+  <section class="chapter-section section-pad">
+    <div class="reading-intro"><p class="eyebrow section-index">Background & perspective</p><p>I’m interested in how things work, who they serve and what it takes to build them.</p></div>
+    <div class="chapters">
+      <article class="chapter reveal"><span class="eyebrow">01</span><div><h2>Education.</h2><p>I study Aerospace Engineering at Khalifa University. Flight, physics and complex systems form the foundation of my academic path.</p><a class="text-link" href="/aerospace/">Aerospace & technical interests <Arrow/></a></div></article>
+      <article class="chapter reveal"><span class="eyebrow">02</span><div><h2>Project leadership.</h2><p>I led the team developing LUMOS, a student concept for decentralized urban lighting. The concept brought together wind generation, energy storage, a wireless transfer demonstration and light sensing around a sustainable-energy question.</p><a class="text-link" href="/projects/lumos/">Read the LUMOS case study <Arrow/></a></div></article>
+      <article class="chapter reveal"><span class="eyebrow">03</span><div><h2>Business perspective.</h2><p>A technical idea is one part of a larger question. I’m also interested in the people it serves, the problem it addresses and the practical work of building a business around it.</p><a class="text-link" href="/ventures/">My approach to entrepreneurship <Arrow/></a></div></article>
+    </div>
+  </section>
+  <ContactCta/>
 </Layout>

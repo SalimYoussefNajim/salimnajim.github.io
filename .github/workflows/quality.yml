@@ -1,9 +1,9 @@
-name: V2 quality checks
+name: Website quality checks
 
 on:
   pull_request:
   push:
-    branches: [redesign-v2]
+    branches: [redesign-v2, experience-v3]
   workflow_dispatch:
 
 permissions:

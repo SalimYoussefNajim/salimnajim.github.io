@@ -1,0 +1,167 @@
+---
+interface Props { class?: string; id?: string }
+const { class: className = '', id = 'experience-instrument' } = Astro.props;
+const marks = Array.from({ length: 40 }, (_, i) => i * 9);
+---
+
+<figure class:list={['experience-scene', className]} data-experience-visual data-experience-render="fallback" data-chapter="0">
+  <div class="experience-scene__fallback" aria-hidden="true">
+    <svg viewBox="0 0 800 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id={`${id}-metal`} x1="185" y1="135" x2="581" y2="565" gradientUnits="userSpaceOnUse"><stop stop-color="#CCD2D6"/><stop offset=".19" stop-color="#7A8996"/><stop offset=".41" stop-color="#BDC7CF"/><stop offset=".66" stop-color="#425463"/><stop offset="1" stop-color="#A6B3BF"/></linearGradient>
+        <linearGradient id={`${id}-edge`} x1="242" y1="215" x2="490" y2="522" gradientUnits="userSpaceOnUse"><stop stop-color="#DCE1E4"/><stop offset=".38" stop-color="#768E9E"/><stop offset=".7" stop-color="#B1BEC6"/><stop offset="1" stop-color="#4C616F"/></linearGradient>
+        <radialGradient id={`${id}-lens`} cx=".28" cy=".23" r=".84"><stop stop-color="#748B9A"/><stop offset=".25" stop-color="#344E61"/><stop offset="1" stop-color="#111C28"/></radialGradient>
+      </defs>
+      <g transform="rotate(-12 400 350)">
+        <ellipse cx="400" cy="350" rx="224" ry="239" stroke="#142332" stroke-width="24"/>
+        <ellipse cx="400" cy="345" rx="224" ry="239" stroke={`url(#${id}-metal)`} stroke-width="18"/>
+        <ellipse cx="400" cy="344" rx="230" ry="245" stroke="#C2D0DA" stroke-opacity=".7" stroke-width="1.4"/>
+        <ellipse cx="400" cy="346" rx="214" ry="229" stroke="#789AAC" stroke-width="1.8"/>
+        {marks.map((angle) => <path d="M397 109h6" transform={`rotate(${angle} 400 350)`} stroke="#D0D8DF" stroke-opacity=".6" stroke-width="1.2"/>)}
+        <g transform="rotate(31 400 350)">
+          <ellipse cx="400" cy="354" rx="194" ry="109" stroke="#263847" stroke-width="20"/>
+          <ellipse cx="400" cy="348" rx="194" ry="109" stroke={`url(#${id}-metal)`} stroke-width="17"/>
+          <ellipse cx="400" cy="345" rx="197" ry="112" stroke="#C1CFD9" stroke-opacity=".7" stroke-width="1.2"/>
+        </g>
+        <g transform="rotate(-34 400 350)">
+          <ellipse cx="400" cy="354" rx="96" ry="162" stroke="#293E4E" stroke-width="20"/>
+          <ellipse cx="400" cy="349" rx="96" ry="162" stroke={`url(#${id}-edge)`} stroke-width="16"/>
+          <ellipse cx="400" cy="347" rx="101" ry="167" stroke="#AABAC7" stroke-width="1.1"/>
+        </g>
+        <g fill={`url(#${id}-metal)`} stroke="#8496A4" stroke-width="1.2">
+          <path d="M178 332h35v35h-35zM588 332h35v35h-35z"/>
+          <path d="m346 296 33-19 43 1 38 20 22 34v42l-25 33-35 18h-44l-36-22-20-36v-37z"/>
+          <path d="M314 335h20v28h-20zM467 335h20v28h-20zM388 263h25v22h-25zM388 414h25v23h-25z"/>
+        </g>
+        <ellipse cx="404" cy="344" rx="66" ry="63" fill={`url(#${id}-edge)`} stroke="#C6D0D7" stroke-width="2"/>
+        <ellipse cx="404" cy="344" rx="46" ry="45" fill="#2E4252" stroke="#768C9D" stroke-width="3"/>
+        <ellipse cx="404" cy="343" rx="35" ry="34" fill={`url(#${id}-lens)`} stroke="#9EB3C2" stroke-width="1.2"/>
+        <path d="M380 329q12-17 29-13" stroke="#A9C5D8" stroke-opacity=".38" stroke-width="2" stroke-linecap="round"/>
+      </g>
+    </svg>
+  </div>
+  <div class="experience-scene__canvas" data-experience-canvas aria-hidden="true"></div>
+  <figcaption class="experience-scene__sr">A sculptural instrument made of three machined titanium rings around a precision core. As the story progresses, its parts separate for inspection, then form an orbital instrument with unfolding solar arrays. With reduced motion or still view enabled, the instrument stays still.</figcaption>
+  <button class="experience-scene__toggle" type="button" data-experience-toggle hidden>
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><rect x="1.5" y="1.5" width="9" height="9" rx="2" stroke="currentColor"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/></svg>
+    <span data-experience-toggle-label>Use still image</span>
+  </button>
+  <span class="experience-scene__sr" role="status" aria-live="polite" data-experience-status></span>
+</figure>
+
+<script>
+  type Connection = { saveData?: boolean; effectiveType?: string };
+  const device = navigator as Navigator & { connection?: Connection; deviceMemory?: number };
+  const supportsObservers = typeof IntersectionObserver !== 'undefined' && typeof ResizeObserver !== 'undefined';
+  const conserve = Boolean(!supportsObservers || device.connection?.saveData || ['slow-2g', '2g'].includes(device.connection?.effectiveType || '') || (device.deviceMemory && device.deviceMemory <= 2) || (device.hardwareConcurrency && device.hardwareConcurrency <= 2));
+  type Record = { host: HTMLElement; visible: boolean; loading: boolean; generation: number; dispose?: () => void };
+  const records = new Map<HTMLElement, Record>();
+  let active = true;
+
+  function updateControl(record: Record): void {
+    const still = record.host.dataset.experiencePreference === 'still';
+    const label = record.host.querySelector('[data-experience-toggle-label]');
+    if (label) label.textContent = still ? 'Enable 3D view' : 'Use still image';
+  }
+  async function initialize(record: Record): Promise<void> {
+    if (!active || document.hidden || !record.visible || record.loading || record.dispose || record.host.dataset.experiencePreference === 'still') return;
+    record.loading = true;
+    const generation = record.generation;
+    try {
+      const { mountExperienceScene } = await import('../scripts/experience-scene');
+      if (active && !document.hidden && generation === record.generation && record.visible && record.host.isConnected) {
+        const dispose = mountExperienceScene(record.host);
+        if (generation === record.generation) record.dispose = dispose;
+        else dispose();
+      }
+    } catch {
+      if (generation !== record.generation) return;
+      record.host.dataset.experiencePreference = 'still';
+      record.host.dataset.experienceRender = 'fallback';
+      updateControl(record);
+    } finally {
+      if (generation === record.generation) record.loading = false;
+    }
+  }
+  const observer = supportsObservers ? new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      const record = records.get(entry.target as HTMLElement);
+      if (!record) continue;
+      record.visible = entry.isIntersecting;
+      if (record.visible) void initialize(record);
+    }
+  }, { threshold: 0 }) : null;
+  document.querySelectorAll<HTMLElement>('[data-experience-visual]').forEach((host) => {
+    const record: Record = { host, visible: false, loading: false, generation: 0 };
+    records.set(host, record);
+    host.dataset.experiencePreference ||= conserve ? 'still' : '3d';
+    const button = host.querySelector<HTMLButtonElement>('[data-experience-toggle]');
+    if (button) button.hidden = !supportsObservers;
+    updateControl(record);
+    button?.addEventListener('click', () => {
+      const still = host.dataset.experiencePreference !== 'still';
+      host.dataset.experiencePreference = still ? 'still' : '3d';
+      record.generation++;
+      record.loading = false;
+      if (still) {
+        record.dispose?.();
+        record.dispose = undefined;
+        host.dataset.experienceRender = 'fallback';
+      } else void initialize(record);
+      updateControl(record);
+      const status = host.querySelector('[data-experience-status]');
+      if (status) status.textContent = still ? 'Still image enabled.' : '3D view enabled.';
+    });
+    host.addEventListener('experience:unavailable', () => {
+      record.generation++;
+      record.loading = false;
+      record.dispose?.();
+      record.dispose = undefined;
+      host.dataset.experiencePreference = 'still';
+      host.dataset.experienceRender = 'fallback';
+      updateControl(record);
+      const status = host.querySelector('[data-experience-status]');
+      if (status) status.textContent = 'The still image is shown because 3D rendering is unavailable.';
+    });
+    observer?.observe(host);
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) records.forEach((record) => void initialize(record));
+  });
+  window.addEventListener('pagehide', () => {
+    active = false;
+    observer?.disconnect();
+    records.forEach((record) => {
+      record.generation++;
+      record.loading = false;
+      record.visible = false;
+      record.dispose?.();
+      record.dispose = undefined;
+    });
+  });
+  window.addEventListener('pageshow', (event) => {
+    if (!event.persisted) return;
+    active = true;
+    records.forEach((record) => observer?.observe(record.host));
+  });
+</script>
+
+<style>
+  @layer base {
+    .experience-scene{position:relative;display:block;width:100%;height:100%;min-width:0;min-height:0;margin:0;isolation:isolate;pointer-events:none;touch-action:auto}
+    .experience-scene__fallback,.experience-scene__canvas{position:absolute;inset:0;pointer-events:none;touch-action:auto;transition:opacity .3s ease}
+    .experience-scene__fallback{opacity:1}
+    .experience-scene__fallback svg{display:block;width:100%;height:100%;overflow:visible}
+    .experience-scene__canvas{opacity:0}
+    .experience-scene__canvas :global(canvas){display:block;width:100%;height:100%;pointer-events:none;touch-action:auto}
+    .experience-scene[data-experience-render='ready'] .experience-scene__canvas{opacity:1}
+    .experience-scene[data-experience-render='ready'] .experience-scene__fallback{opacity:0}
+    .experience-scene__toggle{position:absolute;right:0;bottom:0;z-index:2;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 13px;border:1px solid #c4d1da26;border-radius:8px;background:#15212cdc;color:#c3d0da;font:inherit;font-size:12px;font-weight:450;letter-spacing:.01em;line-height:1.2;cursor:pointer;pointer-events:auto;touch-action:manipulation;backdrop-filter:blur(8px);transition:background .2s,color .2s}
+    .experience-scene__toggle:hover{background:#253747;color:#edf2f5}
+    .experience-scene__toggle:focus-visible{outline:2px solid #b7d5eb;outline-offset:4px}
+    .experience-scene__toggle[hidden]{display:none}
+    .experience-scene__sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:700px){.experience-scene__toggle{font-size:11px;padding:10px 11px;gap:7px}}
+    @media(prefers-reduced-motion:reduce){.experience-scene__fallback,.experience-scene__canvas,.experience-scene__toggle{transition:none}}
+  }
+</style>

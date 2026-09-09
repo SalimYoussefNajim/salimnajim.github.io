@@ -20,7 +20,7 @@ const graph = [{ '@type': 'Person', '@id': `${site.url}/#person`, name: site.nam
     <meta property="og:title" content={title}/><meta property="og:description" content={description}/>
     <meta property="og:url" content={canonical}/><meta property="og:image" content={`${site.url}/images/social-preview.png`}/>
     <meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
-    <meta property="og:image:alt" content="Salim Youssef Najim — Ideas into flight. Aerospace, entrepreneurship and projects."/>
+    <meta property="og:image:alt" content="Salim Youssef Najim — Beyond one discipline. Aerospace Engineering, entrepreneurship and projects."/>
     <meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content={title}/>
     <meta name="twitter:description" content={description}/><meta name="twitter:image" content={`${site.url}/images/social-preview.png`}/>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
@@ -32,10 +32,11 @@ const graph = [{ '@type': 'Person', '@id': `${site.url}/#person`, name: site.nam
   <body class={pageClass}>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
-      <a class="brand" href="/" aria-label="Salim Youssef Najim — Home"><Mark/><span>Salim Najim<span class="brand-sub">Engineering & beyond</span></span></a>
+      <a class="brand" href="/" aria-label="Salim Youssef Najim — Home"><Mark/><span>Salim Najim</span></a>
       <nav class="desktop-nav" aria-label="Main navigation">{navigation.map(item => <a href={item.href} aria-current={Astro.url.pathname.startsWith(item.href) ? 'page' : undefined}>{item.label}</a>)}</nav>
-      <a class="nav-contact" href="/contact/">Get in touch <Arrow diagonal/></a>
-      <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-menu"><span>Menu</span><span class="menu-lines"><i></i><i></i></span></button>
+      <a class="nav-contact" href="/contact/">Contact <Arrow diagonal/></a>
+      <details class="fallback-menu"><summary>Menu</summary><nav aria-label="Basic navigation">{[{label:'Home',href:'/'}, ...navigation, {label:'Contact',href:'/contact/'}].map(item => <a href={item.href}>{item.label}</a>)}</nav></details>
+      <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-menu" hidden><span>Menu</span><span class="menu-lines"><i></i><i></i></span></button>
     </header>
     <dialog id="mobile-menu" class="mobile-menu" aria-label="Site navigation">
       <div class="menu-top"><a class="brand" href="/"><Mark/>Salim Najim</a><button class="menu-close" aria-label="Close navigation">Close <span>×</span></button></div>
@@ -44,9 +45,9 @@ const graph = [{ '@type': 'Person', '@id': `${site.url}/#person`, name: site.nam
     </dialog>
     <main id="main" tabindex="-1"><slot/></main>
     <footer class="site-footer section-pad">
-      <div class="footer-top"><a class="brand" href="/"><Mark/>Salim Youssef Najim</a><p>Aerospace Engineering.<br/>A business perspective.<br/>Always building.</p><nav aria-label="Footer navigation">{navigation.map(item=><a href={item.href}>{item.label}</a>)}<a href="/contact/">Contact</a></nav><div class="footer-social"><a href={site.github} target="_blank" rel="noopener noreferrer">GitHub <Arrow diagonal/></a>{site.email && <a href={`mailto:${site.email}`}>Email <Arrow diagonal/></a>}<a href="#main">Back to top ↑</a></div></div>
+      <div class="footer-top"><div><a class="brand" href="/"><Mark/>Salim Najim</a><p>Aerospace Engineering.<br/>Entrepreneurship. Possibility.</p></div><nav aria-label="Footer navigation">{navigation.map(item=><a href={item.href}>{item.label}</a>)}<a href="/achievements/">Milestones</a></nav><div class="footer-social"><a href="/contact/">Contact <Arrow diagonal/></a><a href={site.github} target="_blank" rel="noopener noreferrer">GitHub <Arrow diagonal/></a>{site.email && <a href={`mailto:${site.email}`}>Email <Arrow diagonal/></a>}<a href="#main">Back to top ↑</a></div></div>
       <div class="footer-name" aria-hidden="true">SALIM NAJIM<span>↗</span></div>
-      <div class="footer-bottom"><span>© {new Date().getFullYear()} Salim Youssef Najim</span><span>Ideas into flight.</span><span>Engineering / Business / Beyond</span></div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} Salim Youssef Najim</span><span>Engineering & beyond.</span></div>
     </footer>
     <script>
       import '../scripts/main';

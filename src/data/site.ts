@@ -6,11 +6,10 @@ export const site = {
   description: 'Aerospace Engineering, entrepreneurship and ideas put into practice. The selected work and perspective of Salim Youssef Najim.'
 };
 export const navigation = [
-  { label: 'Profile', href: '/about/' },
+  { label: 'Work', href: '/projects/' },
   { label: 'Aerospace', href: '/aerospace/' },
   { label: 'Ventures', href: '/ventures/' },
-  { label: 'Projects', href: '/projects/' },
-  { label: 'Achievements', href: '/achievements/' }
+  { label: 'Profile', href: '/about/' }
 ];
 export const projects = [{
   slug: 'lumos', title: 'LUMOS', category: 'Energy / Student engineering',
