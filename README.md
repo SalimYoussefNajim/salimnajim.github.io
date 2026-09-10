@@ -24,7 +24,7 @@ The study illustrates engineering geometry; it does not document student-built h
 
 ## Develop and verify
 
-Use Node.js 24.
+Use Node.js 24 and npm 11.19.0, matching the release check environment. Regenerate the lockfile with that npm version in a clean directory so optional dependencies for other platforms remain recorded.
 
 ```sh
 npm ci

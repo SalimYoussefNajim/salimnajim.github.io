@@ -6,7 +6,7 @@ V4 development happens on `experience-v4`. The included `quality.yml` workflow r
 
 ## Local build
 
-Use Node.js 24 and the committed `package-lock.json`. Astro's installed package requires Node 22.12 or newer; use the same Node major as CI for reproducibility.
+Use Node.js 24, npm 11.19.0 and the committed `package-lock.json`. Preserve optional dependencies for all platforms when regenerating the lockfile; an older npm modifying a populated Windows installation can drop entries required by Linux CI. Astro's installed package requires Node 22.12 or newer; use the same Node major as CI for reproducibility.
 
 ```sh
 npm ci
