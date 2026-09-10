@@ -20,7 +20,7 @@ const graph = [{ '@type': 'Person', '@id': `${site.url}/#person`, name: site.nam
     <meta property="og:title" content={title}/><meta property="og:description" content={description}/>
     <meta property="og:url" content={canonical}/><meta property="og:image" content={`${site.url}/images/social-preview.png`}/>
     <meta property="og:image:width" content="1200"/><meta property="og:image:height" content="630"/>
-    <meta property="og:image:alt" content="Salim Youssef Najim — Beyond one discipline. Aerospace Engineering, entrepreneurship and projects."/>
+    <meta property="og:image:alt" content="Salim Youssef Najim — Engineering. In perspective. Aerospace Engineering and selected projects."/>
     <meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content={title}/>
     <meta name="twitter:description" content={description}/><meta name="twitter:image" content={`${site.url}/images/social-preview.png`}/>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
@@ -46,7 +46,6 @@ const graph = [{ '@type': 'Person', '@id': `${site.url}/#person`, name: site.nam
     <main id="main" tabindex="-1"><slot/></main>
     <footer class="site-footer section-pad">
       <div class="footer-top"><div><a class="brand" href="/"><Mark/>Salim Najim</a><p>Aerospace Engineering.<br/>Entrepreneurship. Possibility.</p></div><nav aria-label="Footer navigation">{navigation.map(item=><a href={item.href}>{item.label}</a>)}<a href="/achievements/">Milestones</a></nav><div class="footer-social"><a href="/contact/">Contact <Arrow diagonal/></a><a href={site.github} target="_blank" rel="noopener noreferrer">GitHub <Arrow diagonal/></a>{site.email && <a href={`mailto:${site.email}`}>Email <Arrow diagonal/></a>}<a href="#main">Back to top ↑</a></div></div>
-      <div class="footer-name" aria-hidden="true">SALIM NAJIM<span>↗</span></div>
       <div class="footer-bottom"><span>© {new Date().getFullYear()} Salim Youssef Najim</span><span>Engineering & beyond.</span></div>
     </footer>
     <script>

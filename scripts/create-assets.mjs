@@ -6,44 +6,28 @@ if (!socialOnly) {
   await sharp('assets/salim-photo.png').resize(826,826,{fit:'inside',withoutEnlargement:true}).webp({quality:86}).toFile('public/images/salim.webp');
   await sharp('public/favicon.svg').resize(180,180).png().toFile('public/images/apple-touch-icon.png');
 }
-const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+// Embed the original Blender artwork so the editable SVG has no external image dependency.
+const propulsion = await sharp('public/images/propulsion-assembled-1280.webp')
+  .resize(640, 427, { fit: 'inside', withoutEnlargement: true })
+  .png()
+  .toBuffer();
+const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="social-title">
+  <title id="social-title">Salim Youssef Najim — Engineering. In perspective.</title>
   <defs>
-    <radialGradient id="light" cx=".76" cy=".48" r=".53"><stop stop-color="#19232d"/><stop offset=".52" stop-color="#0d131a"/><stop offset="1" stop-color="#080a0d"/></radialGradient>
-    <linearGradient id="titanium" x1="730" y1="140" x2="1080" y2="455" gradientUnits="userSpaceOnUse"><stop stop-color="#dfe6ec"/><stop offset=".2" stop-color="#93a3b0"/><stop offset=".39" stop-color="#405160"/><stop offset=".59" stop-color="#c6d1da"/><stop offset=".79" stop-color="#768c9d"/><stop offset="1" stop-color="#334653"/></linearGradient>
-    <linearGradient id="edge" x1="814" y1="202" x2="1032" y2="410" gradientUnits="userSpaceOnUse"><stop stop-color="#e1e7eb"/><stop offset=".46" stop-color="#91a4b4"/><stop offset="1" stop-color="#354d5f"/></linearGradient>
-    <radialGradient id="core" cx=".3" cy=".24" r=".83"><stop stop-color="#496375"/><stop offset=".45" stop-color="#243e50"/><stop offset="1" stop-color="#101d29"/></radialGradient>
+    <radialGradient id="light" cx=".77" cy=".48" r=".57"><stop stop-color="#202b36"/><stop offset=".5" stop-color="#101720"/><stop offset="1" stop-color="#080b10"/></radialGradient>
   </defs>
-  <rect width="1200" height="630" fill="#080a0d"/>
+  <rect width="1200" height="630" fill="#080b10"/>
   <rect width="1200" height="630" fill="url(#light)"/>
-  <g transform="translate(0 -18) rotate(-18 923 310)" fill="none">
-    <ellipse cx="923" cy="317" rx="170" ry="196" stroke="#101922" stroke-width="26"/>
-    <ellipse cx="923" cy="310" rx="170" ry="196" stroke="url(#titanium)" stroke-width="19"/>
-    <ellipse cx="923" cy="309" rx="180" ry="206" stroke="#c1cdd6" stroke-opacity=".5" stroke-width="1"/>
-    <ellipse cx="923" cy="308" rx="160" ry="186" stroke="#adc0d0" stroke-opacity=".62" stroke-width="1.3"/>
-    <g transform="rotate(34 923 310)">
-      <ellipse cx="923" cy="317" rx="156" ry="79" stroke="#162632" stroke-width="22"/>
-      <ellipse cx="923" cy="310" rx="156" ry="79" stroke="url(#titanium)" stroke-width="15"/>
-      <ellipse cx="923" cy="307" rx="162" ry="84" stroke="#c7d6e0" stroke-opacity=".65" stroke-width="1"/>
-    </g>
-    <g transform="rotate(-38 923 310)">
-      <ellipse cx="923" cy="316" rx="72" ry="143" stroke="#192c3a" stroke-width="21"/>
-      <ellipse cx="923" cy="310" rx="72" ry="143" stroke="url(#edge)" stroke-width="14"/>
-      <ellipse cx="923" cy="308" rx="79" ry="150" stroke="#b7c8d5" stroke-opacity=".55" stroke-width="1"/>
-    </g>
-    <g fill="url(#titanium)" stroke="#8196a6" stroke-width="1.2"><path d="M745 296h27v27h-27zM1075 296h27v27h-27z"/><path d="m886 266 26-12h24l30 15 18 29v27l-19 28-28 15h-26l-29-17-15-28v-28z"/></g>
-    <circle cx="925" cy="309" r="47" fill="url(#edge)" stroke="#c2d1dd" stroke-width="1.5"/>
-    <circle cx="925" cy="309" r="35" fill="#243949" stroke="#7e98ab" stroke-width="2"/>
-    <circle cx="925" cy="309" r="27" fill="url(#core)" stroke="#9cb3c4" stroke-opacity=".65"/>
-    <path d="M908 299q9-13 22-10" stroke="#c4d5e1" stroke-opacity=".44" stroke-width="1.5" stroke-linecap="round"/>
-  </g>
+  <image x="620" y="133" width="540" height="360" preserveAspectRatio="xMidYMid meet" href="data:image/png;base64,${propulsion.toString('base64')}"/>
   <g font-family="Arial, Helvetica, sans-serif">
-    <text x="72" y="94" fill="#eef1f4" font-size="25" font-weight="500" letter-spacing="-.5">Salim Youssef Najim</text>
-    <text x="67" y="278" fill="#f3f5f7" font-size="106" font-weight="600" letter-spacing="-5">Beyond one</text>
-    <text x="67" y="392" fill="#d2dbe3" font-size="106" font-weight="600" letter-spacing="-5">discipline.</text>
-    <text x="72" y="556" fill="#b0bdc9" font-size="20" letter-spacing="-.2">Aerospace Engineering · Entrepreneurship · Projects</text>
+    <text x="72" y="94" fill="#e5ebf1" font-size="24" font-weight="500" letter-spacing="-.5">Salim Youssef Najim</text>
+    <text x="67" y="272" fill="#f5f7fa" font-size="84" font-weight="600" letter-spacing="-4">Engineering.</text>
+    <text x="67" y="366" fill="#bcc9d6" font-size="78" font-weight="500" letter-spacing="-3.8">In perspective.</text>
+    <text x="72" y="560" fill="#9eacbb" font-size="18" letter-spacing="-.1">Aerospace Engineering · Selected work</text>
+    <text x="1128" y="560" fill="#9eacbb" font-size="17" letter-spacing="-.1" text-anchor="end">salimyoussefnajim.com</text>
   </g>
   <path d="M72 510h1056" stroke="#d6e3ec" stroke-opacity=".14"/>
 </svg>`;
 await sharp(Buffer.from(og)).png().toFile('public/images/social-preview.png');
 await writeFile('public/images/social-preview.svg',og);
-console.log(socialOnly ? 'Created V3 social preview only.' : 'Created portrait, icons and V3 social preview.');
+console.log(socialOnly ? 'Created V4 social preview only.' : 'Created portrait, icons and V4 social preview.');
