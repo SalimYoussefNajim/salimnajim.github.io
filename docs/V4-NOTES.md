@@ -1,6 +1,6 @@
 # V4 architecture and release notes — 10 September 2026
 
-Status at release preparation: implementation, source checks, viewer state checks and production artifact checks passed. Browser visual inspection was blocked by automatic approval review and is not claimed. Publication is verified separately against the deployed revision.
+Status after the approved browser follow-up: source, viewer state, production artifact and responsive browser checks passed. The initial V4 deployment was verified byte-for-byte. A final timing refinement advances views while the whole study remains visible; its deployment is recorded separately.
 
 ## Design and content
 
@@ -18,7 +18,7 @@ The image contract is `public/images/propulsion-{assembled,exploded,cutaway}-{64
 
 Before switching, the controller loads and decodes the requested image. The existing view stays visible until the replacement is ready; failed requests retain the current view and show error feedback. Request tracking prevents a slow earlier selection from replacing a more recent one. Arrow keys, Home and End complement the named 44px-high buttons.
 
-Passive scrolling changes views only while the study is visible and until the visitor selects a view manually. There is no scroll pinning, pointer capture, continuous rendering loop or WebGL context. Reduced motion disables automatic switching and crossfades. Page exit cancels listeners and queued work; a restored page remounts the controller. Without JavaScript, the initial image remains visible and navigation/content remain usable.
+Passive scrolling changes views only while the entire study fits below the header and above the viewport bottom, and until the visitor selects a view manually. A short viewport without sufficient space keeps the explicit view controls. This avoids starting a transition after the model has moved behind the header. There is no scroll pinning, pointer capture, continuous rendering loop or WebGL context. Reduced motion disables automatic switching and crossfades. Page exit cancels listeners and queued work; a restored page remounts the controller. Without JavaScript, the initial image remains visible and navigation/content remain usable.
 
 The renderings illustrate geometry and are not evidence of flight-qualified hardware or a physical LUMOS prototype. Blender is used only when regenerating artwork. Building and hosting the site require the committed image assets, not Blender or a GPU renderer.
 
@@ -38,13 +38,17 @@ Replace all required image variants together when updating the model. Keep frami
 Verified for V4 during release preparation:
 
 - Astro/TypeScript: 21 files, zero errors, warnings or hints; ESLint passed.
-- `npm run check:viewer`: 30 state checks covering decoded-image readiness, failed requests, rapid selection races, keyboard controls, manual preference, reduced motion, cleanup, missing observers and initial-image retry.
+- `npm run check:viewer`: 61 state checks covering decoded-image readiness, failed requests, rapid selection races, keyboard controls, manual preference, reduced motion, cleanup, missing observers, initial-image retry and fully visible desktop/mobile scroll intervals.
 - Production build: 9 generated routes plus 3 legacy redirect documents. Site verification passed 396 internal references, metadata, contact identity, domain, sitemap and excluded academic claims.
 - All six WebPs fully decode with transparency at their specified dimensions and remain below 300 KB each. Every silhouette has at least 42 pixels of transparent margin. Home and Aerospace have all three named view controls and no canvas or legacy scene markup.
 - Assembled, exploded and cutaway source images and the social card were visually inspected as local assets. This does not establish the finished browser layout.
-- The generated viewer script is 5,290 bytes before transfer compression. This is an artifact measurement, not a device-performance score.
+- The browser loads a small decoded-image controller instead of a graphics engine. No WebGL canvas is present on Home or Aerospace.
 
-Browser inspection of the website was blocked by automatic permission review after a timeout and its permitted retry. No alternate browser route was used. Live browser layout, touch behavior, mobile menu/contact interactions, actual Safari/physical phones and Lighthouse/Core Web Vitals remain unverified for this revision. Historical V2/V3 browser results do not apply to V4.
+The owner approved browser inspection on 10 September. In the Codex in-app browser, the homepage passed widths 320, 375, 390, 430, 600, 768, 900, 1024, 1280, 1440 and 1920px; seven other content pages passed 320, 768 and 1440px. Additional 320x568, 844x390 and 1024x600 checks found no document overflow. The contact honeypot is deliberately offscreen and hidden from accessibility. All three engine images, keyboard Home, mobile menu Escape/focus return, the Work anchor, five LUMOS disclosures, email copying, draft preparation and stale-draft clearing were exercised. No browser warning/error was observed. Back navigation returned a working page; physical-device BFcache behavior is not established.
+
+The final scroll refinement was verified at 1280x900: the exploded view at scrollY 40 had its frame from 130 to 527px; cutaway at scrollY 80 had its frame from 90 to 487px, below the 72px header. All images were decoded. Screenshots and detailed browser evidence are stored in the task output directory.
+
+These are browser viewport tests, not physical phone or Safari tests. Native touch gestures, physical-device performance, Lighthouse scores and real-user Core Web Vitals remain unmeasured. Historical V2/V3 results are not reused.
 
 Release staging verifies the root files against every `dist/` hash. GitHub's quality workflow reruns type checking, lint, the viewer harness, the build and artifact checks on the release branch. Deployment and custom-domain file hashes are recorded separately after publication; this source document does not claim deployment in advance.
 

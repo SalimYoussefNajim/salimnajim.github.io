@@ -16,7 +16,7 @@ function deferred() {
   return { promise, resolve, reject };
 }
 
-function fixture({ reduced = false, observers = true, initialValid = true } = {}) {
+function fixture({ reduced = false, observers = true, initialValid = true, frameTop = 170.45, frameHeight = 396.5, viewportHeight = 900, headerHeight = 72 } = {}) {
   const requested = [];
   const raf = new Map();
   const observerList = [];
@@ -77,8 +77,11 @@ function fixture({ reduced = false, observers = true, initialValid = true } = {}
   const status = new Element('span'); status.selector = '[data-product-status]'; host.appendChild(status);
   const label = new Element('span'); label.selector = '[data-product-view-label]'; host.appendChild(label);
   const media = new EventTarget(); media.matches = reduced;
-  const window = new EventTarget(); window.innerHeight = 900; window.matchMedia = () => media;
+  const window = new EventTarget(); window.innerHeight = viewportHeight; window.scrollY = 0; window.matchMedia = () => media;
+  frame.getBoundingClientRect = () => frame.rect || { top: frameTop - window.scrollY, bottom: frameTop + frameHeight - window.scrollY, height: frameHeight, width: 720 };
+  const header = new Element('header'); header.rect = { top: 0, bottom: headerHeight, height: headerHeight };
   const document = new EventTarget(); document.hidden = false; document.createElement = (tag) => new Element(tag);
+  document.querySelector = (selector) => selector === '.site-header' ? header : null;
   class Observer {
     constructor(callback) { this.callback = callback; observerList.push(this); }
     observe(target) { this.target = target; }
@@ -101,6 +104,7 @@ function fixture({ reduced = false, observers = true, initialValid = true } = {}
   return { host, frame, buttons, status, requested, observerList, media, window, find, settle, resolve, raf,
     visible: () => observerList.forEach((observer) => observer.trigger()),
     scroll: () => window.dispatchEvent(new Event('scroll')),
+    scrollTo: (position) => { window.scrollY = position; window.dispatchEvent(new Event('scroll')); },
     dispose: () => dispose(),
     remount: () => { dispose(); dispose = exports.mountProductStudy(host); },
   };
@@ -126,7 +130,7 @@ function check(value, message) { assert.ok(value, message); checks++; }
   f.buttons[2].click(); f.find('cutaway').fail(); await f.settle();
   check(f.host.dataset.productActive === '1', 'Failed replacement retains valid visible image');
   check(f.status.dataset.error === 'true' && f.status.textContent.includes('remains visible'), 'Failure gives useful status');
-  f.frame.rect = { top: -250, bottom: 230, height: 480 }; f.scroll(); await f.settle();
+  f.scrollTo(60); await f.settle();
   check(f.host.dataset.productActive === '1', 'Manual selection disables automatic switching');
   f.remount(); f.visible(); f.scroll(); await f.settle();
   check(f.host.dataset.productActive === '1', 'Manual preference and current view survive remount/BFcache');
@@ -147,7 +151,7 @@ function check(value, message) { assert.ok(value, message); checks++; }
 }
 {
   const f = fixture({ reduced: true }); f.visible();
-  f.frame.rect = { top: -250, bottom: 230, height: 480 }; f.scroll(); await f.settle();
+  f.scrollTo(60); await f.settle();
   check(f.host.dataset.productActive === '0' && f.raf.size === 0, 'Reduced motion has no automatic scroll transition');
   const event = new Event('keydown', { cancelable: true }); Object.defineProperty(event, 'key', { value: 'End' });
   f.buttons[0].dispatchEvent(event); await f.resolve('cutaway');
@@ -156,10 +160,43 @@ function check(value, message) { assert.ok(value, message); checks++; }
   f.dispose();
 }
 {
-  const f = fixture(); f.visible(); f.frame.rect = { top: -250, bottom: 230, height: 480 }; f.scroll(); await f.settle();
+  const f = fixture(); f.visible(); f.scrollTo(60); await f.settle();
   await f.resolve('cutaway');
   check(f.host.dataset.productActive === '2', 'Actual visible scroll can select cutaway automatically');
   check(f.host.dataset.productManual !== 'true', 'Automatic progression does not lock manual preference');
+  f.dispose();
+}
+for (const scenario of [
+  { name: 'Desktop', frameTop: 170.45, frameHeight: 396.5, viewportHeight: 900, positions: [10, 30, 60] },
+  { name: 'Wide laptop with 60px interval', frameTop: 148, frameHeight: 447, viewportHeight: 900, positions: [5, 22, 42] },
+  { name: 'Laptop with 47px interval', frameTop: 135, frameHeight: 447, viewportHeight: 900, positions: [5, 17, 33] },
+  { name: 'Phone', frameTop: 487, frameHeight: 245, viewportHeight: 844, positions: [20, 140, 280] },
+]) {
+  const f = fixture(scenario); f.visible();
+  await f.resolve('exploded'); await f.resolve('cutaway');
+  check(f.host.dataset.productActive === '0', `${scenario.name}: decoded alternatives do not advance before scrolling`);
+  for (const [index, position] of scenario.positions.entries()) {
+    f.scrollTo(position); await f.settle(); await f.settle();
+    const bounds = f.frame.getBoundingClientRect();
+    check(f.host.dataset.productActive === String(index), `${scenario.name}: scroll reveals ${['assembled', 'exploded', 'cutaway'][index]} in sequence`);
+    check(bounds.top >= 88 && bounds.bottom <= scenario.viewportHeight - 24, `${scenario.name}: the entire image remains visible for view ${index + 1}`);
+  }
+  f.dispose();
+}
+{
+  const f = fixture(); f.visible();
+  await f.resolve('exploded'); await f.resolve('cutaway');
+  f.scrollTo(150); await f.settle(); await f.settle();
+  check(f.host.dataset.productActive === '0', 'A fast scroll past the fully visible interval does not start a late change behind the header');
+  f.dispose();
+}
+{
+  const f = fixture({ frameTop: 487, frameHeight: 245, viewportHeight: 370 }); f.visible();
+  await f.resolve('exploded'); await f.resolve('cutaway');
+  f.scrollTo(390); await f.settle(); await f.settle();
+  check(f.host.dataset.productActive === '0', 'Short landscape interval keeps the assembled image stable');
+  f.buttons[2].click(); await f.settle();
+  check(f.host.dataset.productActive === '2' && f.host.dataset.productManual === 'true', 'Short landscape viewport retains working manual view selection');
   f.dispose();
 }
 {
@@ -167,17 +204,17 @@ function check(value, message) { assert.ok(value, message); checks++; }
   check(f.host.dataset.productActive === '0' && f.raf.size === 0, 'Late decode after disposal cannot mutate the study');
 }
 {
-  const f = fixture(); f.visible(); f.frame.rect = { top: -250, bottom: 230, height: 480 }; f.scroll(); await f.settle();
+  const f = fixture(); f.visible(); f.scrollTo(60); await f.settle();
   f.media.matches = true; f.media.dispatchEvent(new Event('change')); await f.resolve('cutaway');
   check(f.host.dataset.productActive === '0', 'Enabling reduced motion cancels an automatic pending image change');
   f.dispose();
 }
 {
   const f = fixture(); f.visible();
-  f.frame.rect = { top: -50, bottom: 430, height: 480 }; f.scroll(); await f.settle();
+  f.scrollTo(35); await f.settle();
   f.find('exploded').fail(); await f.settle();
   check(f.status.dataset.error === 'true', 'Failed automatic view change exposes an error');
-  f.frame.rect = { top: -250, bottom: 230, height: 480 }; f.scroll(); await f.settle(); await f.resolve('cutaway');
+  f.scrollTo(60); await f.settle(); await f.resolve('cutaway');
   check(f.host.dataset.productActive === '2' && f.status.dataset.error === 'false' && f.status.textContent === '', 'Successful automatic replacement clears stale error status');
   f.dispose();
 }

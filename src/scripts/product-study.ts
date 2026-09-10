@@ -151,8 +151,15 @@ export function mountProductStudy(host: HTMLElement): () => void {
     scrollFrame = 0;
     if (disposed || manual || reduced.matches || !near || !hasScrolled || document.hidden) return;
     const bounds = frame!.getBoundingClientRect();
-    if (bounds.height <= 0 || bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
-    const progress = Math.min(1, Math.max(0, (100 - bounds.top) / (bounds.height * 0.85)));
+    if (bounds.height <= 0) return;
+    const headerHeight = document.querySelector<HTMLElement>('.site-header')?.getBoundingClientRect().height || 72;
+    const frameTop = window.scrollY + bounds.top;
+    // Advance while the whole study fits below the header and above the viewport
+    // edge. A short landscape viewport keeps explicit view controls instead.
+    const start = Math.max(0, frameTop + bounds.height - window.innerHeight + 24);
+    const end = frameTop - headerHeight - 16;
+    if (end - start < 24 || bounds.top < headerHeight + 16 || bounds.bottom > window.innerHeight - 24) return;
+    const progress = Math.min(1, Math.max(0, (window.scrollY - start) / (end - start)));
     const index = Math.min(2, Math.floor(progress * 3));
     if (index !== requestedView) void showView(index);
   }
