@@ -3,7 +3,7 @@ name: Website quality checks
 on:
   pull_request:
   push:
-    branches: [redesign-v2, experience-v3]
+    branches: [redesign-v2, experience-v3, experience-v4]
   workflow_dispatch:
 
 permissions:
@@ -31,6 +31,8 @@ jobs:
         run: npm run typecheck
       - name: Lint source
         run: npm run lint
+      - name: Verify image viewer recovery and controls
+        run: npm run check:viewer
       - name: Build static website
         run: npm run build
       - name: Verify generated website

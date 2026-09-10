@@ -1,50 +1,30 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ExperienceScene from '../components/ExperienceScene.astro';
+import ProductStudy from '../components/ProductStudy.astro';
 import Arrow from '../components/Arrow.astro';
 import FeaturedProject from '../components/FeaturedProject.astro';
 import ContactCta from '../components/ContactCta.astro';
 ---
 <Layout title="Salim Youssef Najim — Engineering & beyond" class="home-page">
-  <section class="experience" data-experience data-chapter="0" aria-label="Engineering and beyond">
-    <div class="experience-stage section-pad" data-experience-stage>
-      <div class="experience-heading">
-        <p class="experience-name">Salim Youssef Najim</p>
-        <div class="experience-copy">
-          <div class="experience-chapter" data-chapter-copy="0"><h1>Beyond one<br class="phone-break"/> discipline.</h1><p>Aerospace Engineering. A business perspective.</p></div>
-          <div class="experience-chapter" data-chapter-copy="1"><h2>Understand<br class="phone-break"/> the system.</h2><p>Every part matters. The connections matter more.</p></div>
-          <div class="experience-chapter" data-chapter-copy="2"><h2>Build for<br class="phone-break"/> what’s next.</h2><p>From a technical question to a new possibility.</p></div>
-        </div>
-      </div>
-      <div class="experience-object"><ExperienceScene/></div>
-      <div class="experience-foot">
-        <div class="experience-chapters" aria-label="Explore the three perspectives">
-          <button data-chapter-target="0" aria-pressed="true" aria-label="Show perspective: Beyond one discipline"><span>01</span><span class="chapter-label">Perspective</span><i></i></button>
-          <button data-chapter-target="1" aria-pressed="false" aria-label="Show perspective: Understand the system"><span>02</span><span class="chapter-label">Systems</span><i></i></button>
-          <button data-chapter-target="2" aria-pressed="false" aria-label="Show perspective: Build for what’s next"><span>03</span><span class="chapter-label">Possibility</span><i></i></button>
-        </div>
-        <a class="experience-skip" href="#selected-work">Explore the work <span aria-hidden="true">↓</span></a>
-      </div>
+  <section class="landing-hero section-pad" aria-labelledby="landing-title">
+    <div class="landing-copy">
+      <p class="landing-name">Salim Youssef Najim</p>
+      <h1 id="landing-title">Engineering.<br/><span>In perspective.</span></h1>
+      <p class="landing-lead">Aerospace Engineering student at Khalifa University. Exploring how technical ideas become useful projects.</p>
+      <div class="landing-actions"><a class="button button-light" href="#selected-work">Explore my work <Arrow/></a><a class="button" href="/contact/">Contact me <Arrow diagonal/></a></div>
+      <p class="landing-note"><span></span>Aerospace · Energy · Systems</p>
     </div>
-  </section>
-  <section class="home-intro section-pad reveal" aria-labelledby="perspective-title">
-    <p class="eyebrow section-index">Engineering & beyond</p>
-    <h2 id="perspective-title">Technical thinking.<br/><span class="muted">Wider possibilities.</span></h2>
-    <div class="home-intro-detail"><p>I study Aerospace Engineering at Khalifa University. I led LUMOS, a student concept for decentralized urban lighting.</p><a class="text-link" href="/about/">Meet Salim <Arrow/></a></div>
+    <div class="landing-study"><ProductStudy id="home-propulsion" priority/></div>
   </section>
   <section id="selected-work" class="selected-work" aria-labelledby="selected-title">
-    <div class="section-heading section-pad reveal"><div><p class="eyebrow section-index">Selected work</p><h2 id="selected-title">An idea, made tangible.</h2></div><a class="text-link" href="/projects/">View projects <Arrow/></a></div>
+    <div class="section-heading section-pad reveal"><div><p class="eyebrow section-index">Selected work</p><h2 id="selected-title">From question to concept.</h2></div><a class="text-link" href="/projects/">All projects <Arrow/></a></div>
     <FeaturedProject/>
   </section>
-  <section class="world-section section-pad" aria-labelledby="focus-title">
-    <div class="section-heading reveal"><div><p class="eyebrow section-index">Three connected perspectives</p><h2 id="focus-title">A broader point of view.</h2></div></div>
-    <a class="world-row reveal" href="/aerospace/"><span class="eyebrow">01</span><div><h3>Aerospace</h3><p>Flight, physics and the relationships inside complex systems.</p></div><span class="world-destination">Explore aerospace</span><span class="circle-arrow"><Arrow diagonal/></span></a>
-    <a class="world-row reveal" href="/ventures/"><span class="eyebrow">02</span><div><h3>Ventures</h3><p>A business perspective on useful ideas and the people they serve.</p></div><span class="world-destination">The perspective</span><span class="circle-arrow"><Arrow diagonal/></span></a>
-    <a class="world-row reveal" href="/projects/"><span class="eyebrow">03</span><div><h3>Projects</h3><p>Questions explored through concepts, experiments and engineering.</p></div><span class="world-destination">See the work</span><span class="circle-arrow"><Arrow diagonal/></span></a>
-  </section>
-  <section class="profile-teaser section-pad reveal">
-    <figure class="portrait-frame"><img src="/images/salim.webp" alt="Salim Youssef Najim" width="826" height="826" loading="lazy" decoding="async"/><figcaption>Salim Youssef Najim</figcaption></figure>
-    <div><p class="eyebrow section-index">The person behind the work</p><h2>Curiosity.<br/>With direction.</h2><p>Engineering is my foundation. I’m interested in where it can lead: new projects, better questions and conversations across disciplines.</p><a class="text-link" href="/about/">My background <Arrow/></a></div>
+  <section class="home-profile section-pad" aria-labelledby="profile-title">
+    <figure class="portrait-frame reveal"><img src="/images/salim.webp" alt="Salim Youssef Najim" width="826" height="826" loading="lazy" decoding="async"/></figure>
+    <div class="home-profile-copy reveal"><p class="eyebrow section-index">A little about me</p><h2 id="profile-title">Curious about<br/>how things work.</h2><p>Engineering is my foundation. Leading LUMOS gave me a way to connect that curiosity with a team and a practical question: how could we approach urban lighting differently?</p><a class="text-link" href="/about/">My background <Arrow/></a>
+      <div class="perspective-links"><a href="/aerospace/"><span><strong>Aerospace</strong><small>Flight, energy and connected systems.</small></span><Arrow diagonal/></a><a href="/ventures/"><span><strong>Business perspective</strong><small>Useful ideas and the people they serve.</small></span><Arrow diagonal/></a></div>
+    </div>
   </section>
   <ContactCta/>
 </Layout>

@@ -1,26 +1,26 @@
-# Salim Youssef Najim — V3 experience
+# Salim Youssef Najim — V4
 
-An original static website for aerospace engineering, entrepreneurship and selected engineering work. V3 combines a scroll-led, three-part 3D introduction with direct page titles, clear reading structure and an email-first contact page. Built with Astro, TypeScript, CSS and Three.js; no application server or CMS is required.
+A static personal website for aerospace engineering, business perspective and selected engineering work. V4 puts identity, Work and Contact actions at the beginning of a normal-flow homepage. An original propulsion study uses three studio-rendered images, so the visual experience does not require browser WebGL. Built with Astro, TypeScript and CSS; no application server or CMS is required.
+
+V4 validation and publication are pending. See [V4 notes](docs/V4-NOTES.md) for the architecture, maintenance details and release checklist. Earlier QA records describe earlier releases.
 
 ## Architecture
 
 | Route | Purpose |
 | --- | --- |
-| `/` | Three-chapter 3D introduction, identity, selected work and paths into the site |
+| `/` | Identity and direct actions, bounded propulsion study, selected work and background |
 | `/about/` | Profile, education, project leadership and business perspective |
-| `/aerospace/` | Academic direction, technical interests and an interactive turbine study |
+| `/aerospace/` | Academic direction, technical interests and the propulsion study |
 | `/projects/` | Selected engineering work |
-| `/projects/lumos/` | LUMOS case study with local navigation, system stages, role and further evaluation |
+| `/projects/lumos/` | LUMOS case study with local navigation, native stage accordions, role and further evaluation |
 | `/ventures/` | Entrepreneurship perspective; no unverified business listings |
 | `/achievements/` | Education and project experience, linked from the footer as Milestones |
 | `/contact/` | Direct email, copy-email feedback and an optional email-draft form |
 | `/404.html` | Branded missing-page experience |
 
-The homepage uses `ExperienceScene.astro` and `experience-scene.ts`: an original procedural instrument whose rings separate and reconfigure as the story progresses. Rendering responds to scroll and layout changes instead of running an idle animation loop. The scene has a still-image option, reduced-motion behavior, a lightweight SVG fallback and capped pixel density. Touch scroll remains native.
+The homepage and Aerospace page share `ProductStudy.astro` and `product-study.ts`. The Assembled, Exploded and Cutaway views are original Blender renders delivered as responsive WebP images. The next image is loaded and decoded before the visible image changes. Named controls work with touch and keyboard; passive scrolling can change the view until a visitor makes a manual selection. Reduced motion disables automatic switching and fades. The initial image is ordinary HTML and remains available without JavaScript.
 
-The Aerospace page retains a separate `Scene.astro` / `scene.ts` turbine study with explicit controls. Both scenes are illustrative visual work, not evidence of flight hardware or measured engineering results.
-
-Normal content is static HTML. The contact form prepares a draft for the visitor’s email application; it does not send server-side email. The address remains usable without JavaScript. See [V3 design notes and current limits](docs/V3-NOTES.md).
+The study illustrates engineering geometry; it does not document student-built hardware, a manufacturer’s product or measured engineering results. Normal content remains static HTML. The contact form prepares a draft for the visitor’s email application; it does not send server-side email. Direct email remains usable without JavaScript.
 
 ## Develop and verify
 
@@ -34,12 +34,13 @@ npm run dev
 ```sh
 npm run typecheck
 npm run lint
+npm run check:viewer
 npm run build
 npm run check:site
 npm run preview
 ```
 
-Edit pages in `src/pages/`, shared UI in `src/components/` and `src/layouts/`, content in `src/data/site.ts`, and static media/legacy redirects in `public/`. `src/scripts/main.ts` coordinates navigation and page interactions. Each 3D scene has its own dynamically imported renderer. `dist/` is the generated build. Root HTML and `_astro/` are generated release output, not the source of truth.
+Edit pages in `src/pages/`, shared UI in `src/components/` and `src/layouts/`, content in `src/data/site.ts`, and static media/legacy redirects in `public/`. `src/scripts/main.ts` coordinates shared navigation and reveals; `src/scripts/product-study.ts` owns image-view interactions. Blender is an asset-authoring tool, not a dependency of the website build. `dist/` is the generated build. Root HTML and `_astro/` are generated release output, not the source of truth.
 
 ## Prepare a release
 
@@ -49,6 +50,6 @@ npm run release:stage
 npm run check:site -- --release
 ```
 
-These commands prepare local files and `.release-files.json` for review, then verify that they match the build. They do not deploy or run Git. Development is on `experience-v3`; GitHub Pages publishes `main` at repository root with the existing custom domain and HTTPS settings. The included GitHub workflow checks source and build only.
+These commands prepare local files and `.release-files.json` for review, then verify that they match the build. They do not deploy or run Git. V4 development is on `experience-v4`; GitHub Pages publishes `main` at repository root with the existing custom domain and HTTPS settings. The included GitHub workflow checks source and build only.
 
-Read [deployment and rollback](docs/DEPLOYMENT.md) before publishing. Read [content boundaries](docs/CONTENT.md) before adding facts, ventures, achievements or contact services. [QA.md](docs/QA.md) contains the historical V2 validation record; those measurements are not V3 results. Record final V3 checks separately. The confirmed contact email is public; credentials do not belong in this repository.
+Read [deployment and rollback mechanics](docs/DEPLOYMENT.md) before publishing and use the current [V4 validation checklist](docs/V4-NOTES.md). Read [content boundaries](docs/CONTENT.md) before adding facts, ventures, achievements or contact services. No GPA, rank, academic-list claims or unverified achievements are included. [QA.md](docs/QA.md) and [V3-NOTES.md](docs/V3-NOTES.md) are historical records, not V4 results. The confirmed contact email is public; credentials do not belong in this repository.

@@ -2,6 +2,7 @@ import { existsSync, lstatSync, readFileSync, readdirSync, realpathSync, statSyn
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import sharp from 'sharp';
 
 // Inspect the generated artifact, never the legacy HTML at the repository root.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -74,6 +75,7 @@ const pages = new Map(files.filter(file => file.endsWith('.html')).map(file => {
 const seenTitles = new Map();
 const seenDescriptions = new Map();
 let checkedReferences = 0;
+const studyImageMetrics = [];
 
 function checkReference(raw, from, label, checkFragment = true) {
   if (!raw || raw.startsWith('data:') || raw.startsWith('blob:')) return;
@@ -175,6 +177,71 @@ for (const [file, page] of pages) {
   }
 }
 
+// The homepage and aerospace study deliberately use decoded images, so a GPU
+// fallback must not accidentally return through an old scene component.
+for (const route of ['/', '/aerospace/']) {
+  const page = pages.get(localFile(new URL(route, origin)));
+  if (!page) continue;
+  if (page.elements.some(({ name, attrs }) => name === 'canvas'
+    || Object.keys(attrs).some(key => /^data-(?:scene|experience)(?:-|$)/.test(key)))) {
+    fail(route, 'canvas or legacy WebGL scene markup is forbidden in the image study');
+  }
+  if (page.elements.filter(({ attrs }) => 'data-product-study' in attrs).length !== 1) {
+    fail(route, 'expected exactly one propulsion image study');
+  }
+  const controls = [...page.html.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/gi)]
+    .map(match => ({ attrs: attributes(match[1]), label: decode(match[2].replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim() }))
+    .filter(({ attrs }) => 'data-product-view' in attrs);
+  if (controls.length !== 3) fail(route, 'expected exactly three named propulsion view buttons');
+  for (const [index, name] of ['Assembled', 'Exploded', 'Cutaway'].entries()) {
+    const matching = controls.filter(({ attrs }) => attrs['data-product-view'] === String(index));
+    if (matching.length !== 1 || matching[0].label !== name || 'hidden' in matching[0].attrs
+      || (matching[0].attrs['aria-label'] !== undefined && matching[0].attrs['aria-label'] !== name)) {
+      fail(route, `view ${index} must have one visible, named ${name} button`);
+    }
+  }
+}
+
+// Fully decode all responsive variants: valid filenames and metadata alone do
+// not establish that an image loads or that the exported silhouette is intact.
+for (const view of ['assembled', 'exploded', 'cutaway']) {
+  for (const [width, height] of [[640, 427], [1280, 853]]) {
+    const relative = `images/propulsion-${view}-${width}.webp`;
+    const file = path.join(dist, relative);
+    if (!existsSync(file)) { fail(relative, 'required propulsion image missing'); continue; }
+    try {
+      const bytes = statSync(file).size;
+      if (bytes > 300_000) fail(relative, `image exceeds 300 KB limit (${bytes} bytes)`);
+      const image = sharp(file, { failOn: 'warning' });
+      const metadata = await image.metadata();
+      if (metadata.format !== 'webp') fail(relative, 'image must be encoded as WebP');
+      if (!metadata.hasAlpha) fail(relative, 'image must retain an alpha channel');
+      const { data, info } = await image.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+      if (info.width !== width || info.height !== height) {
+        fail(relative, `decoded dimensions must be ${width}×${height}; received ${info.width}×${info.height}`);
+      }
+      let left = info.width;
+      let top = info.height;
+      let right = -1;
+      let bottom = -1;
+      for (let y = 0; y < info.height; y++) {
+        for (let x = 0; x < info.width; x++) {
+          // Include even the faintest antialiased edge in the silhouette.
+          if (data[(y * info.width + x) * info.channels + info.channels - 1] === 0) continue;
+          left = Math.min(left, x); top = Math.min(top, y);
+          right = Math.max(right, x); bottom = Math.max(bottom, y);
+        }
+      }
+      const margin = Math.min(left, top, info.width - 1 - right, info.height - 1 - bottom);
+      if (right < 0) fail(relative, 'image is fully transparent and contains no visible study');
+      else if (margin < 2) fail(relative, `visible silhouette needs at least 2 transparent pixels on every edge; smallest margin is ${margin}px`);
+      studyImageMetrics.push({ relative, bytes, margin });
+    } catch (error) {
+      fail(relative, `propulsion image could not be decoded: ${error.message}`);
+    }
+  }
+}
+
 for (const file of files.filter(file => file.endsWith('.css'))) {
   const route = `/${path.relative(dist, file).split(path.sep).join('/')}`;
   const css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
@@ -269,6 +336,8 @@ if (errors.size) {
   const bytes = files.reduce((sum, file) => sum + statSync(file).size, 0);
   console.log(`Site verification passed: ${pages.size} HTML pages, ${checkedReferences} internal references, ${(bytes / 1024 / 1024).toFixed(2)} MB total artifact.`);
   console.log('Verified routes, local assets, anchors, metadata, contact identity, domain, sitemap, manifest, and excluded academic claims.');
+  console.log(`Verified ${studyImageMetrics.length} propulsion WebPs: exact dimensions, alpha, full decoding, 300 KB file limits, and unclipped silhouettes (smallest margin ${Math.min(...studyImageMetrics.map(image => image.margin))}px).`);
+  console.log('Verified home and aerospace each contain three named image-view controls and no canvas or legacy WebGL scene markup.');
   if (verifyRelease) console.log('Verified that the root release files and their recorded hashes match every file in dist/.');
   console.log('External availability, browser behavior, contact delivery, and performance still require their separate checks.');
 }

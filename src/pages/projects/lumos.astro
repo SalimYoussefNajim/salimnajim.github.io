@@ -28,12 +28,12 @@ const steps = [
     <LumosDiagram/>
   </section>
   <section id="system" class="case-system section-pad" aria-labelledby="system-title">
-    <div class="section-heading reveal"><div><p class="eyebrow section-index">02 / The system</p><h2 id="system-title">Follow the energy.</h2></div><p>Explore the five stages.<br/>Select a stage to see its place in the concept.</p></div>
-    <div class="energy-steps" role="group" aria-label="Explore the LUMOS energy path">
-      {steps.map((step,i)=><button type="button" disabled class="energy-step" data-energy-step={i} aria-pressed={i===0} aria-controls={`energy-${i}`}><span class="eyebrow">0{i+1}</span><strong>{step.name}</strong></button>)}
-    </div>
-    <div aria-live="polite" aria-atomic="true">
-      {steps.map((step,i)=><div class="energy-detail" data-energy-detail={i} id={`energy-${i}`}><span class="eyebrow">0{i+1} / {step.name}</span><p>{step.detail}</p></div>)}
+    <div class="section-heading reveal"><div><p class="eyebrow section-index">02 / The system</p><h2 id="system-title">Follow the energy.</h2></div><p>Open a stage to see its role in the concept and the questions it raises.</p></div>
+    <div class="system-accordion">
+      {steps.map((step,i)=><details class="system-step" name="lumos-system" open={i===0}>
+        <summary class="system-step-summary"><span class="eyebrow">0{i+1}</span><strong>{step.name}</strong><span class="system-step-indicator" aria-hidden="true">+</span></summary>
+        <div class="system-step-body"><p>{step.detail}</p></div>
+      </details>)}
     </div>
   </section>
   <section class="chapter-section section-pad">

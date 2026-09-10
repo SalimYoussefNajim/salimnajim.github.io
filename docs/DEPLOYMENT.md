@@ -1,8 +1,8 @@
 # Static build and controlled release
 
-The site is an Astro static build with TypeScript and dynamically loaded Three.js scenes. Astro produces deployable HTML, CSS, JavaScript, fonts, and images in `dist/`. GitHub Pages does not execute Astro source or a Node server. The hosting settings were confirmed in GitHub: publish from `main`, `/ (root)`, custom domain `salimyoussefnajim.com`, HTTPS enforced. Keep those settings for this release and recheck them before publishing.
+The site is an Astro static build with TypeScript and responsive prerendered propulsion images. Astro produces deployable HTML, CSS, JavaScript, fonts, and images in `dist/`. GitHub Pages does not execute Astro source or a Node server. The hosting settings were confirmed in GitHub: publish from `main`, `/ (root)`, custom domain `salimyoussefnajim.com`, HTTPS enforced. Keep those settings for this release and recheck them before publishing.
 
-V3 development happens on `experience-v3`. The included `quality.yml` workflow runs on pull requests, pushes to `experience-v3` and `redesign-v2`, and manual dispatch. It installs the lockfile, type-checks, lints, builds, and verifies `dist/`. It has read-only repository permissions and **does not deploy**.
+V4 development happens on `experience-v4`. The included `quality.yml` workflow runs on pull requests, pushes to `experience-v4`, `experience-v3` and `redesign-v2`, and manual dispatch. It installs the lockfile, type-checks, lints, builds, and verifies `dist/`. It has read-only repository permissions and **does not deploy**.
 
 ## Local build
 
@@ -25,7 +25,7 @@ Preview the generated site at the local URL printed by Astro. Root HTML and rout
 
 - Preview every page and intentional legacy redirect, plus an unknown path for the branded 404. Confirm navigation, footer, visible email, contact draft/delivery behavior, and external links.
 - Check widths 320, 375, 390, 430, 768, 1024, 1280, 1440, 1920 pixels and an ultrawide. Test touch, keyboard, focus, mobile menu close/escape behavior, no horizontal overflow, and readable layouts.
-- Test reduced motion, unavailable WebGL, scene pause offscreen/background, slow loading, and fallback artwork. Inspect browser console and network failures. Check an actual Safari/WebKit environment when available, and record if it was not tested.
+- Test reduced motion, failed image requests, rapid view changes, scroll progression, slow loading and the initial image with JavaScript disabled. Inspect browser console and network failures. Check an actual Safari/WebKit environment when available, and record if it was not tested.
 - Measure the production build's performance and accessibility. Report measured results and limitations; do not present laboratory scores as Core Web Vitals from real visitors.
 - Confirm the content boundaries in `CONTENT.md`, especially the owner's academic-statistics omission and the absence of invented businesses or publications.
 
@@ -51,7 +51,7 @@ Make this a single reviewable release commit. The build includes accessible, noi
 
 Review the complete diff, the exact generated files, and Pages settings before merging the release into `main`. A merge/push to the configured production branch can publish immediately. Do not change DNS, the domain, hosting provider, repository history, or the Pages source setting as part of this release. No secrets are required for this static build.
 
-After publication, verify the HTTPS custom domain, homepage, all major routes, nested project route, fonts/images/3D chunks, contact link, sitemap, robots, `ads.txt`, and unknown-route 404. Check that GitHub Pages reports a successful deployment. Keep the source revision and deployment outcome in the release notes.
+After publication, verify the HTTPS custom domain, homepage, all major routes, nested project route, fonts/images/scripts, contact link, sitemap, robots, `ads.txt`, and unknown-route 404. Check that GitHub Pages reports a successful deployment. Keep the source revision and deployment outcome in the release notes.
 
 ## Rollback and later updates
 

@@ -2,36 +2,12 @@
   "version": 1,
   "files": [
     {
-      "path": "_astro/aerospace.B3zKMJ3m.css",
-      "sha256": "0b02e73c67f533034ea0a673189d0016873c8dae58ed8947ad4358ac366aeffc"
+      "path": "_astro/Layout.CK9qAWgF.css",
+      "sha256": "fcfc1e66007fae1006bbe95348c451a63394c606623dd40191e43da6c6f3ac47"
     },
     {
-      "path": "_astro/experience-scene.DDnSwRi-.js",
-      "sha256": "8a2d25633ef6ec8383e7fdd14db4a9b05bb33ef84d230e43239751f0a52d871a"
-    },
-    {
-      "path": "_astro/ExperienceScene.astro_astro_type_script_index_0_lang.8p1TPVuq.js",
-      "sha256": "847d3f4b9fec91409e905d64d1dde6df99b2eedb9faa56c19d2522104a9ae463"
-    },
-    {
-      "path": "_astro/Layout.B7LNRtCW.css",
-      "sha256": "ed402a9f00b49c6a88aac31272db0d551771903bc2d2a408b0dc519db7425bd9"
-    },
-    {
-      "path": "_astro/preload-helper.CxFQXtKk.js",
-      "sha256": "b39ea8a0a9ff7dd6b08f09d4cc161bbfc41f2039d1606fecbaed8f165af4070d"
-    },
-    {
-      "path": "_astro/RoomEnvironment.BI1b5MFd.js",
-      "sha256": "3f6512805603ee1ecb89617bbd4be3fc9e0426e4a8b5555c346815b2e36f17b8"
-    },
-    {
-      "path": "_astro/Scene.astro_astro_type_script_index_0_lang.DwHBLLiC.js",
-      "sha256": "f619d58911673d4d6ce9497fb4dee610b259f06ddafa5dd623eec0949810bc90"
-    },
-    {
-      "path": "_astro/scene.Cr2TH_ih.js",
-      "sha256": "b575eb0fff6b38bc385984f0899f2bdbd55d2c9332e026f1881d3bea7c31f2dd"
+      "path": "_astro/ProductStudy.astro_astro_type_script_index_0_lang.CRuRRK3d.js",
+      "sha256": "7e2b08ec2a1f13a1c49177399fc5a3e98c4e313630f652fce78123f4b5d29b18"
     },
     {
       "path": ".nojekyll",
@@ -39,15 +15,15 @@
     },
     {
       "path": "404.html",
-      "sha256": "875ca3bd33e783e2b2fbfecd68d4cf81fd6ffd4f1f1a8cc6cb863fd018cb5409"
+      "sha256": "dc8da6fbc947d1d3f0883e3ec824a772b305b6307aa75af58d4401496094c850"
     },
     {
       "path": "about/index.html",
-      "sha256": "86f7b9cbed3a93e50b304d990bef395df3228178bbac4ad461357192403cfe59"
+      "sha256": "eaa617fa836374b6668e6dfcac6ca874c67a5aef5b35fde76620d87a77e64667"
     },
     {
       "path": "achievements/index.html",
-      "sha256": "93693d7e15c6115d3e3ac3ae523b40bf55c160ebeef2b496f91111e8e8deeab7"
+      "sha256": "0442043c101fb9090b9cd92711071e4047c4b95a44cf75968fba8af787889a10"
     },
     {
       "path": "ads.txt",
@@ -55,7 +31,7 @@
     },
     {
       "path": "aerospace/index.html",
-      "sha256": "ed5a5f50791fc88fb242de1702a8a845baf9b5a953f45b4f790c443e5c9da7fc"
+      "sha256": "29da0b2e1cde293dd1bf9204008f6b4b6348f4468e32050a7b28a27bfa3b332b"
     },
     {
       "path": "CNAME",
@@ -63,7 +39,7 @@
     },
     {
       "path": "contact/index.html",
-      "sha256": "92fe776deacbe53f31f3c559b19eff0022fc5945497ab4c64c860a91b2fcce55"
+      "sha256": "c385c93035247041f36c4b341af04c5210dabfe611d6e43b79f96094722fc2b9"
     },
     {
       "path": "dashboard.html",
@@ -94,20 +70,44 @@
       "sha256": "ce1127d70b1789a7e23078c9a716f2727b8cf012415e6b1b2bb1436d1c6aee02"
     },
     {
+      "path": "images/propulsion-assembled-1280.webp",
+      "sha256": "612a952b9eed9c7120062c6495e8d788a5744f79c6b97968aa7bd5ae2c098598"
+    },
+    {
+      "path": "images/propulsion-assembled-640.webp",
+      "sha256": "ca6cd88cd8e66296d4b94d6d37af02694755704567f034662d9755f2c7fc65d8"
+    },
+    {
+      "path": "images/propulsion-cutaway-1280.webp",
+      "sha256": "6a3e0626ffcbc381a49ed07ade839b2e272c76bcd581a1079e3c0b2b9a93b53a"
+    },
+    {
+      "path": "images/propulsion-cutaway-640.webp",
+      "sha256": "099dcd5b5d07c077a17f20e8b1eed4ba645df61d8daa33d196f22fb44fb111ba"
+    },
+    {
+      "path": "images/propulsion-exploded-1280.webp",
+      "sha256": "cd78600f2843090a2d97058da974d8685ef0e710ff28d3f6a381d5972de56555"
+    },
+    {
+      "path": "images/propulsion-exploded-640.webp",
+      "sha256": "a6694ed8eaafcb25d7b5195dbfae1cb9b999e6cd063bd15ec5a05e898be02b36"
+    },
+    {
       "path": "images/salim.webp",
       "sha256": "30913996fa05a2f1bfe821806dda59b075276bbdddada3699967f7862bd936bb"
     },
     {
       "path": "images/social-preview.png",
-      "sha256": "55eae069b33ce93dd75886c7e4d32e4aa25084b3730f4c72c96d7b7f37bc6aae"
+      "sha256": "4eab6b72d013ad0aa4ba4ffa4f6371125b493c20a6808014ef09883bd598773b"
     },
     {
       "path": "images/social-preview.svg",
-      "sha256": "48a8060866197635655cad2e2034724cac75d337772d6ff57b7d36ae1263655b"
+      "sha256": "184d186fb9989df457b1b2ffaf02e9f1e44c64eae572f9af887ae7a337694951"
     },
     {
       "path": "index.html",
-      "sha256": "777386be96c7338b6331fbc92cfedfaf376aecd679053087897a23583a613e66"
+      "sha256": "1234779f6d8ea72594d765732100fabbc9add119aea798ff70b04073f66b14b9"
     },
     {
       "path": "licenses/three-LICENSE.txt",
@@ -119,11 +119,11 @@
     },
     {
       "path": "projects/index.html",
-      "sha256": "8aa4eebbe3abfbb2817e3f168c9fc8f4a439ab90faec0587ee573d42b2d2de48"
+      "sha256": "ab76d34ef0fa2e39b6206d5cb6ba1ae637f9924833841ff0b27a2b1e84769398"
     },
     {
       "path": "projects/lumos/index.html",
-      "sha256": "40d9dfd4b46188e5527136245880139e9713846ff9f838533429891caa606f69"
+      "sha256": "cd20630821aecf96c7beaeb608e5ced6a323311371b7a6693b9cb0eab7230c15"
     },
     {
       "path": "robots.txt",
@@ -143,7 +143,7 @@
     },
     {
       "path": "ventures/index.html",
-      "sha256": "866ec140044868c9f2f571ff4ad829866c08e08f39ecc703e558716068ebe133"
+      "sha256": "87ef14fd196830d9a6e406f944d9c7ee9cb891f9ac6aa37c2fd3691fb7243301"
     }
   ]
 }
