@@ -1,0 +1,113 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BookObject from '../../components/BookObject.astro';
+import Arrow from '../../components/Arrow.astro';
+import { books, physicsBook, aiBooks, otherBooks } from '../../data/books';
+const schema = {
+  '@type': 'CollectionPage', name: 'Books by Salim Youssef Najim',
+  url: 'https://salimyoussefnajim.com/books/',
+  mainEntity: { '@type': 'ItemList', itemListElement: books.map((book, index) => ({ '@type': 'ListItem', position: index + 1, item: { '@type': 'Book', name: `${book.title}${book.subtitle ? `: ${book.subtitle}` : ''}`, author: { '@id': 'https://salimyoussefnajim.com/#person' }, url: book.formats[0].url, ...(book.cover ? { image: `https://salimyoussefnajim.com${book.cover.src}` } : {}) } })) },
+};
+---
+<Layout title="Books — Salim Youssef Najim" description="Explore Built from Physics, the eight-book Talk to AI Like a Pro series, and more books by Salim Youssef Najim." schema={schema}>
+  <div class="book-library" data-book-library>
+    <section class="library-intro section-pad">
+      <div class="library-kicker"><span>Writing & publishing</span><span>11 titles / 3 subjects</span></div>
+      <h1>Ideas,<br/><em>in print.</em></h1>
+      <div class="library-intro__bottom"><p>Physics, the language of AI, and the business of making things. A place for the questions I want to explore beyond the classroom.</p><a href="#built-from-physics">Start with physics <span aria-hidden="true">↙</span></a></div>
+    </section>
+    <div class="library-toolbar section-pad">
+      <p class="library-label">The library</p>
+      <div class="library-filters" role="group" aria-label="Filter books by subject" hidden>
+        <button type="button" data-book-filter="all" aria-pressed="true">All <span>11</span></button>
+        <button type="button" data-book-filter="physics" aria-pressed="false">Physics <span>1</span></button>
+        <button type="button" data-book-filter="ai" aria-pressed="false">AI <span>8</span></button>
+        <button type="button" data-book-filter="other" aria-pressed="false">Other <span>2</span></button>
+      </div>
+      <p class="library-status" aria-live="polite" aria-atomic="true">11 books</p>
+    </div>
+    <section class="physics-book section-pad" id="built-from-physics" data-book-group="physics" aria-labelledby="physics-title">
+      <div class="physics-book__stage"><span class="stage-label">Physics / Engineering</span><BookObject book={physicsBook} priority/><span class="stage-foot">A book by Salim Youssef Najim</span></div>
+      <div class="physics-book__copy">
+        <p class="library-label">The physics book</p>
+        <h2 id="physics-title">Built from<br/><em>Physics.</em></h2>
+        <p class="book-subtitle">{physicsBook.subtitle}</p>
+        <p class="book-description">{physicsBook.description}</p>
+        <div class="book-structure"><span>08 <small>Parts</small></span><span>40 <small>Chapters</small></span></div>
+        <p class="format-label">Find your edition on Amazon</p>
+        <div class="book-formats">{physicsBook.formats.map(format => <a href={format.url} target="_blank" rel="noopener noreferrer" aria-label={`${physicsBook.title} — ${format.label} on Amazon`}>{format.label}<Arrow diagonal/></a>)}</div>
+      </div>
+    </section>
+    <section class="ai-library section-pad" id="ai-books" data-book-group="ai" aria-labelledby="ai-title">
+      <div class="subject-heading"><p class="library-label">The AI series / Eight titles</p><h2 id="ai-title">Talk to AI<br/><em>Like a Pro.</em></h2><p>From the first prompt to the systems around it. Eight books exploring how we communicate and work with artificial intelligence.</p></div>
+      <div class="series-list">
+        {aiBooks.map((book, index) => <article class="series-book" id={book.id}>
+          <div class="series-book__identity"><div class="series-book__cover"><BookObject book={book}/></div><div><p class="series-book__series">{book.title}{index === 0 && <span> / Start here</span>}</p><h3>{book.subtitle}</h3><p class="series-book__description">{book.description}</p></div></div>
+          <div class="book-formats">{book.formats.map(format => <a href={format.url} target="_blank" rel="noopener noreferrer" aria-label={`${book.subtitle} — ${format.label} on Amazon`}>{format.label}<Arrow diagonal/></a>)}</div>
+        </article>)}
+      </div>
+    </section>
+    <section class="other-library section-pad" id="more-books" data-book-group="other" aria-labelledby="more-title">
+      <div class="subject-heading"><p class="library-label">Further reading</p><h2 id="more-title">More to<br/><em>explore.</em></h2><p>Writing and tools for the early stages of an idea.</p></div>
+      <div class="other-list">{otherBooks.map(book => <article class="other-book" id={book.id}><div class="other-book__cover"><BookObject book={book}/></div><div><p class="library-label">{book.id === 'creator-code' ? 'Content & creativity' : 'Entrepreneurship'}</p><h3>{book.title}</h3>{book.subtitle && <p class="other-book__subtitle">{book.subtitle}</p>}<p class="other-book__description">{book.description}</p><div class="book-formats">{book.formats.map(format => <a href={format.url} target="_blank" rel="noopener noreferrer" aria-label={`${book.title} — ${format.label} on Amazon`}>{format.label}<Arrow diagonal/></a>)}</div></div></article>)}</div>
+    </section>
+    <section class="library-outro section-pad"><p>Something sparked a thought?</p><a href="/contact/">Let’s talk. <Arrow diagonal/></a><small>Edition availability varies by country. Amazon opens in a new tab.</small></section>
+  </div>
+</Layout>
+<script>
+  const initializeLibrary = () => {
+    document.querySelectorAll<HTMLElement>('[data-book-library]').forEach(library => {
+      if (library.dataset.ready) return;
+      const filters = library.querySelector<HTMLElement>('.library-filters');
+      const status = library.querySelector<HTMLElement>('.library-status');
+      const groups = [...library.querySelectorAll<HTMLElement>('[data-book-group]')];
+      if (!filters || !status) return;
+      library.dataset.ready = 'true';
+      filters.hidden = false;
+      const applyFilter = (category: string) => {
+        filters.querySelectorAll<HTMLButtonElement>('button').forEach(item => item.setAttribute('aria-pressed', String(item.dataset.bookFilter === category)));
+        groups.forEach(group => { group.hidden = category !== 'all' && group.dataset.bookGroup !== category; });
+        const count = category === 'physics' ? 1 : category === 'ai' ? 8 : category === 'other' ? 2 : 11;
+        status.textContent = `${count} ${count === 1 ? 'book' : 'books'}`;
+      };
+      const revealAnchor = (hash: string, restoreScroll = false) => {
+        let id: string;
+        try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
+        const target = document.getElementById(id);
+        const group = target?.closest<HTMLElement>('[data-book-group]');
+        if (!target || !group || !library.contains(group) || !group.hidden) return;
+        applyFilter('all');
+        if (restoreScroll) target.scrollIntoView({ block: 'start', behavior: 'instant' });
+      };
+      filters.addEventListener('click', event => {
+        const button = (event.target as Element).closest<HTMLButtonElement>('[data-book-filter]');
+        if (button?.dataset.bookFilter) applyFilter(button.dataset.bookFilter);
+      });
+      library.addEventListener('click', event => {
+        const anchor = (event.target as Element).closest<HTMLAnchorElement>('a[href^="#"]');
+        if (anchor) revealAnchor(anchor.hash);
+      });
+      window.addEventListener('hashchange', () => revealAnchor(window.location.hash, true));
+      window.addEventListener('pageshow', () => revealAnchor(window.location.hash));
+    });
+  };
+  initializeLibrary();
+  document.addEventListener('astro:page-load', initializeLibrary);
+</script>
+<style>
+  .book-library{--paper:#efeee8;--ink:#20221f;--red:#df492c;background:var(--paper);color:var(--ink)}
+  .book-library [hidden]{display:none!important}.book-library section[id],.book-library article[id]{scroll-margin-top:100px}
+  .library-intro{padding-block:clamp(72px,10vw,150px) 64px}.library-kicker{display:flex;justify-content:space-between;gap:24px;font-size:11px;text-transform:uppercase;letter-spacing:.09em;border-top:1px solid #20221f44;padding-top:16px}
+  .library-intro h1{font-size:clamp(78px,12vw,180px);font-weight:500;line-height:.91;letter-spacing:-.075em;margin:65px 0 55px}.book-library em{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.065em}.library-intro h1 em{color:var(--red)}
+  .library-intro__bottom{display:flex;justify-content:space-between;gap:36px;align-items:flex-end}.library-intro__bottom>p{max-width:530px;font-size:clamp(17px,1.6vw,22px);line-height:1.55}.library-intro__bottom>a{display:flex;gap:45px;align-items:center;font-size:14px;white-space:nowrap;border-bottom:1px solid currentColor;padding-block:12px}.library-intro__bottom>a span{font-size:26px}
+  .library-toolbar{display:flex;align-items:center;gap:30px;padding-block:26px;border-block:1px solid #20221f33}.library-label{font-family:var(--font-mono,'IBM Plex Mono',monospace);text-transform:uppercase;letter-spacing:.1em;font-size:10px;line-height:1.5}.library-toolbar>.library-label{margin-right:auto}.library-filters{display:flex;gap:5px;flex-wrap:wrap}.library-filters button{display:flex;align-items:center;gap:9px;background:transparent;color:inherit;border:1px solid transparent;padding:11px 16px;min-height:44px;cursor:pointer;font:inherit;font-size:13px}.library-filters button span{font-size:10px;opacity:.6}.library-filters button[aria-pressed=true]{border-color:var(--ink);background:var(--ink);color:var(--paper)}.library-filters button:hover{border-color:var(--ink)}.library-status{font-size:11px;white-space:nowrap;color:#606259;min-width:50px}
+  .physics-book{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,7vw,110px);padding-block:90px 110px}.physics-book__stage{background:#dddcd2;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;padding:28px clamp(45px,6vw,85px) 28px;gap:50px}.stage-label,.stage-foot{font-size:9px;text-transform:uppercase;letter-spacing:.1em;align-self:flex-start}.stage-foot{align-self:flex-end;margin-top:8px;color:#68675e}.physics-book__copy{align-self:center}.physics-book__copy h2,.subject-heading h2{font-size:clamp(48px,5.8vw,86px);line-height:1.01;letter-spacing:-.065em;font-weight:500;margin:26px 0}.book-subtitle{font-size:clamp(18px,1.8vw,24px);line-height:1.4;max-width:430px}.book-description{font-size:15px;line-height:1.75;color:#5c5e57;margin-top:26px;max-width:450px}.book-structure{display:flex;gap:45px;margin:35px 0;border-block:1px solid #20221f25;padding-block:22px}.book-structure>span{font-size:36px;font-weight:400;letter-spacing:-.06em;display:flex;align-items:baseline;gap:10px}.book-structure small{font-size:11px;letter-spacing:0;color:#62635c}.format-label{font-size:11px;margin-bottom:12px;color:#62635c}.book-formats{display:flex;flex-wrap:wrap;gap:7px 15px}.book-formats a{display:inline-flex;align-items:center;gap:12px;min-height:44px;padding:9px 0;border-bottom:1px solid #20221f60;font-size:12px;line-height:1.3}.book-formats a:hover{color:var(--red);border-color:currentColor}.book-formats :global(svg){width:13px;height:13px;flex:none}
+  .ai-library{padding-block:100px;background:#e7e6df;border-block:1px solid #20221f22}.subject-heading{display:grid;grid-template-columns:1fr 1.1fr;gap:0 80px;margin-bottom:65px}.subject-heading>.library-label{grid-column:1/-1}.subject-heading h2{margin-bottom:0}.subject-heading>p:last-child{align-self:end;font-size:17px;line-height:1.65;max-width:410px;color:#595c54;margin-bottom:5px}.series-book{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:30px 50px;border-top:1px solid #20221f33;padding-block:32px}.series-book:last-child{border-bottom:1px solid #20221f33}.series-book__identity{display:flex;gap:30px;min-width:0}.series-mark{font-size:24px;line-height:1.15;width:25px;flex:none;color:var(--red)}.series-book__series{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#65675e;margin-bottom:10px}.series-book__series span{color:#aa3b24}.series-book h3{font-size:clamp(21px,2.1vw,31px);line-height:1.18;letter-spacing:-.035em;font-weight:500;max-width:600px}.series-book__description{font-size:13px;color:#66685f;line-height:1.65;max-width:540px;margin-top:12px}.series-book>.book-formats{align-self:center;justify-content:flex-end;max-width:285px}
+  .other-library{padding-block:100px}.other-list{display:grid;grid-template-columns:1fr 1fr;gap:60px}.other-book{padding-top:24px;border-top:1px solid #20221f55}.other-book h3{font-size:clamp(28px,3.2vw,44px);line-height:1.1;font-weight:500;letter-spacing:-.045em;margin:30px 0 14px;max-width:420px}.other-book__subtitle{font-size:20px;line-height:1.4}.other-book__description{font-size:14px;color:#63655d;margin:22px 0;line-height:1.5}.library-outro{padding-block:65px;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:space-between;gap:25px;flex-wrap:wrap}.library-outro>p{font-size:clamp(18px,2vw,26px)}.library-outro>a{font-size:clamp(32px,4vw,50px);letter-spacing:-.04em;display:inline-flex;align-items:center;gap:40px}.library-outro :global(svg){width:30px;height:30px}.library-outro small{flex-basis:100%;font-size:10px;color:#b1b4a9;margin-top:25px}
+  @media(max-width:1000px){.physics-book{gap:38px}.physics-book__stage{padding-inline:40px}.series-book{grid-template-columns:1fr;gap:12px}.series-book>.book-formats{justify-content:flex-start;max-width:none;margin-left:55px}.subject-heading{gap:0 40px}}
+  @media(max-width:700px){.library-intro{padding-top:55px;padding-bottom:42px}.library-kicker{font-size:9px;gap:14px}.library-intro h1{font-size:clamp(76px,17vw,116px);margin:45px 0 35px}.library-intro__bottom{display:block}.library-intro__bottom>a{width:fit-content;margin-top:20px}.library-intro__bottom>p{font-size:17px}.library-toolbar{gap:14px;flex-wrap:wrap;padding-block:18px}.library-toolbar>.library-label{flex-basis:calc(100% - 80px);margin-right:0;order:0}.library-status{order:1;text-align:right;margin-left:auto}.library-filters{order:2;gap:2px}.library-filters button{padding-inline:13px;font-size:12px}.physics-book{grid-template-columns:1fr;padding-block:36px 65px;gap:45px}.physics-book__stage{padding:24px 60px 28px;gap:35px;max-width:480px;width:100%;margin-inline:auto}.physics-book__stage :global(.book-object){width:min(100%,260px)}.physics-book__copy h2,.subject-heading h2{font-size:clamp(48px,10vw,65px)}.physics-book__copy h2{margin-block:20px}.book-subtitle{font-size:21px}.book-structure{margin-block:25px}.ai-library,.other-library{padding-block:65px}.subject-heading{display:block;margin-bottom:38px}.subject-heading>p:last-child{margin-top:25px;font-size:16px}.series-book{padding-block:25px}.series-book__identity{gap:15px}.series-mark{width:18px;font-size:20px}.series-book h3{font-size:23px}.series-book>.book-formats{margin-left:33px;gap:6px 16px}.series-book__description{font-size:13px}.other-list{grid-template-columns:1fr;gap:40px}.other-book h3{font-size:34px;margin-top:23px}.library-outro{padding-block:45px}.library-outro>p{flex-basis:100%}.library-outro small{margin-top:8px;line-height:1.6}}
+  .library-outro>p{color:#efeee8}.book-formats a:hover{color:#b53720}.series-book__identity{align-items:center}.series-book__cover{width:90px;flex:none;--book-depth:5px}.series-book__cover :global(.book-object__spine){visibility:hidden}.other-book{display:grid;grid-template-columns:105px minmax(0,1fr);gap:30px;align-items:start}.other-book__cover{padding-top:25px;--book-depth:6px}.other-book__cover :global(.book-object__spine){visibility:hidden}.other-book h3{font-size:clamp(26px,2.5vw,37px)}
+  @media(max-width:1000px){.series-book>.book-formats{margin-left:120px}.other-list{gap:35px}.other-book{grid-template-columns:80px minmax(0,1fr);gap:22px}}
+  @media(max-width:700px){.series-book__identity{align-items:flex-start;gap:23px}.series-book__cover{width:70px;margin-top:5px}.series-book h3{font-size:21px}.series-book>.book-formats{margin-left:93px}.series-book__description{font-size:12px}.other-book{grid-template-columns:100px minmax(0,1fr);gap:28px}.other-book h3{font-size:28px}.other-book__subtitle{font-size:17px}}
+  @media(max-width:360px){.physics-book__stage{padding-inline:45px}.library-filters button{padding-inline:10px;gap:6px}.series-book__cover{width:58px}.series-book__identity{gap:18px}.series-book>.book-formats{margin-left:0}.other-book{grid-template-columns:75px minmax(0,1fr);gap:23px}.other-book h3{font-size:26px}}
+</style>

@@ -18,7 +18,7 @@ The owner confirmed the public address **salim.najim.06@gmail.com** during the V
 
 The owner explicitly forbade publication of academic GPA, rankings, or academic lists. **Do not publish GPA/CGPA, 3.94, national rank, or President's List**, including in metadata, structured data, images, captions, or alternative text. The site verifier catches common textual instances, and visual review must cover any artwork. Keep these out even if supporting records become available unless the owner later changes the instruction.
 
-No currently active business, customers, revenue, partnerships, funding, commercial outcome, or book/publication has been verified. The ventures page may explain the owner's approach to entrepreneurship without inventing venture entries. `ventures` stays empty until an actual business and its status are confirmed. Do not create business detail routes or a book/writing route simply to fill navigation.
+No currently active business, customers, revenue, partnerships, funding, or commercial outcome has been verified. The ventures page may explain the owner's approach to entrepreneurship without inventing venture entries. `ventures` stays empty until an actual business and its status are confirmed. Do not create business detail routes simply to fill navigation. Books were verified from the owner-authorized KDP bookshelf and public Amazon listings on 18 September 2026; see BOOKS.md and src/data/books.ts.
 
 The former site mentions Tesla Coil City, NeuroLens AR, and Najim's Production. Its illustrations and brand mockup do not establish project implementation, business ownership, or current operation. They are not proof of a LUMOS prototype. Historical source and assets remain recoverable in Git.
 

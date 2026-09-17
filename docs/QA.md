@@ -1,3 +1,7 @@
+# Historical V2 QA record
+
+This file records the original V2 build. Current V5 validation is recorded in V5-NOTES.md. V5 uses decoded image sequences rather than WebGL, and the owner-authorized KDP review confirmed the published catalogue.
+
 # V2 validation — 9 September 2026
 
 The redesign is prepared on `redesign-v2`. Production remains on `main` with GitHub Pages publishing `/ (root)` and HTTPS enforced.

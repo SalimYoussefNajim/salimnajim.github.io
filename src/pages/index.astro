@@ -1,29 +1,31 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ProductStudy from '../components/ProductStudy.astro';
+import KineticStudy from '../components/KineticStudy.astro';
+import BooksFeature from '../components/BooksFeature.astro';
 import Arrow from '../components/Arrow.astro';
 import FeaturedProject from '../components/FeaturedProject.astro';
 import ContactCta from '../components/ContactCta.astro';
 ---
-<Layout title="Salim Youssef Najim — Engineering & beyond" class="home-page">
-  <section class="landing-hero section-pad" aria-labelledby="landing-title">
-    <div class="landing-copy">
-      <p class="landing-name">Salim Youssef Najim</p>
-      <h1 id="landing-title">Engineering.<br/><span>In perspective.</span></h1>
-      <p class="landing-lead">Aerospace Engineering student at Khalifa University. Exploring how technical ideas become useful projects.</p>
-      <div class="landing-actions"><a class="button button-light" href="#selected-work">Explore my work <Arrow/></a><a class="button" href="/contact/">Contact me <Arrow diagonal/></a></div>
-      <p class="landing-note"><span></span>Aerospace · Energy · Systems</p>
-    </div>
-    <div class="landing-study"><ProductStudy id="home-propulsion" priority/></div>
+<Layout title="Salim Youssef Najim — Engineering, books & ideas" description="The personal portfolio of Salim Youssef Najim. Aerospace Engineering at Khalifa University, the LUMOS project, and books on physics and artificial intelligence." class="home-page">
+  <div class="folio-cover" data-kinetic-story>
+  <section class="folio-hero section-pad" aria-labelledby="folio-title">
+    <div class="folio-topline"><p class="eyebrow">A personal collection of work & ideas</p><p class="eyebrow">Engineering / Writing</p></div>
+    <h1 id="folio-title" class="folio-name"><span>SALIM</span><span>NAJIM<span class="name-period">.</span></span><span class="sr-only"> — Salim Youssef Najim</span></h1>
+    <div class="folio-object"><KineticStudy/></div>
+    <div class="folio-intro"><span class="editorial-star" aria-hidden="true">✳</span><p>I study how things work.<br/>Then explore what<br/>we can do with them.</p><a class="text-link" href="/about/">A little about me <Arrow diagonal/></a></div>
+    <div class="folio-bottom"><p>Aerospace Engineering student<br/>Khalifa University</p><a class="round-link" href="#selected-work"><span>Explore the work</span><span class="round-arrow"><Arrow/></span></a><p class="folio-bottom-note">From physical systems<br/>to ideas on paper.</p></div>
   </section>
+  </div>
+  <section class="opening-note section-pad" aria-labelledby="opening-title"><p class="eyebrow">Different disciplines.<br/>The same curiosity.</p><h2 id="opening-title">Flight. Physics. AI.<br/><span>And the space between.</span></h2><p>I’m Salim Youssef Najim. I study Aerospace Engineering, lead student projects, and write about the systems shaping the world around us.</p></section>
   <section id="selected-work" class="selected-work" aria-labelledby="selected-title">
-    <div class="section-heading section-pad reveal"><div><p class="eyebrow section-index">Selected work</p><h2 id="selected-title">From question to concept.</h2></div><a class="text-link" href="/projects/">All projects <Arrow/></a></div>
+    <div class="section-heading section-pad reveal"><div><p class="eyebrow section-index">01 / In practice</p><h2 id="selected-title">An idea,<br/>set in motion.</h2></div><a class="text-link" href="/projects/">Engineering work <Arrow diagonal/></a></div>
     <FeaturedProject/>
   </section>
+  <BooksFeature/>
   <section class="home-profile section-pad" aria-labelledby="profile-title">
-    <figure class="portrait-frame reveal"><img src="/images/salim.webp" alt="Salim Youssef Najim" width="826" height="826" loading="lazy" decoding="async"/></figure>
-    <div class="home-profile-copy reveal"><p class="eyebrow section-index">A little about me</p><h2 id="profile-title">Curious about<br/>how things work.</h2><p>Engineering is my foundation. Leading LUMOS gave me a way to connect that curiosity with a team and a practical question: how could we approach urban lighting differently?</p><a class="text-link" href="/about/">My background <Arrow/></a>
-      <div class="perspective-links"><a href="/aerospace/"><span><strong>Aerospace</strong><small>Flight, energy and connected systems.</small></span><Arrow diagonal/></a><a href="/ventures/"><span><strong>Business perspective</strong><small>Useful ideas and the people they serve.</small></span><Arrow diagonal/></a></div>
+    <figure class="portrait-frame reveal"><img src="/images/salim.webp" alt="Salim Youssef Najim" width="826" height="826" loading="lazy" decoding="async"/><figcaption>Salim Youssef Najim / Khalifa University</figcaption></figure>
+    <div class="home-profile-copy reveal"><p class="eyebrow section-index">03 / Behind the work</p><h2 id="profile-title">A curious mind.<br/><em>A practical streak.</em></h2><p>Studying engineering gives me a way to ask better questions. Leading LUMOS gave me a way to work through them with a team. Writing gives me room to explain what I’m learning.</p><a class="text-link" href="/about/">More about me <Arrow diagonal/></a>
+      <div class="perspective-links"><a href="/aerospace/"><span><strong>Aerospace</strong><small>Flight, energy and connected systems.</small></span><Arrow diagonal/></a><a href="/ventures/"><span><strong>Business perspective</strong><small>The problem, the people, the practical work.</small></span><Arrow diagonal/></a></div>
     </div>
   </section>
   <ContactCta/>
