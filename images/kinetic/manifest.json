@@ -1,0 +1,554 @@
+{
+  "frames": 36,
+  "width": 900,
+  "height": 900,
+  "totalBytes": 1882678,
+  "mobileWidth": 480,
+  "mobileHeight": 480,
+  "mobileTotalBytes": 1339750,
+  "minimumMargin": 92,
+  "records": [
+    {
+      "frame": 0,
+      "file": "frame-00.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 58242,
+      "margin": 92
+    },
+    {
+      "frame": 1,
+      "file": "frame-01.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 60660,
+      "margin": 92
+    },
+    {
+      "frame": 2,
+      "file": "frame-02.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 62996,
+      "margin": 92
+    },
+    {
+      "frame": 3,
+      "file": "frame-03.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 62090,
+      "margin": 93
+    },
+    {
+      "frame": 4,
+      "file": "frame-04.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 59766,
+      "margin": 93
+    },
+    {
+      "frame": 5,
+      "file": "frame-05.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 56746,
+      "margin": 94
+    },
+    {
+      "frame": 6,
+      "file": "frame-06.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 52412,
+      "margin": 95
+    },
+    {
+      "frame": 7,
+      "file": "frame-07.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 43808,
+      "margin": 96
+    },
+    {
+      "frame": 8,
+      "file": "frame-08.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 37232,
+      "margin": 97
+    },
+    {
+      "frame": 9,
+      "file": "frame-09.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 37740,
+      "margin": 98
+    },
+    {
+      "frame": 10,
+      "file": "frame-10.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 43060,
+      "margin": 100
+    },
+    {
+      "frame": 11,
+      "file": "frame-11.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 48254,
+      "margin": 101
+    },
+    {
+      "frame": 12,
+      "file": "frame-12.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 53246,
+      "margin": 101
+    },
+    {
+      "frame": 13,
+      "file": "frame-13.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 58790,
+      "margin": 100
+    },
+    {
+      "frame": 14,
+      "file": "frame-14.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 60388,
+      "margin": 100
+    },
+    {
+      "frame": 15,
+      "file": "frame-15.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 62242,
+      "margin": 100
+    },
+    {
+      "frame": 16,
+      "file": "frame-16.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 64046,
+      "margin": 100
+    },
+    {
+      "frame": 17,
+      "file": "frame-17.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 65596,
+      "margin": 102
+    },
+    {
+      "frame": 18,
+      "file": "frame-18.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 62398,
+      "margin": 103
+    },
+    {
+      "frame": 19,
+      "file": "frame-19.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 59908,
+      "margin": 105
+    },
+    {
+      "frame": 20,
+      "file": "frame-20.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 57512,
+      "margin": 107
+    },
+    {
+      "frame": 21,
+      "file": "frame-21.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 54736,
+      "margin": 108
+    },
+    {
+      "frame": 22,
+      "file": "frame-22.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 52686,
+      "margin": 108
+    },
+    {
+      "frame": 23,
+      "file": "frame-23.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 51426,
+      "margin": 108
+    },
+    {
+      "frame": 24,
+      "file": "frame-24.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 52866,
+      "margin": 107
+    },
+    {
+      "frame": 25,
+      "file": "frame-25.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 52724,
+      "margin": 107
+    },
+    {
+      "frame": 26,
+      "file": "frame-26.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 51442,
+      "margin": 107
+    },
+    {
+      "frame": 27,
+      "file": "frame-27.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 48512,
+      "margin": 106
+    },
+    {
+      "frame": 28,
+      "file": "frame-28.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 45774,
+      "margin": 104
+    },
+    {
+      "frame": 29,
+      "file": "frame-29.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 41040,
+      "margin": 103
+    },
+    {
+      "frame": 30,
+      "file": "frame-30.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 37460,
+      "margin": 102
+    },
+    {
+      "frame": 31,
+      "file": "frame-31.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 38028,
+      "margin": 101
+    },
+    {
+      "frame": 32,
+      "file": "frame-32.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 42606,
+      "margin": 101
+    },
+    {
+      "frame": 33,
+      "file": "frame-33.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 47058,
+      "margin": 100
+    },
+    {
+      "frame": 34,
+      "file": "frame-34.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 49912,
+      "margin": 100
+    },
+    {
+      "frame": 35,
+      "file": "frame-35.webp",
+      "width": 900,
+      "height": 900,
+      "bytes": 49276,
+      "margin": 100
+    }
+  ],
+  "mobileRecords": [
+    {
+      "frame": 0,
+      "file": "mobile-00.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 41206
+    },
+    {
+      "frame": 1,
+      "file": "mobile-01.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 42898
+    },
+    {
+      "frame": 2,
+      "file": "mobile-02.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 44142
+    },
+    {
+      "frame": 3,
+      "file": "mobile-03.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 43756
+    },
+    {
+      "frame": 4,
+      "file": "mobile-04.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 42314
+    },
+    {
+      "frame": 5,
+      "file": "mobile-05.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 39892
+    },
+    {
+      "frame": 6,
+      "file": "mobile-06.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 36686
+    },
+    {
+      "frame": 7,
+      "file": "mobile-07.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 30826
+    },
+    {
+      "frame": 8,
+      "file": "mobile-08.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 27218
+    },
+    {
+      "frame": 9,
+      "file": "mobile-09.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 27332
+    },
+    {
+      "frame": 10,
+      "file": "mobile-10.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 31502
+    },
+    {
+      "frame": 11,
+      "file": "mobile-11.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 35122
+    },
+    {
+      "frame": 12,
+      "file": "mobile-12.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 37838
+    },
+    {
+      "frame": 13,
+      "file": "mobile-13.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 41384
+    },
+    {
+      "frame": 14,
+      "file": "mobile-14.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 42648
+    },
+    {
+      "frame": 15,
+      "file": "mobile-15.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 44696
+    },
+    {
+      "frame": 16,
+      "file": "mobile-16.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 45774
+    },
+    {
+      "frame": 17,
+      "file": "mobile-17.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 46560
+    },
+    {
+      "frame": 18,
+      "file": "mobile-18.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 44848
+    },
+    {
+      "frame": 19,
+      "file": "mobile-19.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 43382
+    },
+    {
+      "frame": 20,
+      "file": "mobile-20.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 41784
+    },
+    {
+      "frame": 21,
+      "file": "mobile-21.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 40324
+    },
+    {
+      "frame": 22,
+      "file": "mobile-22.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 38710
+    },
+    {
+      "frame": 23,
+      "file": "mobile-23.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 37354
+    },
+    {
+      "frame": 24,
+      "file": "mobile-24.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 38084
+    },
+    {
+      "frame": 25,
+      "file": "mobile-25.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 37400
+    },
+    {
+      "frame": 26,
+      "file": "mobile-26.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 36182
+    },
+    {
+      "frame": 27,
+      "file": "mobile-27.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 34388
+    },
+    {
+      "frame": 28,
+      "file": "mobile-28.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 32300
+    },
+    {
+      "frame": 29,
+      "file": "mobile-29.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 29672
+    },
+    {
+      "frame": 30,
+      "file": "mobile-30.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 26870
+    },
+    {
+      "frame": 31,
+      "file": "mobile-31.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 26630
+    },
+    {
+      "frame": 32,
+      "file": "mobile-32.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 29126
+    },
+    {
+      "frame": 33,
+      "file": "mobile-33.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 32224
+    },
+    {
+      "frame": 34,
+      "file": "mobile-34.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 34082
+    },
+    {
+      "frame": 35,
+      "file": "mobile-35.webp",
+      "width": 480,
+      "height": 480,
+      "bytes": 34596
+    }
+  ]
+}

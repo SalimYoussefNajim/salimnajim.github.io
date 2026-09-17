@@ -1,0 +1,32 @@
+---
+import type { Book } from '../data/books';
+interface Props { book: Book; priority?: boolean; interactive?: boolean; }
+const { book, priority = false, interactive = true } = Astro.props;
+---
+<div class:list={['book-object', { 'book-object--interactive': interactive }]} style={`--book-color:${book.spineColor};--cover-ratio:${book.cover ? `${book.cover.width}/${book.cover.height}` : '2/3'}`}>
+  <div class="book-object__volume">
+    <div class="book-object__back" aria-hidden="true"></div>
+    <div class="book-object__pages" aria-hidden="true"></div>
+    <div class="book-object__spine" aria-hidden="true"><span>{book.title}</span><small>Salim Najim</small></div>
+    <div class="book-object__front">
+      {book.cover ? <img src={book.cover.src} width={book.cover.width} height={book.cover.height} alt={`${book.title}${book.subtitle ? `: ${book.subtitle}` : ''} — original book cover`} loading={priority ? 'eager' : 'lazy'} fetchpriority={priority ? 'high' : 'auto'} decoding="async"/> : <div class="book-object__type"><span>Salim Youssef Najim</span><strong>{book.title}</strong>{book.subtitle && <p>{book.subtitle}</p>}</div>}
+    </div>
+  </div>
+</div>
+<style>
+  .book-object{width:min(100%,340px);aspect-ratio:var(--cover-ratio);position:relative;perspective:1200px;isolation:isolate;margin-inline:auto;--depth:var(--book-depth,15px)}
+  .book-object:after{content:"";position:absolute;left:5%;right:0;bottom:-7%;height:8%;background:rgba(35,32,21,.24);filter:blur(17px);border-radius:50%;transform:rotate(-9deg);z-index:-1}
+  .book-object__volume{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateY(-22deg) rotateX(5deg) rotateZ(-4deg);transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+  .book-object__front,.book-object__back{position:absolute;inset:0;background:var(--book-color);backface-visibility:hidden}
+  .book-object__front{transform:translateZ(var(--depth));box-shadow:inset 0 0 0 1px rgba(255,255,255,.15);overflow:hidden}
+  .book-object__front:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.2),transparent 2%,rgba(255,255,255,.11) 3%,transparent 5%,transparent 80%,rgba(255,255,255,.05))}
+  .book-object__front img{display:block;width:100%;height:100%;object-fit:contain}
+  .book-object__back{transform:translateZ(calc(-1 * var(--depth))) rotateY(180deg)}
+  .book-object__spine{position:absolute;top:0;bottom:0;left:calc(-1 * var(--depth));width:calc(2 * var(--depth));background:var(--book-color);transform:rotateY(-90deg);color:#f0eee5;display:flex;align-items:center;justify-content:space-between;writing-mode:vertical-rl;padding:8% 2px;font-size:clamp(6px,.8vw,11px);letter-spacing:.02em;overflow:hidden}
+  .book-object__spine small{font-size:8px}
+  .book-object__pages{position:absolute;inset:3px calc(2px - var(--depth)) 3px auto;width:calc(2 * var(--depth) - 4px);transform:rotateY(90deg);background:repeating-linear-gradient(to right,#e6e0d1 0,#f8f3e8 1px,#e6e0d1 2px)}
+  .book-object__type{height:100%;padding:10%;display:flex;flex-direction:column;color:#f5f0e4}
+  .book-object__type>span{font-size:11px}.book-object__type strong{font-size:clamp(22px,3vw,44px);line-height:1.06;letter-spacing:-.04em;margin-block:auto 16px}.book-object__type p{font-size:14px;line-height:1.45}
+  @media(hover:hover) and (pointer:fine){.book-object--interactive:hover .book-object__volume{transform:rotateY(-10deg) rotateX(2deg) rotateZ(-1deg)}}
+  @media(prefers-reduced-motion:reduce){.book-object__volume{transition:none}.book-object--interactive:hover .book-object__volume{transform:rotateY(-22deg) rotateX(5deg) rotateZ(-4deg)}}
+</style>

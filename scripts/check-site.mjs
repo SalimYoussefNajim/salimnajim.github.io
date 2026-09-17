@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readFileSync, readdirSync, realpathSync, statSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import sharp from 'sharp';
 
 // Inspect the generated artifact, never the legacy HTML at the repository root.
@@ -10,7 +10,7 @@ const dist = path.join(root, 'dist');
 const origin = 'https://salimyoussefnajim.com';
 const publicEmail = 'salim.najim.06@gmail.com'; // Explicitly confirmed by the owner.
 const verifyRelease = process.argv.includes('--release');
-const routes = ['/', '/about/', '/aerospace/', '/ventures/', '/projects/', '/projects/lumos/', '/achievements/', '/contact/', '/404.html'];
+const routes = ['/', '/about/', '/aerospace/', '/ventures/', '/projects/', '/projects/lumos/', '/books/', '/achievements/', '/contact/', '/404.html'];
 const errors = new Set();
 const fail = (where, message) => errors.add(`${where}: ${message}`);
 if (process.argv.slice(2).some(argument => argument !== '--release')) {
@@ -76,6 +76,10 @@ const seenTitles = new Map();
 const seenDescriptions = new Map();
 let checkedReferences = 0;
 const studyImageMetrics = [];
+const kineticImageMetrics = [];
+const bookImageMetrics = [];
+let checkedBooks = 0;
+let checkedBookFormats = 0;
 
 function checkReference(raw, from, label, checkFragment = true) {
   if (!raw || raw.startsWith('data:') || raw.startsWith('blob:')) return;
@@ -186,6 +190,21 @@ for (const route of ['/', '/aerospace/']) {
     || Object.keys(attrs).some(key => /^data-(?:scene|experience)(?:-|$)/.test(key)))) {
     fail(route, 'canvas or legacy WebGL scene markup is forbidden in the image study');
   }
+  if (route === '/') {
+    if (page.elements.filter(({ attrs }) => 'data-kinetic-study' in attrs).length !== 1) {
+      fail(route, 'expected exactly one kinetic image study');
+    }
+    const poster = page.elements.filter(({ name, attrs }) => name === 'img' && 'data-kinetic-image' in attrs);
+    if (poster.length !== 1 || !poster[0].attrs.alt?.trim() || !/^\/images\/kinetic\/(?:poster-(?:480|640)|frame-00)\.webp$/.test(poster[0].attrs.src ?? '')) {
+      fail(route, 'kinetic study requires a described static first-frame image');
+    }
+    const rotation = page.elements.filter(({ name, attrs }) => name === 'input' && 'data-kinetic-range' in attrs);
+    if (rotation.length !== 1 || rotation[0].attrs.type !== 'range' || !rotation[0].attrs['aria-label']?.trim()
+      || rotation[0].attrs.min !== '0' || rotation[0].attrs.max !== '35') {
+      fail(route, 'kinetic study requires a named native range covering all 36 views');
+    }
+    continue;
+  }
   if (page.elements.filter(({ attrs }) => 'data-product-study' in attrs).length !== 1) {
     fail(route, 'expected exactly one propulsion image study');
   }
@@ -202,43 +221,137 @@ for (const route of ['/', '/aerospace/']) {
   }
 }
 
-// Fully decode all responsive variants: valid filenames and metadata alone do
-// not establish that an image loads or that the exported silhouette is intact.
+// Fully decode the real assets. Metadata and plausible filenames alone cannot
+// establish that an image loads or that the exported silhouette is intact.
+async function checkTransparentImage(relative, width, height, maxBytes) {
+  const file = path.join(dist, relative);
+  if (!existsSync(file)) { fail(relative, 'required study image missing'); return null; }
+  try {
+    const bytes = statSync(file).size;
+    if (bytes > maxBytes) fail(relative, `image exceeds ${maxBytes} byte limit (${bytes} bytes)`);
+    const image = sharp(file, { failOn: 'warning' });
+    const metadata = await image.metadata();
+    if (metadata.format !== 'webp') fail(relative, 'image must be encoded as WebP');
+    if (!metadata.hasAlpha) fail(relative, 'image must retain an alpha channel');
+    const { data, info } = await image.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    if (info.width !== width || info.height !== height) {
+      fail(relative, `decoded dimensions must be ${width}×${height}; received ${info.width}×${info.height}`);
+    }
+    let left = info.width;
+    let top = info.height;
+    let right = -1;
+    let bottom = -1;
+    for (let y = 0; y < info.height; y++) {
+      for (let x = 0; x < info.width; x++) {
+        // Include even the faintest antialiased edge in the silhouette.
+        if (data[(y * info.width + x) * info.channels + info.channels - 1] === 0) continue;
+        left = Math.min(left, x); top = Math.min(top, y);
+        right = Math.max(right, x); bottom = Math.max(bottom, y);
+      }
+    }
+    const margin = Math.min(left, top, info.width - 1 - right, info.height - 1 - bottom);
+    if (right < 0) fail(relative, 'image is fully transparent and contains no visible study');
+    else if (margin < 2) fail(relative, `visible silhouette needs at least 2 transparent pixels on every edge; smallest margin is ${margin}px`);
+    return { relative, bytes, margin };
+  } catch (error) {
+    fail(relative, `study image could not be decoded: ${error.message}`);
+    return null;
+  }
+}
 for (const view of ['assembled', 'exploded', 'cutaway']) {
   for (const [width, height] of [[640, 427], [1280, 853]]) {
-    const relative = `images/propulsion-${view}-${width}.webp`;
-    const file = path.join(dist, relative);
-    if (!existsSync(file)) { fail(relative, 'required propulsion image missing'); continue; }
-    try {
-      const bytes = statSync(file).size;
-      if (bytes > 300_000) fail(relative, `image exceeds 300 KB limit (${bytes} bytes)`);
-      const image = sharp(file, { failOn: 'warning' });
-      const metadata = await image.metadata();
-      if (metadata.format !== 'webp') fail(relative, 'image must be encoded as WebP');
-      if (!metadata.hasAlpha) fail(relative, 'image must retain an alpha channel');
-      const { data, info } = await image.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-      if (info.width !== width || info.height !== height) {
-        fail(relative, `decoded dimensions must be ${width}×${height}; received ${info.width}×${info.height}`);
-      }
-      let left = info.width;
-      let top = info.height;
-      let right = -1;
-      let bottom = -1;
-      for (let y = 0; y < info.height; y++) {
-        for (let x = 0; x < info.width; x++) {
-          // Include even the faintest antialiased edge in the silhouette.
-          if (data[(y * info.width + x) * info.channels + info.channels - 1] === 0) continue;
-          left = Math.min(left, x); top = Math.min(top, y);
-          right = Math.max(right, x); bottom = Math.max(bottom, y);
-        }
-      }
-      const margin = Math.min(left, top, info.width - 1 - right, info.height - 1 - bottom);
-      if (right < 0) fail(relative, 'image is fully transparent and contains no visible study');
-      else if (margin < 2) fail(relative, `visible silhouette needs at least 2 transparent pixels on every edge; smallest margin is ${margin}px`);
-      studyImageMetrics.push({ relative, bytes, margin });
-    } catch (error) {
-      fail(relative, `propulsion image could not be decoded: ${error.message}`);
+    const result = await checkTransparentImage(`images/propulsion-${view}-${width}.webp`, width, height, 300_000);
+    if (result) studyImageMetrics.push(result);
+  }
+}
+for (const [prefix, width, budget] of [['frame', 900, 2_000_000], ['mobile', 480, 1_500_000]]) {
+  const sequence = [];
+  for (let frame = 0; frame < 36; frame++) {
+    const relative = `images/kinetic/${prefix}-${String(frame).padStart(2, '0')}.webp`;
+    const result = await checkTransparentImage(relative, width, width, 100_000);
+    if (result) sequence.push(result);
+  }
+  const bytes = sequence.reduce((sum, image) => sum + image.bytes, 0);
+  if (bytes > budget) fail(`images/kinetic/${prefix}`, `36-frame sequence exceeds ${budget} byte budget (${bytes} bytes)`);
+  kineticImageMetrics.push(...sequence);
+}
+for (const width of [480, 640]) {
+  const result = await checkTransparentImage(`images/kinetic/poster-${width}.webp`, width, width, 100_000);
+  if (result) kineticImageMetrics.push(result);
+}
+
+// This catalogue was confirmed in the owner's KDP bookshelf. Check the public
+// content and real format destinations, without publishing account URLs or
+// treating a retail price or unverified cover as permanent book metadata.
+const expectedCovers = new Map();
+const normalizeText = value => decode(value).replace(/\s+/g, ' ').trim();
+try {
+  const { books } = await import(pathToFileURL(path.join(root, 'src/data/books.ts')).href);
+  if (!Array.isArray(books) || books.length !== 11) throw new Error('expected the 11 confirmed catalogue entries');
+  const page = pages.get(localFile(new URL('/books/', origin)));
+  const publicText = normalizeText((page?.html ?? '').replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi, '').replace(/<[^>]+>/g, ' '));
+  const links = new Set((page?.elements ?? []).filter(tag => tag.name === 'a').map(tag => tag.attrs.href));
+  const ids = new Set();
+  const titles = new Set();
+  const formatAsins = new Set();
+  for (const book of books) {
+    if (!book.id || ids.has(book.id)) fail('/books/', `missing or duplicated catalogue id: ${book.id}`);
+    ids.add(book.id);
+    const fullTitle = `${book.title ?? ''} ${book.subtitle ?? ''}`.trim();
+    if (!book.title?.trim() || titles.has(fullTitle)) fail('/books/', `missing or duplicated book title: ${fullTitle}`);
+    titles.add(fullTitle);
+    for (const text of [book.title, book.subtitle].filter(Boolean)) {
+      if (!publicText.includes(normalizeText(text))) fail('/books/', `confirmed title text missing from visible content: ${text}`);
     }
+    if (!Array.isArray(book.formats) || book.formats.length < 1) fail('/books/', `no confirmed format for ${fullTitle}`);
+    for (const format of book.formats ?? []) {
+      if (!/^[A-Z0-9]{10}$/.test(format.asin ?? '') || formatAsins.has(format.asin)) {
+        fail('/books/', `invalid or duplicated format ASIN for ${fullTitle}`);
+      }
+      formatAsins.add(format.asin);
+      if (format.url !== `https://www.amazon.com/dp/${format.asin}` || !links.has(format.url)) {
+        fail('/books/', `missing confirmed Amazon format destination for ${fullTitle}: ${format.url}`);
+      }
+      checkedBookFormats++;
+    }
+    if (book.cover) {
+      if (!/^\/images\/books\/[a-z0-9-]+\.(?:webp|jpe?g|png)$/.test(book.cover.src ?? '')) {
+        fail('/books/', `book cover must reference a local published asset: ${fullTitle}`);
+      } else expectedCovers.set(book.cover.src.slice(1), book.cover);
+    }
+    checkedBooks++;
+  }
+  if (checkedBookFormats !== 29) fail('/books/', `expected 29 confirmed format destinations; received ${checkedBookFormats}`);
+  if ([...links].some(link => /https?:\/\/(?:[^/]*\.)?kdp\.amazon\./i.test(link ?? ''))) {
+    fail('/books/', 'private KDP account links must not be published');
+  }
+} catch (error) {
+  fail('/books/', `could not verify confirmed catalogue: ${error.message}`);
+}
+const bookImages = files.filter(file => path.relative(dist, file).split(path.sep).join('/').startsWith('images/books/')
+  && /\.(?:webp|jpe?g|png)$/i.test(file));
+for (const relative of expectedCovers.keys()) {
+  if (!existsSync(path.join(dist, relative))) fail(relative, 'confirmed book cover asset missing');
+}
+for (const file of bookImages) {
+  const relative = path.relative(dist, file).split(path.sep).join('/');
+  try {
+    const bytes = statSync(file).size;
+    if (bytes > 300_000) fail(relative, `book image exceeds 300 KB (${bytes} bytes)`);
+    const image = sharp(file, { failOn: 'warning' });
+    const metadata = await image.metadata();
+    const { info } = await image.raw().toBuffer({ resolveWithObject: true });
+    if (!['webp', 'jpeg', 'png'].includes(metadata.format)) fail(relative, 'unsupported cover image encoding');
+    if (info.width < 160 || info.height < 160 || info.width > 2048 || info.height > 3072) {
+      fail(relative, `book cover must be a usable bounded image; received ${info.width}×${info.height}`);
+    }
+    const expected = expectedCovers.get(relative);
+    if (expected && (info.width !== expected.width || info.height !== expected.height)) {
+      fail(relative, `cover dimensions differ from declared ${expected.width}×${expected.height}`);
+    }
+    bookImageMetrics.push({ relative, bytes, width: info.width, height: info.height });
+  } catch (error) {
+    fail(relative, `book image could not be decoded: ${error.message}`);
   }
 }
 
@@ -337,7 +450,9 @@ if (errors.size) {
   console.log(`Site verification passed: ${pages.size} HTML pages, ${checkedReferences} internal references, ${(bytes / 1024 / 1024).toFixed(2)} MB total artifact.`);
   console.log('Verified routes, local assets, anchors, metadata, contact identity, domain, sitemap, manifest, and excluded academic claims.');
   console.log(`Verified ${studyImageMetrics.length} propulsion WebPs: exact dimensions, alpha, full decoding, 300 KB file limits, and unclipped silhouettes (smallest margin ${Math.min(...studyImageMetrics.map(image => image.margin))}px).`);
-  console.log('Verified home and aerospace each contain three named image-view controls and no canvas or legacy WebGL scene markup.');
+  console.log(`Verified ${kineticImageMetrics.length} kinetic WebPs: exact dimensions, alpha, full decoding, bounded sequence sizes, and unclipped silhouettes (smallest margin ${Math.min(...kineticImageMetrics.map(image => image.margin))}px).`);
+  console.log(`Verified ${checkedBooks} confirmed book entries, ${checkedBookFormats} Amazon format destinations, and ${bookImageMetrics.length} fully decoded local book image assets.`);
+  console.log('Verified the home kinetic study has a named rotation range, aerospace has three named propulsion views, and both use image fallbacks without canvas or legacy WebGL scene markup.');
   if (verifyRelease) console.log('Verified that the root release files and their recorded hashes match every file in dist/.');
   console.log('External availability, browser behavior, contact delivery, and performance still require their separate checks.');
 }
